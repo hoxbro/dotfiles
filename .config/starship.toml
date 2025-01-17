@@ -1,0 +1,9 @@
+[conda]
+ignore_base = false
+
+[python]
+disabled = true
+
+[git_status]
+untracked = ''
+ignore_submodules = true

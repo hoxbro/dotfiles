@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+projects=$(find -L ~/projects "$HOLOVIZ_REP" -mindepth 0 -maxdepth 1 -type d -not -name '.*' -exec sh -c 'echo "$(basename "$1") $1"' _ {} \; 2>/dev/null | sort)
+
+if [[ $# -eq 1 ]]; then
+    selected=$(echo "$projects" | fzf --tmux --with-nth 1 --select-1 --query "'$1")
+else
+    selected=$(echo "$projects" | fzf --tmux --with-nth 1)
+fi
+selected=$(echo "$selected" | awk '{print $2}')
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+
+if [ -f "$selected"/.cenv ]; then
+    CONDA_DEFAULT_ENV="$(head -n 1 "$selected/.cenv")"
+elif [[ "$selected" == *holoviz* ]]; then
+    CONDA_DEFAULT_ENV="holoviz"
+else
+    CONDA_DEFAULT_ENV=""
+fi
+
+if [[ ! $(pgrep tmux) ]]; then
+    tmux new-session -s "$selected_name" -c "$selected" -e CONDA_DEFAULT_ENV="$CONDA_DEFAULT_ENV"
+    exit 0
+fi
+
+if ! tmux has-session -t "$selected_name" 2>/dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected" -e CONDA_DEFAULT_ENV="$CONDA_DEFAULT_ENV"
+fi
+
+if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "$selected_name"
+else
+    tmux attach-session -t "$selected_name"
+fi

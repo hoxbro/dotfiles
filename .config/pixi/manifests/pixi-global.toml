@@ -1,0 +1,112 @@
+version = 1
+
+[envs.git-cliff]
+channels = ["conda-forge"]
+dependencies = { git-cliff = "*" }
+# exposed = { git-cliff = "git-cliff", git-cliff-mangen = "git-cliff-mangen", git-cliff-completions = "git-cliff-completions" }
+exposed = { git-cliff = "git-cliff" }
+
+[envs.tmux]
+channels = ["conda-forge"]
+dependencies = { tmux = "*" }
+exposed = {}
+
+[envs.nodejs]
+channels = ["conda-forge"]
+dependencies = { nodejs = "*" }
+exposed = { npx = "npx", node = "node", corepack = "corepack", npm = "npm" }
+
+[envs.fzf]
+channels = ["conda-forge"]
+dependencies = { fzf = "*" }
+exposed = { fzf = "fzf" }
+
+[envs.ruff]
+channels = ["conda-forge"]
+dependencies = { ruff = "*" }
+exposed = { ruff = "ruff" }
+
+[envs.gh]
+channels = ["conda-forge"]
+dependencies = { gh = "*" }
+exposed = { gh = "gh" }
+
+[envs.pre-commit]
+channels = ["conda-forge"]
+dependencies = { python = "3.12.*", pre-commit = "*" }
+exposed = { pre-commit = "pre-commit" }
+
+[envs.git-absorb]
+channels = ["conda-forge"]
+dependencies = { git-absorb = "*" }
+exposed = { git-absorb = "git-absorb" }
+
+[envs.watchfiles]
+channels = ["conda-forge"]
+dependencies = { watchfiles = "*" }
+exposed = { watchfiles = "watchfiles" }
+
+[envs.pipx]
+channels = ["conda-forge"]
+dependencies = { pipx = "*" }
+exposed = { pipx = "pipx" }
+
+[envs.ripgrep]
+channels = ["conda-forge"]
+dependencies = { ripgrep = "*" }
+exposed = { rg = "rg" }
+
+[envs.bat]
+channels = ["conda-forge"]
+dependencies = { bat = "*" }
+exposed = { bat = "bat" }
+
+[envs.eza]
+channels = ["conda-forge"]
+dependencies = { eza = "*" }
+exposed = { eza = "eza" }
+
+[envs.jq]
+channels = ["conda-forge"]
+dependencies = { jq = "*" }
+exposed = { jq = "jq" }
+
+[envs.zoxide]
+channels = ["conda-forge"]
+dependencies = { zoxide = "*" }
+exposed = { zoxide = "zoxide" }
+
+[envs.fd-find]
+channels = ["conda-forge"]
+dependencies = { fd-find = "*" }
+exposed = { fd = "fd" }
+
+[envs.nvim]
+channels = ["conda-forge"]
+dependencies = { nvim = "*" }
+exposed = {}
+
+[envs.hyperfine]
+channels = ["conda-forge"]
+dependencies = { hyperfine = "*" }
+exposed = { hyperfine = "hyperfine" }
+
+[envs.clean-notebook]
+channels = ["conda-forge"]
+dependencies = { clean-notebook = "*" }
+exposed = { clean-notebook = "clean-notebook" }
+
+[envs.starship]
+channels = ["conda-forge"]
+dependencies = { starship = "*" }
+exposed = { starship = "starship" }
+
+[envs.yazi]
+channels = ["conda-forge"]
+dependencies = { yazi = "*" }
+exposed = { yazi = "yazi" }
+
+[envs.go-gum]
+channels = ["conda-forge"]
+dependencies = { go-gum = "*" }
+exposed = { gum = "gum" }

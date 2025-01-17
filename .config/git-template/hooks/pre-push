@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# No x as we don't want to see the commands
+set -euo pipefail
+
+BRANCH=$(git branch --show-current)
+
+if [[ "$BRANCH" =~ ^(master|main|branch-.*|develop)$ ]]; then
+  echo -e "\nPrevented pushing to $BRANCH. Use --no-verify to bypass this pre-push hook.\n"
+  exit 1
+fi
+
+exit 0

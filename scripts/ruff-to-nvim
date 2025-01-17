@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ -z "$1" ]; then
+    echo "Please provide a file path."
+    exit 1
+fi
+
+ruff check --exit-zero --output-format concise "$@" >"/tmp/ruff_quickfix_list"
+
+if grep -q "All checks passed!" "/tmp/ruff_quickfix_list"; then
+    cat /tmp/ruff_quickfix_list
+else
+    nvim -c "cfile /tmp/ruff_quickfix_list" -c "copen"
+fi

@@ -1,0 +1,24 @@
+[tool.ruff]
+fix = true
+line-length = 99
+
+[tool.ruff.lint]
+select = ["C4", "E", "F", "FLY", "I", "RUF", "UP", "W"]
+ignore = [
+    "E402", # Module level import not at top of file
+    "E501", # Line too long
+    "E731", # Do not assign a lambda expression, use a def
+    "E741", # Ambiguous variable name
+    "RUF012", # Mutable class attributes should use `typing.ClassVar`
+]
+extend-unsafe-fixes = [
+    "F401", # Unused imports
+    "F841", # Unused variables
+]
+
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.pyflakes]
+allowed-unused-imports = ["hvplot.pandas", "hvplot.dask", "hvplot.xarray", "hvplot.polars"]

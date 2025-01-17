@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+TOOLS=~/scripts/pop-tools
+
+if [[ $1 == "setup" ]]; then
+    if [[ -z $2 ]]; then
+        bash "$TOOLS/setup.sh"
+    else
+        bash "$TOOLS/setup/$2.sh"
+    fi
+elif [[ $1 == "update" ]]; then
+    if [[ -z $2 ]]; then
+        bash "$TOOLS/update.sh"
+    else
+        bash "$TOOLS/update.sh" "$2"
+    fi
+elif [[ $1 == "sync" ]]; then
+    bash "$TOOLS/sync.sh"
+elif [[ $1 == "login" ]]; then
+    grep gdm-password /var/log/auth.log | grep -E "unlocked keyring|unlocked login keyring" | awk '{print $1, $2, $3}'
+else
+    exit 1
+fi

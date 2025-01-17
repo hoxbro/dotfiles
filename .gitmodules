@@ -1,0 +1,12 @@
+[submodule ".config/zsh/zsh-autosuggestions"]
+	path = .config/zsh/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule ".config/zsh/zsh-syntax-highlighting"]
+	path = .config/zsh/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+[submodule ".config/diff-so-fancy"]
+	path = .config/diff-so-fancy
+	url = https://github.com/so-fancy/diff-so-fancy.git
+[submodule ".config/zsh/zsh-defer"]
+	path = .config/zsh/zsh-defer
+	url = https://github.com/romkatv/zsh-defer.git

@@ -1,0 +1,7 @@
+change_ps1 = false
+
+[mirrors]
+"https://conda.anaconda.org/conda-forge" = ["https://prefix.dev/conda-forge"]
+
+[repodata-config."https://prefix.dev"]
+disable-sharded = false

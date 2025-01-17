@@ -1,0 +1,4 @@
+[status]
+separator_open = ""
+separator_close = ""
+separator_style = { fg = "#90a0bf", bg = "#21283b" }

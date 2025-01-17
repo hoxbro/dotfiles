@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+pgrep -f ipykernel | xargs -r -l1 kill || true # problem with jupyter hanging after sleep
+
+sudo rmmod nvidia_uvm
+sudo modprobe nvidia_uvm

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+jupyter lab list --jsonlist | jq '.[].pid' | xargs -r kill -15
+
+rm -rf ~/.local/share/jupyter/runtime
+mkdir ~/.local/share/jupyter/runtime

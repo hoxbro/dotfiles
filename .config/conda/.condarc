@@ -1,0 +1,10 @@
+ssl_verify: true
+changeps1: false
+channel_priority: strict
+experimental_sat_error_message: true
+channels:
+  - conda-forge
+solver: libmamba
+anaconda_anon_usage: false
+conda_build:
+  pkg_format: '2'

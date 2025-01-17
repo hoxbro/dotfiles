@@ -1,0 +1,44 @@
+font-family = UbuntuMono Nerd Font
+font-size = 14
+
+background = #1a212e
+foreground = #ffffff
+palette = 0=#505354
+palette = 1=#e01b24
+palette = 2=#82b414
+palette = 3=#fd971f
+palette = 4=#268bd2
+palette = 5=#8c54fe
+palette = 6=#56c2d6
+palette = 7=#ccccc6
+palette = 8=#77767b
+palette = 9=#f66151
+palette = 10=#b7eb46
+palette = 11=#feed6c
+palette = 12=#62ade3
+palette = 13=#bfa0fe
+palette = 14=#94d8e5
+palette = 15=#f8f8f2
+
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+
+keybind = ctrl+v=paste_from_clipboard
+keybind = ctrl+shift+v=unbind
+keybind = ctrl+q=close_window
+keybind = ctrl+shift+q=unbind
+keybind = ctrl+shift+right=unbind
+keybind = ctrl+shift+left=unbind
+
+confirm-close-surface = false
+resize-overlay = never
+
+window-decoration = true
+gtk-titlebar = false
+gtk-adwaita = false
+gtk-single-instance = true
+
+macos-icon = custom-style
+macos-icon-ghost-color = #000000
+macos-icon-screen-color = #ffffff

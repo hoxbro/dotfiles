@@ -1,0 +1,6 @@
+.*_cache
+.git
+.github
+.gitmodules
+README.md
+.pre-commit-config.yaml

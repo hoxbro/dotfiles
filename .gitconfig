@@ -1,0 +1,78 @@
+[user]
+    name = Simon Høxbro Hansen
+    email = hoxbro@protonmail.com
+    signingkey = hoxbro@protonmail.com
+[alias]
+    l = log --graph --pretty=format:'%C(bold yellow)%h %C(cyan)(%ar) %C(green)%an %C(dim white)%s %C(auto)%d' --color=always
+    ll = !git l -15 --first-parent
+    lf = !git l -15
+    la = !git l --all
+    ls = !git la -15
+    lr = !git la | grep '(.*origin.*)'
+    lt = !git la | grep '(.*tag:.*)'
+    sl = stash list --pretty=format:'%C(bold yellow)%h %C(cyan)(%ar) %C(green)%gd %C(dim white)%s' --color=always
+    d = diff
+    ds = diff --staged
+    s = status
+    can = commit --amend --no-edit
+    redo = reset @{'10 minutes ago'}
+    mom = clean -fxd --exclude=".cenv" --exclude="pixi.lock" --exclude="example*.py" --exclude=".lazy.lua"
+    pr = push --force-with-lease
+    co = checkout
+    cob = checkout -b
+    po = "!git pull --set-upstream origin \"$(git branch --show-current)\""
+    skipci  = "!git commit --amend -m \"$(git log --format=%B -n1)\" -m \"[skip ci]\""
+    remove-stash = reflog expire --expire-unreachable=30.days refs/stash
+    freedom = "!rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
+    lasts = "!git reflog | grep -oP 'checkout: moving from \\K\\S+' | grep -vE '^(main|[0-9a-f]{40})$' | uniq | head -n 10"
+[color]
+    ui = true
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[diff-so-fancy]
+    markEmptyLines = false
+    stripLeadingSymbols = false
+[core]
+    pager = diff-so-fancy | less --tabs=4 -RFX
+    editor = nvim
+    eol = lf
+    excludesfile = ~/.gitignore
+    # autocrlf = true
+[interactive]
+    diffFilter = diff-so-fancy --patch  # https://github.com/so-fancy/diff-so-fancy/issues/437
+[pull]
+    rebase = true
+    default = current
+[push]
+    default = current
+    autoSetupRemote = true
+[init]
+    defaultBranch = main
+    templateDir = ~/dotfiles/.config/git-template/
+[help]
+    autocorrect = 10
+[commit]
+    gpgsign = true
+[tag]
+    gpgsign = true
+[rebase]
+    autoStash = true
+[diff]
+    algorithm = histogram
+[mergetool "nvim"]
+    cmd = nvim -c DiffviewOpen
+[merge]
+    tool = nvim
+[mergetool]
+    prompt = false
+    keepBackup = false
