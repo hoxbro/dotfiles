@@ -21,7 +21,7 @@ PACKAGES=(
     extension-manager
 
     # misc
-    libreoffice-still geary yt-dlp nemo ulauncher
+    libreoffice-still geary yt-dlp nemo ulauncher hunspell hunspell-da
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-common cifs-utils)
