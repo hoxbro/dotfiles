@@ -17,7 +17,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(js|JS)$")
+    left: (identifier) @_left (#match? @_left "(js|JS|esm)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "javascript")
