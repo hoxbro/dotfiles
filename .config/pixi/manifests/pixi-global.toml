@@ -46,11 +46,6 @@ channels = ["conda-forge"]
 dependencies = { watchfiles = "*" }
 exposed = { watchfiles = "watchfiles" }
 
-[envs.pipx]
-channels = ["conda-forge"]
-dependencies = { pipx = "*" }
-exposed = { pipx = "pipx" }
-
 [envs.ripgrep]
 channels = ["conda-forge"]
 dependencies = { ripgrep = "*" }
