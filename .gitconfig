@@ -76,3 +76,5 @@
 [mergetool]
     prompt = false
     keepBackup = false
+[checkout]
+    workers = 0
