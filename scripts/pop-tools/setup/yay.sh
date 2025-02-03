@@ -12,7 +12,7 @@ PACKAGES=(
     code ffmpeg celluloid remmina parallel trash-cli stow btop
 
     # Flatpak
-    spotify slack-desktop parsec discord zoom
+    spotify slack-desktop parsec discord zoom ksnip
 
     # Languages
     rust rust-analyzer cargo-nextest cargo-insta
@@ -21,8 +21,8 @@ PACKAGES=(
     extension-manager
 
     # misc
-    libreoffice-still geary yt-dlp nemo ulauncher hunspell hunspell-da
-    pipewire-pulse
+    libreoffice-still hunspell hunspell-en_US hunspell-da
+    geary yt-dlp nemo ulauncher pipewire-pulse
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-common cifs-utils)
