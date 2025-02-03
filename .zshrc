@@ -65,9 +65,9 @@ zsh-defer __env_vars
 export MKL_DEBUG_CPU_TYPE=5
 export PYDEVD_DISABLE_FILE_VALIDATION=1
 alias pipe='python -m pip install --no-deps --disable-pip-version-check -ve .'
-alias pipr='uv pip install --system -r requirements.txt'
 alias ppt='pytest -n logical --dist loadgroup -qq'
 alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
+alias uvc='[ -n "$CONDA_PREFIX" ] && uv pip install --system'
 zsh-defer source ~/.config/zsh/conda.zsh
 
 # Holoviz
