@@ -35,7 +35,7 @@ confirm-close-surface = false
 resize-overlay = never
 
 window-decoration = true
-gtk-titlebar = false
+# gtk-titlebar = false
 gtk-adwaita = false
 gtk-single-instance = true
 
