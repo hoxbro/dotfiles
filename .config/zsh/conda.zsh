@@ -68,6 +68,19 @@ else
   ca base
 fi
 
+ce() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: ce <env_name> <python_version>" >&2
+    return 1
+  fi
+  if conda env list | awk '{print $1}' | grep -qx "$1"; then
+    echo "Environment '$1' exists."
+  else
+    mamba env create --name "$1" python="$2" --offline --yes
+    ca "$1"
+  fi
+}
+
 pixi() {
   # https://github.com/prefix-dev/pixi/issues/1548
   trap 'printf "\x1b[?25h"' SIGINT
