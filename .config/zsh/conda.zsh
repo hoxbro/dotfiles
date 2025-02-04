@@ -73,7 +73,7 @@ ce() {
     echo "Usage: ce <env_name> <python_version>" >&2
     return 1
   fi
-  if conda env list | awk '{print $1}' | grep -qx "$1"; then
+  if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else
     mamba env create --name "$1" python="$2" --offline --yes
