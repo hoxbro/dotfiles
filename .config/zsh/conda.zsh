@@ -81,6 +81,10 @@ ce() {
   fi
 }
 
+alias cer() {
+  conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L2 conda env remove -y -n
+}
+
 pth() {
   if [ -n "$CONDA_PREFIX" ]; then
     local PTH_FILE="$(python -c "import site; print(site.getsitepackages()[0])")/my.pth"
