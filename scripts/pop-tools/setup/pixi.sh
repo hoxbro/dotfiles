@@ -11,6 +11,8 @@ if [ ! -d "$PIXI_HOME" ]; then
 fi
 
 pixi global sync
+
+mkdir -p ~/.local/bin
 pixi completion --shell zsh >~/.local/bin/_pixi
 
 ln -sf "$PIXI_HOME/envs/tmux/bin/tmux" ~/.local/bin/tmux
