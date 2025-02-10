@@ -88,7 +88,7 @@ alias cer() {
 pth() {
   if [ -n "$CONDA_PREFIX" ]; then
     local PTH_FILE="$(python -c "import site; print(site.getsitepackages()[0])")/my.pth"
-    echo "$CWD" >>$PTH_FILE
+    echo "$CWD" >>"$PTH_FILE"
   else
     echo "No conda environment is activated." >&2
   fi
