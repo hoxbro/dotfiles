@@ -20,7 +20,7 @@ return {
 
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { python = { { "basedpyright", version = "1.24.0" } } },
+        opts = { python = { "basedpyright" } },
     },
 
     {
