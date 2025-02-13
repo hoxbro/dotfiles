@@ -69,20 +69,22 @@ else
 fi
 
 ce() {
-  if [[ -z "$1" || -z "$2" ]]; then
-    echo "Usage: ce <env_name> <python_version>" >&2
+  if [[ -z "$1" ]]; then
+    echo "Usage: ce <env_name> package1 package2 ..." >&2
     return 1
   fi
   if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else
-    mamba env create --name "$1" python="$2" --offline --yes
+    echo "mamba env create --name \"$1\" \"${@:2}\" --offline --yes"
+    mamba env create --name "$1" "${@:2}" --offline --yes
     ca "$1"
   fi
 }
 
 alias cer() {
-  conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L2 conda env remove -y -n
+  ca base
+  conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L1 conda env remove -y -n
 }
 
 pth() {
