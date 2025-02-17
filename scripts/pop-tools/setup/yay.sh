@@ -25,7 +25,7 @@ PACKAGES=(
     geary yt-dlp nemo ulauncher pipewire-pulse
 )
 
-PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-common cifs-utils)
+PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-utils cifs-utils)
 PACKAGES_FRAMEWORK=()
 PACKAGES_VIRTM=(spice-vdagent)
 

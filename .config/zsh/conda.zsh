@@ -26,6 +26,12 @@ __unset_cenv() {
 ca() { # conda activate
   if [[ "$1" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
+  elif [ -d "$1" ]; then
+    if [[ $folder == */ ]]; then
+      echo "Folder ends with a trailing slash. Exiting."
+      return 1
+    fi
+    local ENV_PATH="$1"
   else
     local ENV_PATH="$CONDA_HOME/envs/$1"
   fi
