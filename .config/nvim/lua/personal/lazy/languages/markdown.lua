@@ -22,30 +22,8 @@ return {
         ft = "markdown",
     },
     {
-        "3rd/image.nvim",
-        build = false,
+        "folke/snacks.nvim",
         ft = "markdown",
-        opts = {
-            processor = "magick_cli",
-            integrations = {
-                markdown = {
-                    clear_in_insert_mode = true,
-                    download_remote_images = true,
-                    only_render_image_at_cursor = true,
-                },
-            },
-            editor_only_render_when_focused = false,
-            tmux_show_only_in_active_window = true,
-        },
+        opts = { image = {} },
     },
-    --[[
-    {
-        "HakonHarnes/img-clip.nvim",
-        ft = "markdown",
-        opts = {
-            dir_path = "Attachments/",
-            template = "![$FILE_NAME]($FILE_PATH)",
-        },
-    },
-    ]]
 }
