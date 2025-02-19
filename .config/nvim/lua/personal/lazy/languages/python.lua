@@ -35,7 +35,6 @@ return {
                 },
             }
             local configurations = {
-                { name = "Launch: File", program = "${file}" },
                 {
                     name = "Launch: Panel",
                     module = "panel",
@@ -47,6 +46,7 @@ return {
                         "--check-unused-sessions=500",
                     },
                 },
+                { name = "Launch: File", program = "${file}" },
                 { name = "Launch: Bokeh", module = "bokeh", args = { "serve", "${file}" } },
                 {
                     name = "Launch: Lumen",
