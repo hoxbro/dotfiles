@@ -30,3 +30,4 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 -- Because I'm stupid
 vim.api.nvim_create_user_command("W", "w", {})
+vim.api.nvim_create_user_command("Wq", "wq", {})
