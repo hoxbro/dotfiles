@@ -37,3 +37,5 @@ vim.diagnostic.config({
     virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 vim.treesitter.language.register("python", "pyodide")
+
+vim.opt.formatoptions:append({ c = true, r = true, q = true })
