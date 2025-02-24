@@ -49,7 +49,7 @@
     excludesfile = ~/.gitignore
     # autocrlf = true
 [interactive]
-    diffFilter = diff-so-fancy --patch  # https://github.com/so-fancy/diff-so-fancy/issues/437
+    diffFilter = diff-so-fancy --patch
 [pull]
     rebase = true
     default = current
