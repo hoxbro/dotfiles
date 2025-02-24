@@ -7,6 +7,7 @@ PACKAGES=(
     # Custom
     librewolf-bin ghostty 1password synology-drive noto-fonts ttf-ubuntu-mono-nerd chromium
     clockify-desktop jdk-openjdk
+    bluez bluez-utils
 
     # Apt
     code ffmpeg celluloid remmina parallel trash-cli stow btop
