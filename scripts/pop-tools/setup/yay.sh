@@ -1,29 +1,24 @@
 #!/usr/bin/env bash
 
 PACKAGES=(
-    # Basic
+    # Terminal
     less rsync lsof zsh rar stow wl-clipboard
+    ffmpeg parallel trash-cli btop yt-dlp
 
-    # Custom
-    librewolf-bin ghostty 1password synology-drive noto-fonts ttf-ubuntu-mono-nerd chromium
+    # Desktop Environment
+    noto-fonts ttf-ubuntu-mono-nerd extension-manager
+    bluez bluez-utils pipewire-pulse
+    hunspell hunspell-en_US hunspell-da
+
+    # GUI
+    librewolf-bin ghostty 1password synology-drive
     clockify-desktop jdk-openjdk
-    bluez bluez-utils
-
-    # Apt
-    code ffmpeg celluloid remmina parallel trash-cli stow btop
-
-    # Flatpak
+    code celluloid remmina geary nemo ulauncher
     spotify slack-desktop parsec discord zoom ksnip
+    libreoffice-still
 
     # Languages
     rust rust-analyzer cargo-nextest cargo-insta
-
-    # Gnome
-    extension-manager
-
-    # misc
-    libreoffice-still hunspell hunspell-en_US hunspell-da
-    geary yt-dlp nemo ulauncher pipewire-pulse
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-utils cifs-utils)
