@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 CONDA_APPS=(
-    "python=3.12" numpy pandas bs4 lxml
+    "python=3.13" numpy pandas bs4 lxml
     jupyterlab jupyterlab_code_formatter
     conda-build rich rich-click httpx debugpy
 )

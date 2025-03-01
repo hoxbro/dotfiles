@@ -6,7 +6,7 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 source "$CONDA_HOME/etc/profile.d/mamba.sh"
 
 cclean() {
-  conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L1 conda env remove -y -n
+  cer
   conda clean -a -y
   rm -rf "$CONDA_HOME/pkgs/cache"
   python -m pip cache purge
