@@ -10,6 +10,7 @@ pixi.lock
 lazy-lock.json
 node_modules/
 .obsidian/
+tuna.log
 
 *.ipynb
 *.png
