@@ -13,9 +13,10 @@ PACKAGES=(
     # GUI
     librewolf-bin ghostty 1password synology-drive
     clockify-desktop jdk-openjdk
-    code celluloid remmina geary nemo ulauncher
+    code celluloid remmina geary ulauncher
+    nemo nemo-fileroller
     spotify slack-desktop parsec discord zoom ksnip
-    libreoffice-still
+    libreoffice-still chromium
 
     # Languages
     rust rust-analyzer cargo-nextest cargo-insta
