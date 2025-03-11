@@ -78,7 +78,7 @@ exposed = { fd = "fd" }
 
 [envs.nvim]
 channels = ["conda-forge"]
-dependencies = { nvim = "*" }
+dependencies = { nvim = "0.10.*" }
 exposed = {}
 
 [envs.hyperfine]
