@@ -3,7 +3,7 @@ export PIXI_HOME=~/.local/pixi
 
 export PATH="$PIXI_HOME/bin:$PATH"
 source "$CONDA_HOME/etc/profile.d/conda.sh"
-source "$CONDA_HOME/etc/profile.d/mamba.sh"
+# source "$CONDA_HOME/etc/profile.d/mamba.sh"
 
 cclean() {
   cer
