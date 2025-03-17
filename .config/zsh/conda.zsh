@@ -85,6 +85,7 @@ ce() {
     echo "mamba env create --name \"$1\" \"${@:2}\""
     mamba env create --name "$1" "${@:2}" --offline --yes --quiet
     ca "$1"
+    mamba list
   fi
 }
 
