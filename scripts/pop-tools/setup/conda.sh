@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+PYTHON_VERSION="3.13"
 CONDA_APPS=(
-    "python=3.13" numpy pandas bs4 lxml
+    "python=$PYTHON_VERSION" numpy pandas bs4 lxml
     jupyterlab jupyterlab_code_formatter
     conda-build rich rich-click httpx debugpy
 )
@@ -26,3 +27,5 @@ conda activate base
 # Install other apps
 mamba install "${CONDA_APPS[@]}" -y
 mamba update --all -y
+
+touch "$CONDA_HOME/lib/python$PYTHON_VERSION/EXTERNALLY-MANAGED"
