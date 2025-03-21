@@ -16,6 +16,7 @@ if (($(grep -E -c '(vmx|svm)' /proc/cpuinfo) > 0)); then
     sudo systemctl enable --now libvirtd
     sudo systemctl start libvirtd
 
+    sudo virsh net-autostart default
     # Note seem to need a restart to work
 else
     echo "Missing virtualization extension!!!"
