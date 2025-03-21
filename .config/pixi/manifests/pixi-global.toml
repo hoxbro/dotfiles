@@ -3,7 +3,6 @@ version = 1
 [envs.git-cliff]
 channels = ["conda-forge"]
 dependencies = { git-cliff = "*" }
-# exposed = { git-cliff = "git-cliff", git-cliff-mangen = "git-cliff-mangen", git-cliff-completions = "git-cliff-completions" }
 exposed = { git-cliff = "git-cliff" }
 
 [envs.tmux]
@@ -110,3 +109,8 @@ exposed = { gum = "gum" }
 channels = ["conda-forge"]
 dependencies = { uv = "*" }
 exposed = { uv = "uv", uvx = "uvx" }
+
+[envs.awscli]
+channels = ["conda-forge"]
+dependencies = { awscli = "*" }
+exposed = { aws = "aws" }

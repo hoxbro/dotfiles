@@ -7,3 +7,6 @@ disabled = true
 [git_status]
 untracked = ''
 ignore_submodules = true
+
+[aws]
+disabled = true
