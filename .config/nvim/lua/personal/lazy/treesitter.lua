@@ -27,6 +27,7 @@ return {
                 "markdown",
                 "markdown_inline",
                 "query",
+                "dockerfile",
             },
 
             auto_install = false,
