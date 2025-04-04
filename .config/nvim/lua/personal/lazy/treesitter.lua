@@ -28,6 +28,7 @@ return {
                 "markdown_inline",
                 "query",
                 "dockerfile",
+                "nginx",
             },
 
             auto_install = false,
