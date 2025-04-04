@@ -82,8 +82,8 @@ ce() {
   if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else
-    echo "mamba env create --name \"$1\" \"${@:2}\""
-    mamba env create --name "$1" "${@:2}" --offline --yes --quiet
+    echo "mamba env create --name \"$1\" ${@:2}"
+    mamba env create --name "$1" ${@:2} --offline --yes --quiet
     ca "$1"
     mamba list
   fi
@@ -92,6 +92,11 @@ ce() {
 alias cer() {
   ca base
   conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L1 conda env remove -y -n
+
+  for env in "$@"; do
+      conda env remove -y -n "$env"
+  done
+
 }
 
 pth() {
