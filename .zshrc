@@ -21,8 +21,8 @@ export PATH=~/scripts:~/.local/bin:~/.cargo/bin:$PATH
 
 alias vim='nvim'
 alias ls='eza'
-alias ll='eza -l'
-alias la='eza -la'
+alias ll='eza -l --octal-permissions'
+alias la='eza -la --octal-permissions'
 alias tree='eza --tree'
 
 export COLOR_LIGHT='#90a0bf'
