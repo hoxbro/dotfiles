@@ -2,7 +2,7 @@
 
 PACKAGES=(
     # Terminal
-    less rsync lsof zsh rar stow wl-clipboard man
+    less rsync lsof zsh rar stow wl-clipboard man-db zip
     ffmpeg parallel trash-cli btop yt-dlp
 
     # Desktop Environment
