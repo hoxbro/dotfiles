@@ -39,3 +39,14 @@ vim.diagnostic.config({
 vim.treesitter.language.register("python", "pyodide")
 
 vim.opt.formatoptions:append({ c = true, r = true, q = true })
+
+vim.opt.fillchars = { diff = "╱" }
+vim.opt.diffopt = {
+    "internal",
+    "filler",
+    "closeoff",
+    "context:12",
+    "algorithm:histogram",
+    "linematch:200",
+    "indent-heuristic",
+}
