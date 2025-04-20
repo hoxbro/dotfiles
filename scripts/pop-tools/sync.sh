@@ -81,7 +81,8 @@ backup() {
 OPT1="Sync from Meshify to Framework"
 OPT2="Sync from Framework to Meshify"
 OPT3="Backup"
-case "$(gum choose "$OPT1" "$OPT2" "$OPT3")" in
+choice=$(printf "%s\n" "$OPT1" "$OPT2" "$OPT3" | fzf --tmux)
+case "$choice" in
 "$OPT1") meshify-to-framework ;;
 "$OPT2") framework-to-meshify ;;
 "$OPT3") backup ;;

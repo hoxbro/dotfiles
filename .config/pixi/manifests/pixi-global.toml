@@ -100,11 +100,6 @@ channels = ["conda-forge"]
 dependencies = { yazi = "*" }
 exposed = { yazi = "yazi" }
 
-[envs.go-gum]
-channels = ["conda-forge"]
-dependencies = { go-gum = "*" }
-exposed = { gum = "gum" }
-
 [envs.uv]
 channels = ["conda-forge"]
 dependencies = { uv = "*" }
