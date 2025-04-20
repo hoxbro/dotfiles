@@ -31,8 +31,18 @@ vim.keymap.set(
 )
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go To Previous Diagnostic Message" })
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go To Next Diagnostic Message" })
+vim.keymap.set(
+    "n",
+    "[d",
+    function() vim.diagnostic.jump({ count = -1, float = true }) end,
+    { desc = "Go To Previous Diagnostic Message" }
+)
+vim.keymap.set(
+    "n",
+    "]d",
+    function() vim.diagnostic.jump({ count = 1, float = true }) end,
+    { desc = "Go To Next Diagnostic Message" }
+)
 vim.keymap.set("n", "<leader>m", vim.diagnostic.open_float, { desc = "Show Diagnostic Error Messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open Diagnostic Quickfix List" })
 
