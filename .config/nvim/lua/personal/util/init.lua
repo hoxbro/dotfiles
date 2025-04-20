@@ -1,5 +1,6 @@
 require("personal.util.autocmd")
 require("personal.util.virtual_text")
+require("personal.util.yankring")
 
 Util = {}
 
