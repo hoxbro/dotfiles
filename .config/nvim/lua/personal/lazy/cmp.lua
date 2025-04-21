@@ -4,10 +4,6 @@ return {
         version = "1.*",
         opts = {
             completion = { documentation = { auto_show = false } },
-            enabled = function()
-                local filetype = vim.bo.filetype
-                return filetype ~= "prompt" or vim.startswith(filetype, "dapui_") or filetype == "dap-repl"
-            end,
             sources = {
                 default = { "lazydev", "lsp", "path", "buffer", "snippets", "copilot" },
                 providers = {
