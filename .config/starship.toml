@@ -10,3 +10,6 @@ ignore_submodules = true
 
 [aws]
 disabled = true
+
+[pixi]
+disabled = true
