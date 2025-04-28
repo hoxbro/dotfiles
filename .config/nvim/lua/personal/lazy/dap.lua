@@ -3,7 +3,6 @@ return {
         "mfussenegger/nvim-dap",
         dependencies = {
             "rcarriga/nvim-dap-ui",
-            "rcarriga/cmp-dap",
             { "theHamsta/nvim-dap-virtual-text", opts = {} },
         },
         keys = {
@@ -77,17 +76,6 @@ return {
                 dapui.close()
                 dapvt.disable()
             end, { desc = "Debug: Exit" })
-        end,
-    },
-    {
-        "rcarriga/cmp-dap",
-        dependencies = { "hrsh7th/nvim-cmp" },
-        lazy = true,
-        config = function()
-            require("cmp").setup.filetype(
-                { "dap-repl", "dapui_watches", "dapui_hover" },
-                { sources = { { name = "dap" } } }
-            )
         end,
     },
 }

@@ -2,7 +2,7 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     -- event = "InsertEnter",
-    dependencies = { { "zbirenbaum/copilot-cmp", opts = {} } },
+    dependencies = { "fang2hou/blink-copilot" },
     opts = {
         panel = { enabled = false },
         suggestion = { enabled = false },
