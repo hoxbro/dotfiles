@@ -63,6 +63,7 @@
     autocorrect = 10
 [commit]
     gpgsign = true
+    template = ./.git/commit-msg-template
 [tag]
     gpgsign = true
 [rebase]
