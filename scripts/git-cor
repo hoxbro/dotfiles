@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -euo pipefail
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
+if [ -z "$1" ]; then
+    echo -e "${RED}[+] Error:${RESET} Usage: git cor user[:branch]"
+    exit 1
+fi
+
+IFS=':' read -r user branch <<<"$1"
+remote="${user%%[0-9]*}"
+repo=$(basename -s .git "$(git config --get remote.origin.url)")
+
+echo -e "${GREEN}[+] Adding remote:${RESET} $remote"
+git remote add "$remote" "git@github.com:$user/$repo.git" 2>/dev/null || true
+
+if [ -n "$branch" ]; then
+    echo -e "${GREEN}[+] Fetching updates for remote:${RESET} $remote"
+    git fetch "$remote"
+
+    if git rev-parse --verify "$branch" >/dev/null 2>&1; then
+        echo -e "${GREEN}[+] Switching to existing branch:${RESET} $branch"
+        git checkout --quiet "$branch"
+    else
+        echo -e "${GREEN}[+] Creating and switching to new branch:${RESET} $branch"
+        git checkout --quiet -b "$branch" "$remote/$branch"
+    fi
+fi
