@@ -64,7 +64,7 @@
     autocorrect = 10
 [commit]
     gpgsign = true
-    template = ./.git/commit-msg-template
+    template = ~/dotfiles/.config/git-template/commit-msg-template
 [tag]
     gpgsign = true
 [rebase]
