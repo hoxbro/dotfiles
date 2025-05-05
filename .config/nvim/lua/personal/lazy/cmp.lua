@@ -12,6 +12,7 @@ return {
                 },
             },
             signature = { enabled = true },
+            keymap = { ["<C-e>"] = { "hide", "show" } },
         },
     },
 }
