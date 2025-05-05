@@ -89,14 +89,24 @@ ce() {
   fi
 }
 
-alias cer() {
+cer() {
+  set +m
   ca base
-  conda env list | grep -oE "^(test|tmp)[^ ]*" | xargs -r -L1 conda env remove -y -n
 
-  for env in "$@"; do
-      conda env remove -y -n "$env"
+  remove_env() {
+    conda env remove -y -n "$1" >/dev/null 2>&1 && echo "Removed: $1" || echo "Failed to remove: $1"
+  }
+
+  conda env list | grep -oE "^(test|tmp)[^ ]*" | while read -r env; do
+    remove_env "$env" &
   done
 
+  for env in "$@"; do
+    remove_env "$env" &
+  done
+
+  wait
+  set -m
 }
 
 pth() {
