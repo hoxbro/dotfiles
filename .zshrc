@@ -63,6 +63,7 @@ zsh-defer __env_vars
 # Python
 export MKL_DEBUG_CPU_TYPE=5
 export PYDEVD_DISABLE_FILE_VALIDATION=1
+export JUPYTER_PLATFORM_DIRS=1
 alias pipe='python -m pip install --no-deps --disable-pip-version-check -ve .'
 alias ppt='pytest -n logical --dist loadgroup -qq'
 alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
