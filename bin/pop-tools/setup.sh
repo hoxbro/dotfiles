@@ -66,8 +66,8 @@ EOF
     sudo systemctl enable wol.service
 }
 
-# Install scripts
-install() { bash "$HOME/dotfiles/scripts/pop-tools/setup/$1.sh"; }
+# Install bin
+install() { bash "$HOME/dotfiles/bin/pop-tools/setup/$1.sh"; }
 install_conda() { install conda; }
 install_pixi() { install pixi; }
 install_qemu() { install qemu; }
@@ -75,7 +75,7 @@ install_update_screensize() { install update_screensize; }
 install_yay() { install yay; }
 
 # Setting up environment for Pop! OS
-PATH=~/scripts:$PATH
+PATH=~/bin:$PATH
 sudo -v || exit 1 # Set sudo
 
 # NOTE: Order matter

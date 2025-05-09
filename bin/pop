@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TOOLS=~/scripts/pop-tools
+TOOLS=~/bin/pop-tools
 
 if [[ $1 == "setup" ]]; then
     if [[ -z $2 ]]; then

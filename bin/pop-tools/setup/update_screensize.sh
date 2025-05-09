@@ -14,9 +14,9 @@ xrandr --output "$SCREEN" --mode "$NAME"
 # Bootstrapping
 # shellcheck disable=SC2128
 SRC=$(realpath "$BASH_SOURCE")
-DST=~/scripts/pop-tools/update_screensize.sh
+DST=~/bin/pop-tools/update_screensize.sh
 if [[ "$DST" != "$SRC" ]]; then
-    mkdir -p ~/scripts/pop-tools
+    mkdir -p ~/bin/pop-tools
     cp "$SRC" "$DST"
     chmod +x "$DST"
 fi
@@ -28,7 +28,7 @@ if [[ ! -f $AUTOSTART ]]; then
     bash -c "cat >$AUTOSTART" <<EOF
 [Desktop Entry]
 Type=Application
-Exec=bash /home/shh/scripts/pop-tools/update_screensize.sh
+Exec=bash /home/shh/bin/pop-tools/update_screensize.sh
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

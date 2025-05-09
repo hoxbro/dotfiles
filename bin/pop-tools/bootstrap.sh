@@ -15,4 +15,4 @@ bootstrap() {
 echo -n "Bootstrapping..."
 bootstrap >~/Downloads/setup0_bootstrap.log 2>&1
 echo " done"
-bash ~/dotfiles/scripts/pop-tools/setup.sh | tee -a ~/Downloads/setup0_bootstrap.log
+bash ~/dotfiles/bin/pop-tools/setup.sh | tee -a ~/Downloads/setup0_bootstrap.log
