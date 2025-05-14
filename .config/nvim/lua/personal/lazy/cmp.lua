@@ -1,6 +1,7 @@
 return {
     {
         "saghen/blink.cmp",
+        event = "VeryLazy",
         version = "1.*",
         opts = {
             completion = {
