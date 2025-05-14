@@ -82,8 +82,9 @@ ce() {
   if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else
-    echo "mamba env create --name \"$1\" ${@:2}"
-    mamba env create --name "$1" ${@:2} --offline --yes --quiet
+    if [ $# -eq 1 ]; then packages="python"; else packages="${@:2}"; fi
+    echo "mamba env create --name \"$1\" $packages"
+    mamba env create --name "$1" $packages --offline --yes --quiet
     ca "$1"
     mamba list
   fi
