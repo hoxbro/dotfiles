@@ -83,8 +83,9 @@ ce() {
     echo "Environment '$1' exists."
   else
     if [ $# -eq 1 ]; then packages="python"; else packages="${@:2}"; fi
-    echo "mamba env create --name \"$1\" $packages"
-    mamba env create --name "$1" $packages --offline --yes --quiet
+    ee() {echo "[+] $1" && eval "$1"}
+    cmd="mamba env create --name \"$1\" $packages --yes --quiet"
+    ee "$cmd --offline" || ee "$cmd" || return 1
     ca "$1"
     mamba list
   fi
