@@ -1,6 +1,7 @@
 # General settings
 export LANG='en_US.UTF-8'
 export EDITOR='nvim'
+export TERM='xterm-256color'
 
 # Speed up zsh startup
 source ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh
