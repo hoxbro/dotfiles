@@ -2,24 +2,24 @@
 
 PACKAGES=(
     # Terminal
-    less rsync lsof zsh rar stow wl-clipboard man-db zip
+    less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp
 
     # Desktop Environment
-    noto-fonts ttf-ubuntu-mono-nerd extension-manager
+    noto-fonts ttf-ubuntu-mono-nerd # extension-manager
     bluez bluez-utils pipewire-pulse
     hunspell hunspell-en_US hunspell-da
 
     # GUI
     librewolf-bin ghostty 1password synology-drive
-    clockify-desktop jdk-openjdk
-    code celluloid remmina geary ulauncher
-    nemo nemo-fileroller
-    spotify slack-desktop parsec discord zoom ksnip
-    libreoffice-still chromium
+    # clockify-desktop jdk-openjdk
+    # code celluloid remmina geary ulauncher
+    # nemo nemo-fileroller
+    # spotify slack-desktop parsec discord zoom ksnip
+    # libreoffice-still chromium
 
     # Languages
-    rust rust-analyzer cargo-nextest cargo-insta
+    # rust rust-analyzer cargo-nextest cargo-insta
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-utils cifs-utils)
