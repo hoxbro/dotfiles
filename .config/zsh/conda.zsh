@@ -111,6 +111,8 @@ cer() {
   set -m
 }
 
+cel() { mamba env list }
+
 pth() {
   if [ -n "$CONDA_PREFIX" ]; then
     local PTH_FILE="$(python -c "import site; print(site.getsitepackages()[0])")/my.pth"
