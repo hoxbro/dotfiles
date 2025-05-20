@@ -1,3 +1,14 @@
+-- Helper to update sign definition partially
+local function update_sign(sign_name, new_text, new_texthl)
+    local existing = vim.fn.sign_getdefined(sign_name)[1] or {}
+    vim.fn.sign_define(sign_name, {
+        text = new_text or existing.text,
+        texthl = new_texthl or existing.texthl,
+        linehl = existing.linehl,
+        numhl = existing.numhl,
+    })
+end
+
 return {
     {
         "mfussenegger/nvim-dap",
@@ -44,6 +55,12 @@ return {
                 -- Configurations
                 dap.configurations[language_name] = language_opts.configurations
             end
+
+            -- Update sign and color
+            update_sign("DapBreakpoint", " ", "DiagnosticSignError")
+            update_sign("DapBreakpointCondition", " ", "DiagnosticSignError")
+            update_sign("DapBreakpointRejected", " ", "DiagnosticSignError")
+            update_sign("DapStopped", "")
         end,
     },
     {
