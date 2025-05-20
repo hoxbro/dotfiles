@@ -5,7 +5,7 @@ set -euox pipefail
 # https://christitus.com/vm-setup-in-archlinux/
 if (($(grep -E -c '(vmx|svm)' /proc/cpuinfo) > 0)); then
     # yay -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables libguestfs --needed
-    yay -S qemu-desktop virt-manager --needed
+    yay -S qemu-desktop virt-manager swtpm spice-vdagent --needed
 
     sudo usermod -a -G libvirt "$(whoami)"
     newgrp libvirt
