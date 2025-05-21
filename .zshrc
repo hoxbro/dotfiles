@@ -70,7 +70,7 @@ alias ppt='pytest -n logical --dist loadgroup -qq'
 alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
 alias uvc='[ -n "$CONDA_PREFIX" ] && uv pip install --system'
 import-time() { python -X importtime -c "import $1" 2> /tmp/tuna.log && tuna /tmp/tuna.log }
-zsh-defer source ~/.config/zsh/conda.zsh
+zsh-defer source ~/.config/zsh/python.zsh
 
 # Holoviz
 export HOLOVIZ_REP=~/projects/holoviz/repos/

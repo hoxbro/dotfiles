@@ -79,6 +79,10 @@ va() {
     zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
   else
     VIRTUAL_ENV="$(pwd)/.venv"
+    if [ ! -d "$VIRTUAL_ENV" ]; then
+        echo "Virtual environment not found at $VIRTUAL_ENV"
+        return 1
+    fi
     export PATH="$VIRTUAL_ENV/bin:$PATH"
     export VIRTUAL_ENV
     cad
