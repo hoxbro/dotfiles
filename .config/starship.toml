@@ -2,6 +2,12 @@
 ignore_base = false
 
 [python]
+detect_extensions = []
+detect_files = []
+format = 'via [🅟 venv ]($style)'
+python_binary = []
+
+[package]
 disabled = true
 
 [git_status]
