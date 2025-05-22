@@ -1,100 +1,32 @@
 #!/bin/bash
 
-update_settings() {
-    mkdir -p ~/.local/bin
-    mkdir -p ~/projects
-
-    sudo chsh "$(whoami)" -s "$(which zsh)"
-    xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search # Nemo as default
-    gsettings set org.gnome.desktop.sound event-sounds false                       # Disable alert sound
-    # flatpak override --user --filesystem=home com.slack.Slack                      # Paste into Slack
-    xdg-mime default io.github.celluloid_player.Celluloid.desktop video/*
-    gsettings set org.cinnamon.desktop.default-applications.terminal exec ghostty
-
-    sudo systemctl enable --now bluetooth.service
-    systemctl --user enable --now ulauncher
-
-    case $(cat /etc/hostname) in
-    meshify)
-        # xrandr --output HDMI-0 --mode "2560x1440" --rate 75 --panning 2560x1440+0+0
-        # xrandr --output HDMI-1 --mode "2560x1440" --rate 144 --panning 2560x1440+2560+0 --primary
-
-        # sudo cp ~/.config/monitors.xml /var/lib/gdm3/.config/ || echo 'no monitor config'
-
-        # nvidia-settings -a AllowFlipping=0
-        ;;
-    framework)
-        # sudo sed -i "s/.*HandleLidSwitch=.*/HandleLidSwitch=suspend/g" -i /etc/systemd/logind.conf
-        ;;
-    virtm)
-        # https://vitux.com/how-to-enable-disable-automatic-login-in-ubuntu/
-        # sudo sed -i \
-        #     -e "s/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/g" \
-        #     -e "s/.*AutomaticLogin =.*/AutomaticLogin = shh/g" \
-        #     /etc/gdm3/custom.conf
-        ;;
-    esac
-}
-
-install_repos() {
-    git clone git@github.com:hoxbro/dotfiles.git ~/dotfiles || echo "Already installed with bootstrap"
-    git -C ~/dotfiles submodule update --init
-    stow -d ~/dotfiles --no-folding .
-    ln -sf ~/dotfiles ~/projects/dotfiles
-    ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
-}
-
-install_wol() {
-    # https://necromuralist.github.io/posts/enabling-wake-on-lan/
-    INTERFACE=$(nmcli device status | grep ethernet | awk '{print $1}')
-
-    if [ -z "$INTERFACE" ]; then exit 10; fi
-
-    sudo bash -c "cat >/etc/systemd/system/wol.service" <<EOF
-[Unit]
-Description=Enable Wake On Lan
-
-[Service]
-Type=oneshot
-ExecStart = /sbin/ethtool --change $INTERFACE wol g
-
-[Install]
-WantedBy=basic.target
-EOF
-
-    sudo systemctl daemon-reload
-    sudo systemctl enable wol.service
-}
-
-# Install bin
-install() { bash "$HOME/dotfiles/bin/pop-tools/setup/$1.sh"; }
-install_conda() { install conda; }
-install_pixi() { install pixi; }
-install_qemu() { install qemu; }
-install_update_screensize() { install update_screensize; }
-install_yay() { install yay; }
-
-# Setting up environment for Pop! OS
-PATH=~/bin:$PATH
+export PATH=$HOME/bin:$PATH
 sudo -v || exit 1 # Set sudo
+
+# Setup
+setup() { bash "$HOME/dotfiles/bin/pop-tools/setup/$1.sh"; }
+setup_conda() { setup conda; }
+setup_pixi() { setup pixi; }
+setup_yay() { setup yay; }
+setup_wol() { setup wol; }
+setup_config() { setup config; }
 
 # NOTE: Order matter
 FUNCTIONS=(
-    install_yay
-    update_settings
-    install_repos
-    install_conda
-    install_pixi
+    setup_yay
+    setup_config
+    setup_conda
+    setup_pixi
 )
 
 case $(cat /etc/hostname) in
-meshify) FUNCTIONS+=(install_qemu install_wol) ;;
-# framework) FUNCTIONS+=(install_flatpak) ;;
-# virtm) FUNCTIONS+=(install_update_screensize) ;;
+meshify) FUNCTIONS+=(setup_wol) ;;
+# framework) ;;
+# virtm) ;;
 esac
 
-echo
-echo "Running functions in setup:"
+# The machine
+echo -e "\nRunning functions in setup:"
 TOTAL=${#FUNCTIONS[@]}
 COUNT=1
 for FUNCTION in "${FUNCTIONS[@]}"; do
