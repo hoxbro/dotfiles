@@ -9,7 +9,7 @@ sudo chsh "$(whoami)" -s "$(which zsh)"
 
 sudo systemctl enable --now bluetooth.service
 systemctl --user enable --now ulauncher
-gsettings set org.gnome.desktop.sound event-sounds false
+gsettings set org.gnome.desktop.sound event-sounds false || true
 
 if command -v nemo >/dev/null 2>&1; then
     xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search

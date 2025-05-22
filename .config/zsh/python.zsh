@@ -5,14 +5,6 @@ export PATH="$PIXI_HOME/bin:$PATH"
 source "$CONDA_HOME/etc/profile.d/conda.sh"
 # source "$CONDA_HOME/etc/profile.d/mamba.sh"
 
-cclean() {
-  cer
-  conda clean -a -y
-  rm -rf "$CONDA_HOME/pkgs/cache"
-  python -m pip cache purge
-  pixi clean cache --yes
-}
-
 __set_cenv() {
   eval "$(fd '_activate.sh$' "$1/etc/conda/activate.d/" -x echo 'source' || true)"
   eval "$(jq -r '.env_vars | to_entries[] | "export \(.key)=\(.value)"' "$1/conda-meta/state" || true)"
@@ -26,9 +18,6 @@ __unset_cenv() {
 ca() { # conda activate
   if [[ "$1" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
-  elif [[ "$1" == "venv" ]]; then
-    va
-    return 0
   elif [ -d "$1" ]; then
     if [[ $folder == */ ]]; then
       echo "Folder ends with a trailing slash. Exiting."

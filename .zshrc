@@ -17,7 +17,7 @@ zsh-defer source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 zsh-defer source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # My settings
-fpath+=(~/.local/bin)
+fpath+=(~/bin ~/.local/bin)
 export PATH=~/bin:~/.local/bin:~/.cargo/bin:$PATH
 
 alias vim='nvim'
