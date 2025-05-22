@@ -6,10 +6,10 @@ sudo -v || exit 1 # Set sudo
 # Setup
 setup() { bash "$HOME/dotfiles/bin/pop-tools/setup/$1.sh"; }
 setup_conda() { setup conda; }
-setup_pixi() { setup pixi; }
-setup_yay() { setup yay; }
-setup_wol() { setup wol; }
 setup_config() { setup config; }
+setup_pixi() { setup pixi; }
+setup_wol() { setup wol; }
+setup_yay() { setup yay; }
 
 # NOTE: Order matter
 FUNCTIONS=(
@@ -25,20 +25,43 @@ meshify) FUNCTIONS+=(setup_wol) ;;
 # virtm) ;;
 esac
 
+
 # The machine
-echo -e "\nRunning functions in setup:"
+spinner() {
+    spinner_chars='|/-\'
+    delay=0.1
+    local pid=$1
+    local i=0
+    while kill -0 "$pid" 2>/dev/null; do
+        if ps -o stat= -p "$pid" | grep -q T; then
+            printf "\rx"
+        else
+            i=$(((i + 1) % 4))
+            printf "\r${spinner_chars:$i:1}"
+        fi
+        sleep $delay
+    done
+}
+
+echo -e "\e[?25l"
+echo "Running functions in setup:"
 TOTAL=${#FUNCTIONS[@]}
 COUNT=1
 for FUNCTION in "${FUNCTIONS[@]}"; do
-    echo -n "$COUNT"/"$TOTAL" "${FUNCTION//_/ }"
+    printf "\r   $COUNT/$TOTAL ${FUNCTION//_/ }"
     LOGNAME=~/Downloads/setup"$COUNT"_${FUNCTION/install_/}.log
     SECONDS=0
-    systemd-inhibit kgx --tab --title="$FUNCTION" -- tail -f "$LOGNAME" &
-    (set -euxo pipefail && "$FUNCTION") &>"$LOGNAME"
-    if (($? > 0)); then echo -n " !!! failed !!!"; fi
-    echo " ($((("$SECONDS" / 60) % 60)) min and $(("$SECONDS" % 60)) sec)"
+    (set -euxo pipefail && "$FUNCTION") &>"$LOGNAME" &
+    cmd_pid=$!
+    spinner $cmd_pid
+    wait $cmd_pid
+    exitcode=$?
+    printf "\r   $COUNT/$TOTAL ${FUNCTION//_/ }"
+    if (($exitcode > 0)); then printf " !!! failed !!!"; fi
+    printf " ($((("$SECONDS" / 60) % 60)) min and $(("$SECONDS" % 60)) sec)\n"
     COUNT=$((COUNT + 1))
 done
+echo -e "\e[?25h"
 
 if [ -f /var/run/reboot-required ]; then
     echo 'reboot required'
