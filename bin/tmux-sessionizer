@@ -15,21 +15,27 @@ fi
 
 selected_name=$(basename "$selected" | tr . _)
 
-if [ -f "$selected"/.cenv ]; then
-    CONDA_DEFAULT_ENV="$(head -n 1 "$selected/.cenv")"
+args=(-c "$selected")
+CONDA_DEFAULT_ENV=""
+if [ -f "$selected/.cenv" ]; then
+    env="$(head -n 1 "$selected/.cenv")"
+    if [[ $env == "venv" ]]; then
+        args+=(-e "VIRTUAL_ENV=$selected/.venv")
+    else
+        CONDA_DEFAULT_ENV=$env
+    fi
 elif [[ "$selected" == *holoviz* ]]; then
     CONDA_DEFAULT_ENV="holoviz"
-else
-    CONDA_DEFAULT_ENV=""
 fi
+args+=(-e "CONDA_DEFAULT_ENV=$CONDA_DEFAULT_ENV")
 
 if [[ ! $(pgrep tmux) ]]; then
-    tmux new-session -s "$selected_name" -c "$selected" -e CONDA_DEFAULT_ENV="$CONDA_DEFAULT_ENV"
+    tmux new-session -s "$selected_name" "${args[@]}"
     exit 0
 fi
 
 if ! tmux has-session -t "$selected_name" 2>/dev/null; then
-    tmux new-session -ds "$selected_name" -c "$selected" -e CONDA_DEFAULT_ENV="$CONDA_DEFAULT_ENV"
+    tmux new-session -ds "$selected_name" "${args[@]}"
 fi
 
 if [[ -n "$TMUX" ]]; then
