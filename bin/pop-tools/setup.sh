@@ -28,7 +28,7 @@ esac
 
 # The machine
 spinner() {
-    spinner_chars='|/-\'
+    spinner_chars="|/-\\"
     delay=0.1
     local pid=$1
     local i=0
@@ -37,7 +37,7 @@ spinner() {
             printf "\rx"
         else
             i=$(((i + 1) % 4))
-            printf "\r${spinner_chars:$i:1}"
+            printf "\r%s" "${spinner_chars:$i:1}"
         fi
         sleep $delay
     done
@@ -48,7 +48,7 @@ echo "Running functions in setup:"
 TOTAL=${#FUNCTIONS[@]}
 COUNT=1
 for FUNCTION in "${FUNCTIONS[@]}"; do
-    printf "\r   $COUNT/$TOTAL ${FUNCTION//_/ }"
+    printf "\r   %s/%s %s" "$COUNT" "$TOTAL" "${FUNCTION//_/ }"
     LOGNAME=~/Downloads/setup"$COUNT"_${FUNCTION/install_/}.log
     SECONDS=0
     (set -euxo pipefail && "$FUNCTION") &>"$LOGNAME" &
@@ -56,9 +56,9 @@ for FUNCTION in "${FUNCTIONS[@]}"; do
     spinner $cmd_pid
     wait $cmd_pid
     exitcode=$?
-    printf "\r   $COUNT/$TOTAL ${FUNCTION//_/ }"
-    if (($exitcode > 0)); then printf " !!! failed !!!"; fi
-    printf " ($((("$SECONDS" / 60) % 60)) min and $(("$SECONDS" % 60)) sec)\n"
+    printf "\r   %s/%s %s" "$COUNT" "$TOTAL" "${FUNCTION//_/ }"
+    if ((exitcode > 0)); then printf " !!! failed !!!"; fi
+    printf " (%d min and %d sec)\n" $(( (SECONDS / 60) % 60 )) $(( SECONDS % 60 ))
     COUNT=$((COUNT + 1))
 done
 echo -e "\e[?25h"
