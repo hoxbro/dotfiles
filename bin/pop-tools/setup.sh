@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export PATH=$HOME/bin:$PATH
 sudo -v || exit 1 # Set sudo

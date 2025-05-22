@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 update_dotfiles() {
     git -C ~/dotfiles restore .config/nvim/lazy-lock.json

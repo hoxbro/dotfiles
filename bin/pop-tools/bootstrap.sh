@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 bootstrap() {
     mkdir -p ~/.ssh

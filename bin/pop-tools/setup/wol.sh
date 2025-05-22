@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 # https://necromuralist.github.io/posts/enabling-wake-on-lan/
