@@ -29,5 +29,5 @@ esac
 git clone git@github.com:hoxbro/dotfiles.git ~/dotfiles || true
 git -C ~/dotfiles submodule update --init
 stow -d ~/dotfiles --no-folding .
-ln -sf ~/dotfiles ~/projects/dotfiles
+ln -sf ~/dotfiles ~/projects/
 ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
