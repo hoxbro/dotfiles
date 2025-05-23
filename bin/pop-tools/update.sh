@@ -13,9 +13,8 @@ update_dotfiles() {
 }
 
 update_yay() {
-    set +o pipefail
     sudo -v || exit 1 # Set sudo
-    yes | yay
+    yay --noconfirm
 }
 
 update_conda() {

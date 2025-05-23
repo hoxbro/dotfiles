@@ -28,8 +28,7 @@ PACKAGES_VIRTM=(spice-vdagent)
 
 # =============================================================================
 
-# no pipefail because of yes
-set -eux
+set -euxo pipefail
 
 sudo -v || exit 1
 
@@ -46,4 +45,4 @@ framework) PACKAGES+=("${PACKAGES_FRAMEWORK[@]}") ;;
 virtm) PACKAGES+=("${PACKAGES_VIRTM[@]}") ;;
 esac
 
-yes | yay -S "${PACKAGES[@]}" --batchinstall --needed
+yay -S "${PACKAGES[@]}" --batchinstall --needed --noconfirm
