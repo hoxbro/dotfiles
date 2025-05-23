@@ -36,6 +36,7 @@ if [[ ! $(command -v yay) ]]; then
     sudo pacman -S --needed git base-devel go --noconfirm
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     makepkg -s --dir /tmp/yay --noconfirm
+    rm /tmp/yay/yay-debug*.tar.zst
     sudo pacman -U --noconfirm /tmp/yay/yay*.tar.zst
 fi
 
