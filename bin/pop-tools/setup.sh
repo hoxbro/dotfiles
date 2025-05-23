@@ -34,7 +34,7 @@ spinner() {
     local i=0
     while kill -0 "$pid" 2>/dev/null; do
         if ps -o stat= -p "$pid" | grep -q T; then
-            printf "\rx"
+            printf "\rI"
         else
             i=$(((i + 1) % 4))
             printf "\r%s" "${spinner_chars:$i:1}"
