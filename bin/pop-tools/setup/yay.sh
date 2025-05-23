@@ -34,9 +34,10 @@ set -eux
 sudo -v || exit 1
 
 if [[ ! $(command -v yay) ]]; then
-    sudo pacman -S --needed git base-devel --noconfirm
+    sudo pacman -S --needed git base-devel go --noconfirm
     git clone https://aur.archlinux.org/yay.git /tmp/yay
-    makepkg -si --dir /tmp/yay --noconfirm
+    makepkg -s --dir /tmp/yay --noconfirm
+    sudo pacman -U --noconfirm /tmp/yay/yay*.tar.zst
 fi
 
 case $(cat /etc/hostname) in
