@@ -16,16 +16,18 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 
 args=(-c "$selected")
-CONDA_DEFAULT_ENV=""
 if [ -f "$selected/.cenv" ]; then
     env="$(head -n 1 "$selected/.cenv")"
     if [[ $env == "venv" ]]; then
         args+=(-e "VIRTUAL_ENV=$selected/.venv")
+        CONDA_DEFAULT_ENV=""
     else
         CONDA_DEFAULT_ENV=$env
     fi
 elif [[ "$selected" == *holoviz* ]]; then
     CONDA_DEFAULT_ENV="holoviz"
+else
+    CONDA_DEFAULT_ENV="base"
 fi
 args+=(-e "CONDA_DEFAULT_ENV=$CONDA_DEFAULT_ENV")
 
