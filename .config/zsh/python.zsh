@@ -18,12 +18,6 @@ __unset_cenv() {
 ca() { # conda activate
   if [[ "$1" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
-  elif [ -d "$1" ]; then
-    if [[ $folder == */ ]]; then
-      echo "Folder ends with a trailing slash. Exiting."
-      return 1
-    fi
-    local ENV_PATH="$1"
   else
     local ENV_PATH="$CONDA_HOME/envs/$1"
   fi
@@ -67,13 +61,12 @@ va() {
     export PATH="$VIRTUAL_ENV/bin:$PATH"
     zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
   else
-    VIRTUAL_ENV="$(pwd)/.venv"
-    if [ ! -d "$VIRTUAL_ENV" ]; then
-        echo "Virtual environment not found at $VIRTUAL_ENV"
+    if [ ! -d ".venv" ]; then
+        echo "Virtual environment not found"
         return 1
     fi
+    export VIRTUAL_ENV="$(realpath .venv)"
     export PATH="$VIRTUAL_ENV/bin:$PATH"
-    export VIRTUAL_ENV
     cad
     zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
   fi
