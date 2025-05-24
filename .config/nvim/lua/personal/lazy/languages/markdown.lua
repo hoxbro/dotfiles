@@ -1,13 +1,5 @@
 return {
     {
-        "neovim/nvim-lspconfig",
-        opts = { marksman = {} },
-    },
-    {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { markdown = { "marksman" } },
-    },
-    {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
         ft = "markdown",
