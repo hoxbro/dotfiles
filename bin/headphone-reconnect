@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-address=AC:80:0A:5B:14:38
+address="80:99:E7:E2:B3:6A"
 bluetoothctl disconnect $address
 bluetoothctl connect $address
