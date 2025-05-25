@@ -22,7 +22,7 @@ return {
         "neovim/nvim-lspconfig",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         dependencies = {
-            { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
+            "williamboman/mason-lspconfig.nvim",
             { "j-hui/fidget.nvim", opts = {} },
         },
         -- `opts` are a table where:
@@ -30,21 +30,14 @@ return {
         --  - Keys (`String`) are the server name.
         --  - Values (`Table`) are the settings for the lspconfig.
         config = function(_, opts)
-            -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-
-            -- Setup lspconfig
-            local handlers = function(server_name)
-                require("lspconfig")[server_name].setup({
-                    capabilities = capabilities,
+            for server_name, config in pairs(opts) do
+                vim.lsp.config(server_name, {
                     on_attach = on_attach,
-                    settings = opts[server_name],
-                    filetypes = (opts[server_name] or {}).filetypes,
+                    settings = config,
+                    filetypes = (config or {}).filetypes,
                 })
             end
-            ---@diagnostic disable-next-line: missing-fields
-            require("mason-lspconfig").setup({ handlers = { handlers } })
+            require("mason-lspconfig").setup()
         end,
     },
 }
