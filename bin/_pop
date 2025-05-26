@@ -5,7 +5,7 @@ local setup_dir=$tools_dir/setup
 local update_script=$tools_dir/update.sh
 
 if (( CURRENT == 2 )); then
-  local -a cmds=(setup update sync login)
+  local -a cmds=(setup update sync)
   compadd $cmds
   return
 elif (( CURRENT == 3 )); then

@@ -2,6 +2,10 @@
 
 set -euox pipefail
 sudo -v || exit 1 # Set sudo
+has() {
+    for cmd in "$@"; do command -v "$cmd" >/dev/null 2>&1 || return 1; done
+    return 0
+}
 
 mkdir -p ~/.local/bin
 mkdir -p ~/projects
@@ -10,24 +14,27 @@ sudo chsh "$(whoami)" -s "$(which zsh)"
 sudo locale-gen en_DK.UTF-8 en_US.UTF-8
 
 if [[ $XDG_CURRENT_DESKTOP == "GNOME" ]]; then
-    sudo systemctl enable --now bluetooth.service
     gsettings set org.gnome.desktop.sound event-sounds false || true
 fi
 
-if command -v nemo >/dev/null 2>&1; then
+if has bluetoothctl; then
+    sudo systemctl enable --now bluetooth.service
+fi
+
+if has nemo; then
     xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
     gsettings set org.cinnamon.desktop.default-applications.terminal exec ghostty
 fi
 
-if command -v celluloid >/dev/null 2>&1; then
+if has celluloid; then
     xdg-mime default io.github.celluloid_player.Celluloid.desktop video/*
 fi
 
-if command -v timeshift >/dev/null 2>&1; then
+if has timeshift; then
     sudo systemctl enable --now cronie.service
 fi
 
-if command -v ulauncher >/dev/null 2>&1; then
+if has ulauncher; then
     systemctl --user enable --now ulauncher
 fi
 
