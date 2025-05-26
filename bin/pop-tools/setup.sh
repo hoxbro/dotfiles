@@ -17,6 +17,7 @@ FUNCTIONS=(
     setup_config
     setup_conda
     setup_pixi
+    setup_nvim
 )
 
 case $(cat /etc/hostname) in

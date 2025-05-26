@@ -14,7 +14,7 @@ sudo chsh "$(whoami)" -s "$(which zsh)"
 sudo locale-gen en_DK.UTF-8 en_US.UTF-8
 echo -e "LANG=en_US.UTF-8\nLC_TIME=en_DK.UTF-8\nLC_MEASUREMENT=en_DK.UTF-8" | sudo tee /etc/locale.conf
 
-if [[ $XDG_CURRENT_DESKTOP == "GNOME" ]]; then
+if [[ "${XDG_CURRENT_DESKTOP:-}" == "GNOME" ]]; then
     gsettings set org.gnome.desktop.sound event-sounds false || true
 fi
 
