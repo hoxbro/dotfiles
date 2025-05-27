@@ -40,7 +40,7 @@ return {
         "wansmer/treesj",
         keys = {
             {
-                "cs",
+                "<leader>cs",
                 function() require("treesj").toggle() end,
                 desc = "Treesitter split and join",
                 mode = { "n", "x" },
