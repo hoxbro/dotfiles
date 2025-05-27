@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PATH=$HOME/bin:$PATH
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 sudo -v || exit 1 # Set sudo
 
 # Setup
