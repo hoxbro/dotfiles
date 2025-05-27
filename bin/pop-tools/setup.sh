@@ -7,6 +7,7 @@ sudo -v || exit 1 # Set sudo
 setup() { bash "$HOME/dotfiles/bin/pop-tools/setup/$1.sh"; }
 setup_conda() { setup conda; }
 setup_config() { setup config; }
+setup_nvim() { setup nvim; }
 setup_pixi() { setup pixi; }
 setup_wol() { setup wol; }
 setup_yay() { setup yay; }
