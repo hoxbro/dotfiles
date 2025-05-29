@@ -3,10 +3,10 @@
 PACKAGES=(
     # Terminal
     less rsync lsof zsh rar stow wl-clipboard man-db zip
-    ffmpeg parallel trash-cli btop yt-dlp
+    ffmpeg parallel trash-cli btop yt-dlp downgrade
 
     # Desktop Environment
-    noto-fonts ttf-ubuntu-mono-nerd extension-manager
+    noto-fonts ttf-ubuntu-mono-nerd
     bluez bluez-utils pipewire-pulse
     hunspell hunspell-en_US hunspell-da
 
@@ -17,6 +17,7 @@ PACKAGES=(
     nemo nemo-fileroller
     spotify slack-desktop parsec discord zoom ksnip
     libreoffice-still chromium
+    extension-manager
 
     # Languages
     rust rust-analyzer cargo-nextest cargo-insta
