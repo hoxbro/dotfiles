@@ -1,10 +1,12 @@
 local git_status_keymap = function(bufnr)
     -- https://github.com/nvim-telescope/telescope.nvim/issues/3341
     require("telescope.actions").select_default(bufnr)
+    local group = vim.api.nvim_create_augroup("git", { clear = true })
     local ok = false
     local id
     id = vim.api.nvim_create_autocmd("User", {
         pattern = "GitSignsUpdate",
+        group = group,
         callback = function()
             if ok then vim.api.nvim_del_autocmd(id) end
             require("gitsigns").nav_hunk("first", { navigation_message = false })
