@@ -5,7 +5,7 @@ PACKAGES=(
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp
 
-    otf-san-francisco waybar hyprland
+    otf-san-francisco waybar hyprland hyprpaper
     # Desktop Environment
     noto-fonts ttf-ubuntu-mono-nerd # extension-manager
     bluez bluez-utils pipewire-pulse
