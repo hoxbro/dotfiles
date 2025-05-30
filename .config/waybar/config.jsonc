@@ -6,7 +6,7 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": [],
-    "modules-right": ["memory", "temperature", "wireplumber", "battery", "backlight", "hyprland/language", "network", "bluetooth", "tray", "clock"],
+    "modules-right": ["tray", "memory", "temperature", "wireplumber", "battery", "backlight", "hyprland/language", "network", "bluetooth", "clock"],
 
     "hyprland/workspaces": {
         "format": "<span size='larger'>{icon}</span>",

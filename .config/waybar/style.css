@@ -1,6 +1,6 @@
 @define-color foreground #eeeeee;
 @define-color foreground-inactive #aaaaaa;
-@define-color background #000000;
+@define-color background rgba(0, 0, 0, 0.7);
 
 * {
   font-family: otf-san-francisco;
@@ -14,26 +14,31 @@
   background-color: @background;
 }
 
+#workspaces {
+  padding-left: 0.5em;
+}
 #workspaces button {
   color: @foreground;
-  padding-right: 0.4em;
+  /* padding-right: 0.4em; */
 }
 
 #workspaces button.empty {
   color: @foreground-inactive;
 }
 
+#backlight,
+#battery,
+#bluetooth,
+#clock,
+#language,
 #memory,
-#temperature {
-  padding-left: 1em;
+#network,
+#temperature,
+#tray,
+#wireplumber {
+  padding-right: 1em;
 }
 
-#wireplumber,
-#battery,
-#backlight,
-#language,
-#network,
-#bluetooth,
-#tray {
-  padding-right: 1em;
+#clock {
+  padding-left: 1em;
 }
