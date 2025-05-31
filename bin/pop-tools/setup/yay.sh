@@ -32,6 +32,7 @@ case "${XDG_CURRENT_DESKTOP:-}" in
 GNOME) PACKAGES+=(ulauncher extension-manager) ;;
 Hyprland) PACKAGES+=(
     otf-san-francisco waybar hyprland hyprpaper hyprlock
+    blueman
 ) ;;
 esac
 
