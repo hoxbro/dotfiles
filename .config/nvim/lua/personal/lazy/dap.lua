@@ -1,10 +1,18 @@
+-- Helper to update sign definition partially
+local function update_sign(sign_name, new_text, new_texthl)
+    local existing = vim.fn.sign_getdefined(sign_name)[1] or {}
+    vim.fn.sign_define(sign_name, {
+        text = new_text or existing.text,
+        texthl = new_texthl or existing.texthl,
+        linehl = existing.linehl,
+        numhl = existing.numhl,
+    })
+end
+
 return {
     {
         "mfussenegger/nvim-dap",
-        dependencies = {
-            "rcarriga/nvim-dap-ui",
-            { "theHamsta/nvim-dap-virtual-text", opts = {} },
-        },
+        dependencies = { "rcarriga/nvim-dap-ui" },
         keys = {
             { "<F2>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
             { "<F3>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
@@ -47,13 +55,23 @@ return {
                 -- Configurations
                 dap.configurations[language_name] = language_opts.configurations
             end
+
+            -- Update sign and color
+            update_sign("DapBreakpoint", " ", "DiagnosticSignError")
+            update_sign("DapBreakpointCondition", " ", "DiagnosticSignError")
+            update_sign("DapBreakpointRejected", " ", "DiagnosticSignError")
+            update_sign("DapStopped", "")
         end,
     },
     {
         "rcarriga/nvim-dap-ui",
         lazy = true,
         opts = {},
-        dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+        dependencies = {
+            "mfussenegger/nvim-dap",
+            "nvim-neotest/nvim-nio",
+            { "theHamsta/nvim-dap-virtual-text", opts = {} },
+        },
         config = function(_, opts)
             local dap = require("dap")
             local dapui = require("dapui")

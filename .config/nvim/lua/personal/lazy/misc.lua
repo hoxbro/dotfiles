@@ -56,7 +56,7 @@ return {
         "echasnovski/mini.surround",
         version = "*",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-        opts = {},
+        opts = { mappings = { highlight = "" } },
     },
     {
         "mbbill/undotree",

@@ -1,5 +1,4 @@
 # General settings
-export LANG='en_US.UTF-8'
 export EDITOR='nvim'
 export TERM='xterm-256color'
 
@@ -17,7 +16,7 @@ zsh-defer source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 zsh-defer source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # My settings
-fpath+=(~/.local/bin)
+fpath+=(~/bin ~/.local/bin)
 export PATH=~/bin:~/.local/bin:~/.cargo/bin:$PATH
 
 alias vim='nvim'
@@ -32,6 +31,7 @@ export COLOR_DARK='#21283b'
 alias folder='xdg-open'
 alias wol='curl -X POST http://10.0.1.2:8000/wol && ping 10.0.1.11'
 alias ts='tmux-sessionizer'
+alias t='tmux-sessionizer'
 alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
 alias zsh-reload="exec zsh"
 alias ansi-remove='sed "s/\x1B\[[0-9;]*[a-zA-Z]//g"'
@@ -69,7 +69,8 @@ alias pipe='python -m pip install --no-deps --disable-pip-version-check -ve .'
 alias ppt='pytest -n logical --dist loadgroup -qq'
 alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
 alias uvc='[ -n "$CONDA_PREFIX" ] && uv pip install --system'
-zsh-defer source ~/.config/zsh/conda.zsh
+import-time() { python -X importtime -c "import $1" 2> /tmp/tuna.log && tuna /tmp/tuna.log }
+zsh-defer source ~/.config/zsh/python.zsh
 
 # Holoviz
 export HOLOVIZ_REP=~/projects/holoviz/repos/

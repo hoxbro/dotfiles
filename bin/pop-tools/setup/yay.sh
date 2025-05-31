@@ -38,15 +38,15 @@ esac
 
 # =============================================================================
 
-# no pipefail because of yes
-set -eux
+set -euxo pipefail
 
 sudo -v || exit 1
 
 if [[ ! $(command -v yay) ]]; then
-    sudo pacman -S --needed git base-devel --noconfirm
+    sudo pacman -S --needed git base-devel go --noconfirm
     git clone https://aur.archlinux.org/yay.git /tmp/yay
-    makepkg -si --dir /tmp/yay --noconfirm
+    makepkg -s --dir /tmp/yay --noconfirm
+    sudo pacman -U --noconfirm /tmp/yay/yay-[0-9]*.tar.zst
 fi
 
 case $(cat /etc/hostname) in
@@ -55,4 +55,4 @@ framework) PACKAGES+=("${PACKAGES_FRAMEWORK[@]}") ;;
 virtm) PACKAGES+=("${PACKAGES_VIRTM[@]}") ;;
 esac
 
-yes | yay -S "${PACKAGES[@]}" --batchinstall --needed
+yay -S "${PACKAGES[@]}" --batchinstall --needed --noconfirm

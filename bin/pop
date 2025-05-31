@@ -16,8 +16,6 @@ elif [[ $1 == "update" ]]; then
     fi
 elif [[ $1 == "sync" ]]; then
     bash "$TOOLS/sync.sh"
-elif [[ $1 == "login" ]]; then
-    grep gdm-password /var/log/auth.log | grep -E "unlocked keyring|unlocked login keyring" | awk '{print $1, $2, $3}'
 else
     exit 1
 fi

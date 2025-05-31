@@ -22,6 +22,8 @@ tuna.log
 *.blf
 *.svg
 
+!example*.py
+
 # Submodules
 zsh-autosuggestions/
 zsh-syntax-highlighting/

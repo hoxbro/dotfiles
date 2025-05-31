@@ -13,9 +13,8 @@ CONDA_HOME=~/.local/conda
 
 set -euox pipefail
 
-# Download and install conda
-
 if [ ! -d "$CONDA_HOME" ]; then
+    # Download and install conda
     DST=/tmp/miniforge.sh
     URL="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
     curl -o $DST -L "$URL"
@@ -25,8 +24,6 @@ fi
 source $CONDA_HOME/etc/profile.d/conda.sh
 conda activate base
 
-# Install other apps
 mamba install "${CONDA_APPS[@]}" -y
-mamba update --all -y
 
 touch "$CONDA_HOME/lib/python$PYTHON_VERSION/EXTERNALLY-MANAGED"

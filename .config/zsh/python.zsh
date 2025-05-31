@@ -5,14 +5,6 @@ export PATH="$PIXI_HOME/bin:$PATH"
 source "$CONDA_HOME/etc/profile.d/conda.sh"
 # source "$CONDA_HOME/etc/profile.d/mamba.sh"
 
-cclean() {
-  cer
-  conda clean -a -y
-  rm -rf "$CONDA_HOME/pkgs/cache"
-  python -m pip cache purge
-  pixi clean cache --yes
-}
-
 __set_cenv() {
   eval "$(fd '_activate.sh$' "$1/etc/conda/activate.d/" -x echo 'source' || true)"
   eval "$(jq -r '.env_vars | to_entries[] | "export \(.key)=\(.value)"' "$1/conda-meta/state" || true)"
@@ -26,12 +18,6 @@ __unset_cenv() {
 ca() { # conda activate
   if [[ "$1" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
-  elif [ -d "$1" ]; then
-    if [[ $folder == */ ]]; then
-      echo "Folder ends with a trailing slash. Exiting."
-      return 1
-    fi
-    local ENV_PATH="$1"
   else
     local ENV_PATH="$CONDA_HOME/envs/$1"
   fi
@@ -44,6 +30,7 @@ ca() { # conda activate
     return 1
   fi
 
+  vad
   if [ -n "$CONDA_DEFAULT_ENV" ]; then
     PATH=${PATH//$CONDA_PREFIX\/bin:}
     zsh-defer __unset_cenv "$CONDA_PREFIX"
@@ -68,8 +55,36 @@ cad() { # conda deactivate
   zsh-defer tmux setenv -u CONDA_DEFAULT_ENV
 }
 
+va() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    cad
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
+  else
+    if [ ! -d ".venv" ]; then
+        echo "Virtual environment not found"
+        return 1
+    fi
+    export VIRTUAL_ENV="$(realpath .venv)"
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    cad
+    zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
+  fi
+}
+
+vad() {
+  if [ -n "$VIRTUAL_ENV" ]; then
+    PATH=${PATH//$VIRTUAL_ENV\/bin:}
+  fi
+  unset VIRTUAL_ENV
+  zsh-defer tmux setenv -u VIRTUAL_ENV
+}
+
+
 if [ -n "$CONDA_DEFAULT_ENV" ]; then
   ca "$CONDA_DEFAULT_ENV"
+elif [ -n "$VIRTUAL_ENV" ]; then
+  va
 else
   ca base
 fi
@@ -110,6 +125,8 @@ cer() {
   wait
   set -m
 }
+
+cel() { mamba env list }
 
 pth() {
   if [ -n "$CONDA_PREFIX" ]; then
