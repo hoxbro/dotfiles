@@ -5,16 +5,15 @@ PACKAGES=(
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp
 
-    otf-san-francisco waybar hyprland hyprpaper hyprlock
-    # Desktop Environment
-    noto-fonts ttf-ubuntu-mono-nerd # extension-manager
+    # System
+    noto-fonts ttf-ubuntu-mono-nerd
     bluez bluez-utils pipewire-pulse
     hunspell hunspell-en_US hunspell-da
 
     # GUI
     librewolf-bin ghostty 1password synology-drive
     # clockify-desktop jdk-openjdk
-    # code celluloid remmina geary ulauncher
+    # code celluloid remmina geary
     # nemo nemo-fileroller
     # spotify slack-desktop parsec discord zoom ksnip
     # libreoffice-still chromium
@@ -23,9 +22,18 @@ PACKAGES=(
     # rust rust-analyzer cargo-nextest cargo-insta
 )
 
+# Computers
 PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-utils cifs-utils)
 PACKAGES_FRAMEWORK=()
 PACKAGES_VIRTM=(spice-vdagent)
+
+# Desktop Environments
+case "${XDG_CURRENT_DESKTOP:-}" in
+GNOME) PACKAGES+=(ulauncher extension-manager) ;;
+Hyprland) PACKAGES+=(
+    otf-san-francisco waybar hyprland hyprpaper hyprlock
+) ;;
+esac
 
 # =============================================================================
 
