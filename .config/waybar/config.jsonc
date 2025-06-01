@@ -6,7 +6,19 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": [],
-    "modules-right": ["tray", "memory", "temperature", "wireplumber", "battery", "backlight", "hyprland/language", "network", "bluetooth", "clock"],
+    "modules-right": [
+        "tray",
+        "memory",
+        "temperature",
+        "wireplumber",
+        "battery",
+        "custom/cliphist",
+        "backlight",
+        "hyprland/language",
+        "network",
+        "bluetooth",
+        "clock",
+    ],
 
     "hyprland/workspaces": {
         "format": "<span size='larger'>{icon}</span>",
@@ -86,5 +98,12 @@
     "tray": {
         "icon-size": 16,
         "spacing": 16
-    }
+    },
+  "custom/cliphist": {
+    "format": "",
+    "on-click": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh",
+    "on-click-right": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh d",
+    "on-click-middle": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh w",
+    "tooltip-format": "Left: Open clipboard Manager\nRight: Delete an entry\nMiddle: Clear list",
+  },
 }
