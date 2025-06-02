@@ -9,5 +9,5 @@ set -euox pipefail
 # (sometimes). Solution to both is to open nvim up after
 # the script has finished.
 nvim --headless "+Lazy! restore" +qa
-nvim --headless "+MasonToolsInstallSync" +qa
+nvim --headless "+MasonLockRestore" +qa
 # TODO: blink.cmp binary download too
