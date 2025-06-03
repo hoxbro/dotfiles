@@ -16,15 +16,19 @@ __unset_cenv() {
 }
 
 ca() { # conda activate
-  if [[ "$1" == "base" ]]; then
+  local ENV="$1"
+  if [[ "$ENV" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
+  elif [[ -d "$ENV" ]]; then
+    local ENV_PATH="$(realpath $ENV)"
+    local ENV="$ENV_PATH"
   else
-    local ENV_PATH="$CONDA_HOME/envs/$1"
+    local ENV_PATH="$CONDA_HOME/envs/$ENV"
   fi
 
-  if [ ! -d "$ENV_PATH" ]; then
-    echo "Environment '$1' does not exist."
-    if [[ "$CONDA_DEFAULT_ENV" == "$1" && -z "$PIXI_ENVIRONMENT_NAME" ]]; then
+  if [ ! -d "$ENV_PATH/conda-meta" ]; then
+    echo "Not a conda environment '$ENV'"
+    if [[ "$CONDA_DEFAULT_ENV" == "$ENV" && -z "$PIXI_ENVIRONMENT_NAME" ]]; then
       ca base
     fi
     return 1
@@ -36,11 +40,11 @@ ca() { # conda activate
     zsh-defer __unset_cenv "$CONDA_PREFIX"
   fi
 
-  export CONDA_DEFAULT_ENV="$1"
+  export CONDA_DEFAULT_ENV="$ENV"
   export CONDA_PREFIX="$ENV_PATH"
   export PATH="$CONDA_PREFIX/bin:$PATH"
   zsh-defer __set_cenv "$CONDA_PREFIX"
-  zsh-defer tmux setenv CONDA_DEFAULT_ENV "$1"
+  zsh-defer tmux setenv CONDA_DEFAULT_ENV "$ENV"
 }
 
 cad() { # conda deactivate
