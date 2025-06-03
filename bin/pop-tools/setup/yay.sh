@@ -23,7 +23,7 @@ PACKAGES=(
     rust rust-analyzer cargo-nextest cargo-insta
 )
 
-PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris nfs-utils cifs-utils)
+PACKAGES_MESHIFY=(ethtool openssh-server refind timeshift lutris cifs-utils)
 PACKAGES_FRAMEWORK=()
 PACKAGES_VIRTM=(spice-vdagent)
 
