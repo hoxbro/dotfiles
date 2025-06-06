@@ -85,7 +85,7 @@ vad() {
 }
 
 
-if [ -n "$CONDA_DEFAULT_ENV" ]; then
+if [[ -n "$CONDA_DEFAULT_ENV" && "$CONDA_DEFAULT_ENV" != "base" ]]; then
   ca "$CONDA_DEFAULT_ENV"
 elif [ -n "$VIRTUAL_ENV" ]; then
   va
