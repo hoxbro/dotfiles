@@ -20,6 +20,7 @@
     pr = push --force-with-lease
     co = checkout
     cob = checkout -b
+    cof = checkout -B
     po = "!git pull --set-upstream origin \"$(git branch --show-current)\""
     skipci  = "!git commit --amend -m \"$(git log --format=%B -n1)\" -m \"[skip ci]\""
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
