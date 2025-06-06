@@ -18,4 +18,7 @@ ignore_submodules = true
 disabled = true
 
 [pixi]
-disabled = true
+style = "#f9c405 bold"
+detect_files = []
+detect_folders = []
+format = 'via [🅟 ${environment} ]($style)'
