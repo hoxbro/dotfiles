@@ -2,8 +2,8 @@
 
 PACKAGES=(
     # Terminal
-    less rsync lsof zsh rar stow wl-clipboard man-db zip
-    ffmpeg parallel trash-cli btop yt-dlp downgrade
+    less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
+    ffmpeg parallel trash-cli btop yt-dlp downgrade ufw
 
     # Desktop Environment
     noto-fonts ttf-ubuntu-mono-nerd
