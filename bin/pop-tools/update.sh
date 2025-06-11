@@ -25,7 +25,7 @@ update_conda() {
 }
 
 update_pixi() {
-    pixi self-update
+    pixi self-update --no-release-note
     pixi global sync
     pixi global update
     pixi completion --shell zsh >~/.local/bin/_pixi
