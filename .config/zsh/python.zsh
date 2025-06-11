@@ -28,7 +28,7 @@ ca() { # conda activate
 
   if [ ! -d "$ENV_PATH/conda-meta" ]; then
     echo "Not a conda environment '$ENV'"
-    if [[ "$CONDA_DEFAULT_ENV" == "$ENV" && -z "$PIXI_ENVIRONMENT_NAME" ]]; then
+    if [[ "$CONDA_DEFAULT_ENV" == "$ENV" && -z "$PIXI_ENVIRONMENT_NAME" && -z "$VIRTUAL_ENV" ]]; then
       ca base
     fi
     return 1
