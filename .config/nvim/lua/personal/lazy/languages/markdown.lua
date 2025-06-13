@@ -18,4 +18,10 @@ return {
         ft = "markdown",
         opts = { image = {} },
     },
+    {
+        "HakonHarnes/img-clip.nvim",
+        ft = "markdown",
+        opts = { dir_path = "Attachments" },
+        keys = { { "<leader>mp", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" } },
+    },
 }
