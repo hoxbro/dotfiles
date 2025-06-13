@@ -1,4 +1,5 @@
 local indents = {
+    css = 2,
     javascript = 2,
     python = 4,
 }
@@ -48,20 +49,21 @@ return {
 
             -- Autostart
             local autostart_group = vim.api.nvim_create_augroup("TreesitterAutoStart", { clear = true })
+            local autostart = function(details)
+                local bufnr = details.buf
+                -- Highlight
+                if not pcall(vim.treesitter.start, bufnr) then return end
+                -- Indentation
+                vim.bo[bufnr].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+                -- Folds
+                vim.bo[bufnr].syntax = "on"
+                vim.wo.foldlevel = 99
+                vim.wo.foldmethod = "expr"
+                vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            end
             vim.api.nvim_create_autocmd("FileType", {
                 group = autostart_group,
-                callback = function(details)
-                    local bufnr = details.buf
-                    -- Highlight
-                    if not pcall(vim.treesitter.start, bufnr) then return end
-                    -- Indentation
-                    vim.bo[bufnr].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
-                    -- Folds
-                    vim.bo[bufnr].syntax = "on"
-                    vim.wo.foldlevel = 99
-                    vim.wo.foldmethod = "expr"
-                    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                end,
+                callback = autostart,
             })
 
             -- Auto update indent settings based on language
