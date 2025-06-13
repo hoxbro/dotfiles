@@ -69,6 +69,7 @@ alias ppt='pytest -n logical --dist loadgroup -qq'
 alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
 alias uvc='[ -n "$CONDA_PREFIX" ] && uv pip install --system'
 import-time() { python -X importtime -c "import $1" 2> /tmp/tuna.log && tuna /tmp/tuna.log }
+if [[ -n "$VIRTUAL_ENV" && "$CONDA_DEFAULT_ENV" == "base" ]]; then unset CONDA_DEFAULT_ENV; fi
 zsh-defer source ~/.config/zsh/python.zsh
 
 # Holoviz

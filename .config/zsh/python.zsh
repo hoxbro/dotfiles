@@ -28,9 +28,6 @@ ca() { # conda activate
 
   if [ ! -d "$ENV_PATH/conda-meta" ]; then
     echo "Not a conda environment '$ENV'"
-    if [[ "$CONDA_DEFAULT_ENV" == "$ENV" && -z "$PIXI_ENVIRONMENT_NAME" && -z "$VIRTUAL_ENV" ]]; then
-      ca base
-    fi
     return 1
   fi
 
@@ -78,14 +75,14 @@ va() {
 
 vad() {
   if [ -n "$VIRTUAL_ENV" ]; then
-    PATH=${PATH//$VIRTUAL_ENV\/bin:}
+    export PATH=${PATH//$VIRTUAL_ENV\/bin:}
   fi
   unset VIRTUAL_ENV
   zsh-defer tmux setenv -u VIRTUAL_ENV
 }
 
 
-if [[ -n "$CONDA_DEFAULT_ENV" && "$CONDA_DEFAULT_ENV" != "base" ]]; then
+if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
   ca "$CONDA_DEFAULT_ENV"
 elif [ -n "$VIRTUAL_ENV" ]; then
   va
