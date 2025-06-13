@@ -8,13 +8,13 @@ local on_attach = function(_, bufnr)
     map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
     map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature Help")
 
-    local tb = require("telescope.builtin")
-    map("n", "gd", tb.lsp_definitions, "Goto Definition")
-    map("n", "gr", tb.lsp_references, "Goto References")
-    map("n", "gi", tb.lsp_implementations, "Goto Implementation")
-    map("n", "<leader>gt", tb.lsp_type_definitions, "Type Definition")
-    map("n", "<leader>ds", tb.lsp_document_symbols, "Document Symbols")
-    map("n", "<leader>ws", tb.lsp_dynamic_workspace_symbols, "Workspace Symbols")
+    local sp = require("snacks").picker
+    map("n", "gd", sp.lsp_definitions, "Goto Definition")
+    map("n", "gr", sp.lsp_references, "Goto References")
+    map("n", "gi", sp.lsp_implementations, "Goto Implementation")
+    map("n", "<leader>gt", sp.lsp_type_definitions, "Type Definition")
+    map("n", "<leader>ds", sp.lsp_symbols, "Document Symbols")
+    map("n", "<leader>ws", sp.lsp_workspace_symbols, "Workspace Symbols")
 end
 
 return {

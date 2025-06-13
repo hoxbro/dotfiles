@@ -1,31 +1,10 @@
-.git/
-__pycache__/
-.ipynb_checkpoints/
-formal/
-archive/
-patch/
 *_cache/
+.git/
+.ipynb_checkpoints/
 .pixi/
-pixi.lock
-lazy-lock.json
+__pycache__/
 node_modules/
-.obsidian/
 
-*.ipynb
-*.png
-*.jpeg
-*.jpg
-*.zip
-*.csv
-*.db
-*.blf
-*.svg
-*.log
-
-!example*.py
-
-# Submodules
-zsh-autosuggestions/
-zsh-syntax-highlighting/
-diff-so-fancy/
-zsh-defer/
+pixi.lock
+uv.lock
+lazy-lock.json
