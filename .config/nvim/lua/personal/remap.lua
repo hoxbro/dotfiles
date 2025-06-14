@@ -78,5 +78,9 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>ci", require("personal.util.virtual_text").virtual_to_inline_text)
 
 -- Advanced keymaps
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make File Executable" })
--- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux-sessionizer<CR>", { desc = "Open Tmux Sessionizer" })
+vim.keymap.set(
+    "n",
+    "<leader>x",
+    '<cmd>silent ![ -x "%" ] && chmod u-x "%" || chmod u+x "%"<CR>',
+    { desc = "Toggle Executable Bit" }
+)

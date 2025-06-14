@@ -1,3 +1,12 @@
+local function file_mode_numeric()
+    local file = vim.fn.expand("%:p")
+    if vim.fn.filereadable(file) == 0 then return "" end
+    local stat = (vim.uv or vim.loop).fs_stat(file)
+    if not stat then return "" end
+    local mode = stat.mode
+    return "0x" .. string.format("%03o", mode % 512)
+end
+
 return {
     {
         "navarasu/onedark.nvim",
@@ -17,7 +26,7 @@ return {
             },
             sections = {
                 lualine_c = { { "filename", path = 1 } },
-                lualine_x = {},
+                lualine_x = { file_mode_numeric },
             },
         },
     },
