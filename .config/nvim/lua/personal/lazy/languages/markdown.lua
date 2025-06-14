@@ -21,7 +21,7 @@ return {
     {
         "HakonHarnes/img-clip.nvim",
         ft = "markdown",
-        opts = { dir_path = "Attachments" },
+        opts = {},
         keys = { { "<leader>mp", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" } },
     },
 }

@@ -8,6 +8,7 @@ local exclude = {
     "*_cache/",
     ".pixi/",
     "node_modules/",
+    ".venv/",
 
     "lazy-lock.json",
     "pixi.lock",
@@ -72,18 +73,12 @@ return {
         },
         {
             "<leader>sh",
-            function()
-                local env = vim.fn.getenv("HOLOVIZ_DEV")
-                require("snacks").picker.files({ cwd = env, title = "Files HoloViz" })
-            end,
+            function() require("snacks").picker.files({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Files HoloViz" }) end,
             desc = "Search Files (Holoviz)",
         },
         {
             "<leader>sj",
-            function()
-                local env = vim.fn.getenv("HOLOVIZ_DEV")
-                require("snacks").picker.grep({ cwd = env, title = "Grep HoloViz" })
-            end,
+            function() require("snacks").picker.grep({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Grep HoloViz" }) end,
             desc = "Search Files (Holoviz)",
         },
         {

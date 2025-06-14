@@ -2,7 +2,6 @@ local always_hidden = {
     ".SynologyWorkingDirectory",
     ".benchmarks",
     ".git",
-    -- ".hypothesis*",
     ".ipynb_checkpoints",
     ".pixi",
     ".pytest_cache",
@@ -11,7 +10,7 @@ local always_hidden = {
     "CVS",
     "__pycache__",
     "node_modules",
-    ".obsidian",
+    ".venv",
 }
 
 return {
