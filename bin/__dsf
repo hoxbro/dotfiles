@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Because of https://github.com/so-fancy/diff-so-fancy/issues/490
+diff-so-fancy | sed -e 's/^+\(.*\)/\x1b[1;32m+\1\x1b[0m/' -e 's/^\-\(.*\)/\x1b[1;31m-\1\x1b[0m/'

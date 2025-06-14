@@ -99,6 +99,9 @@ return {
                 files = { hidden = true, follow = true },
                 grep = { hidden = true, follow = true },
             },
+            previewers = {
+                diff = { builtin = false, cmd = { "__dsf" } },
+            },
         },
     },
 }
