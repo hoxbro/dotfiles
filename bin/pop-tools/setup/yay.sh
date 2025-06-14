@@ -23,8 +23,8 @@ PACKAGES=(
     rust rust-analyzer cargo-nextest cargo-insta
 )
 
-PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils)
-PACKAGES_FRAMEWORK=()
+PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
+PACKAGES_FRAMEWORK=(amd-ucode)
 PACKAGES_VIRTM=(spice-vdagent)
 
 # =============================================================================
