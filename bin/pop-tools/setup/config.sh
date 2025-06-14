@@ -11,7 +11,9 @@ mkdir -p ~/.local/bin
 mkdir -p ~/projects
 
 sudo chsh "$(whoami)" -s "$(which zsh)"
-sudo locale-gen en_DK.UTF-8 en_US.UTF-8
+
+sudo sed -i 's/^#en_DK.UTF-8 UTF-8/en_DK.UTF-8 UTF-8/' /etc/locale.gen
+sudo locale-gen
 echo -e "LANG=en_US.UTF-8\nLC_TIME=en_DK.UTF-8\nLC_MEASUREMENT=en_DK.UTF-8" | sudo tee /etc/locale.conf
 
 if [[ "${XDG_CURRENT_DESKTOP:-}" == "GNOME" ]]; then
@@ -37,6 +39,10 @@ fi
 
 if has ulauncher; then
     systemctl --user enable --now ulauncher
+fi
+
+if has librewolf; then
+    xdg-settings set default-web-browser librewolf.desktop
 fi
 
 if has 1password librewolf; then
