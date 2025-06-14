@@ -15,7 +15,7 @@ copy-path() {
     if [[ $SRC != *:* && $DST != *:* ]]; then
         mkdir -p "$(dirname "$DST/$1")"
     fi
-    rsync -avhz --delete --exclude={'*/.pixi','*/target','*/.*_cache','*/node_modules'} "$SRC/$1/" "$DST/$1"
+    rsync -avhz --delete --exclude={'*/.pixi','*/target','*/.*_cache','*/node_modules','*/.venv'} "$SRC/$1/" "$DST/$1"
     echo
 }
 
