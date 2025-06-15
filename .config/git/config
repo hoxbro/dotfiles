@@ -60,7 +60,7 @@
     autoSetupRemote = true
 [init]
     defaultBranch = main
-    templateDir = ~/dotfiles/.config/git-template/
+    templateDir = ~/dotfiles/.config/git/template/
 [help]
     autocorrect = 10
 [commit]
