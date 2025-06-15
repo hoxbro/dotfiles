@@ -6,6 +6,14 @@ return {
         opts = {},
     },
     {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        opts = { markdown = { "marksman" } },
+    },
+    {
+        "neovim/nvim-lspconfig",
+        opts = { marksman = { root_markers = { ".marksman.toml", ".git" } } },
+    },
+    {
         "iamcco/markdown-preview.nvim",
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
         keys = { { "<leader>mw", "<Plug>MarkdownPreview", desc = "Markdown Preview" } },

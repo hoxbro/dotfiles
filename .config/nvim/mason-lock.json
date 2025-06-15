@@ -11,6 +11,7 @@
   "html-lsp": "4.10.0",
   "js-debug-adapter": "v1.100.1",
   "lua-language-server": "3.14.0",
+  "marksman": "2024-12-18",
   "prettierd": "0.26.1",
   "ruff": "0.11.11",
   "rust-analyzer": "2025-05-19",
