@@ -16,7 +16,7 @@ return {
             }
             local function run_build(cmd)
                 local function inner_build()
-                    local output = vim.fn.system("cd " .. Util.get_root("Cargo.toml") .. " && " .. cmd)
+                    local output = vim.fn.system("cd " .. vim.fs.root(0, { "Cargo.toml" }) .. " && " .. cmd)
                     local filename = output:match('"executable":"(.-)".-"success":true}')
                     if not filename then return error("failed to build cargo project") end
                     return filename

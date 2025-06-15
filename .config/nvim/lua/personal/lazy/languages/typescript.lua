@@ -85,11 +85,11 @@ return {
                     request = "launch",
                     name = "Launch: Chrome (client)",
                     url = function() return vim.fn.input("Enter URL: ", "http://localhost:8000") end,
-                    webRoot = Util.get_root({ "tsconfig.json", "package.json", "jsconfig.json" }),
+                    webRoot = vim.fs.root(0, { "tsconfig.json", "package.json", "jsconfig.json" }),
                     protocol = "inspector",
                     sourceMaps = true,
                     userDataDir = false,
-                    runtimeExecutable = vim.fn.exepath("chrome-dev"),
+                    runtimeExecutable = vim.fn.exepath("chromium"),
                 },
             }
             opts.typescript = { adapters = adapters, configurations = configurations }

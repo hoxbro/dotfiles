@@ -4,19 +4,6 @@ require("personal.util.yankring")
 
 Util = {}
 
-Util.get_root = function(patterns)
-    patterns = type(patterns) == "string" and { patterns } or patterns
-    local path = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-    local pattern = vim.fs.find(function(name)
-        for _, p in ipairs(patterns) do
-            if name == p then return true end
-            if p:sub(1, 1) == "*" and name:find(vim.pesc(p:sub(2)) .. "$") then return true end
-        end
-        return false
-    end, { path = path, upward = true })[1]
-    return vim.fs.dirname(pattern)
-end
-
 Util.selector = function(options, title)
     local action_state = require("telescope.actions.state")
     local actions = require("telescope.actions")
