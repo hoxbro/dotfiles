@@ -13,7 +13,7 @@ PACKAGES=(
     # GUI
     librewolf-bin ghostty 1password synology-drive
     clockify-desktop jdk-openjdk
-    code celluloid remmina geary ulauncher timeshift
+    code celluloid remmina geary ulauncher timeshift pavucontrol
     nemo nemo-fileroller
     spotify slack-desktop parsec discord zoom ksnip
     libreoffice-still chromium
@@ -24,7 +24,7 @@ PACKAGES=(
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
-PACKAGES_FRAMEWORK=(amd-ucode)
+PACKAGES_FRAMEWORK=(amd-ucode gnome-keyring plymouth)
 PACKAGES_VIRTM=(spice-vdagent)
 
 # =============================================================================
