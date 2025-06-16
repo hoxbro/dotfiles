@@ -6,3 +6,4 @@ node_modules
 crates/
 .git/
 .pixi/
+archive/
