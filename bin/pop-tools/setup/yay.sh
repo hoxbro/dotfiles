@@ -11,11 +11,10 @@ PACKAGES=(
     hunspell hunspell-en_US hunspell-da
 
     # GUI
-    librewolf-bin ghostty 1password synology-drive
-    clockify-desktop jdk-openjdk
-    code celluloid remmina geary ulauncher timeshift pavucontrol
+    librewolf-bin ghostty 1password synology-drive clockify-desktop
+    celluloid remmina geary ulauncher timeshift pavucontrol seahorse
     nemo nemo-fileroller
-    spotify slack-desktop parsec discord zoom ksnip
+    code spotify slack-desktop parsec discord zoom ksnip
     libreoffice-still chromium
     extension-manager
 
@@ -24,7 +23,7 @@ PACKAGES=(
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
-PACKAGES_FRAMEWORK=(amd-ucode gnome-keyring plymouth)
+PACKAGES_FRAMEWORK=(amd-ucode plymouth)
 PACKAGES_VIRTM=(spice-vdagent)
 
 # =============================================================================
@@ -46,4 +45,4 @@ framework) PACKAGES+=("${PACKAGES_FRAMEWORK[@]}") ;;
 virtm) PACKAGES+=("${PACKAGES_VIRTM[@]}") ;;
 esac
 
-yay -S "${PACKAGES[@]}" --batchinstall --needed --noconfirm
+yay -S "${PACKAGES[@]}" --batchinstall --needed --noconfirm --removemake
