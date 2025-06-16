@@ -36,7 +36,7 @@ vim.api.nvim_create_user_command("Wq", "wq", {})
 -- https://www.reddit.com/r/neovim/comments/1l4tubm/copy_last_yanked_text_to_clipboard_on_focuslost/
 local last_clipboard = ""
 local group_clipboard = vim.api.nvim_create_augroup("group_clipboard", { clear = true })
-vim.api.nvim_create_autocmd("FocusLost", {
+vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
     desc = "Copy to clipboard on FocusLost",
     group = group_clipboard,
     callback = function()

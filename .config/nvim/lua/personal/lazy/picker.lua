@@ -103,6 +103,6 @@ return {
                 diff = { builtin = false, cmd = { "__dsf" } },
             },
         },
-        input = {},
+        input = { win = { row = 10 } },
     },
 }
