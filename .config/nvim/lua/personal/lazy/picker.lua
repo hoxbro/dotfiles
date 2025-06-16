@@ -103,5 +103,6 @@ return {
                 diff = { builtin = false, cmd = { "__dsf" } },
             },
         },
+        input = {},
     },
 }

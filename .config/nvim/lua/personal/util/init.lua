@@ -5,44 +5,20 @@ require("personal.util.yankring")
 Util = {}
 
 Util.selector = function(options, title)
-    local action_state = require("telescope.actions.state")
-    local actions = require("telescope.actions")
-    local finders = require("telescope.finders")
-    local pickers = require("telescope.pickers")
-    local themes = require("telescope.themes")
-
     local co = coroutine.running()
+    local t = vim.deepcopy(options)
+    table.insert(t, "Custom...")
 
-    pickers
-        .new(
-            themes.get_dropdown({
-                prompt_title = title or "Select an Option",
-                previewer = false,
-            }),
-            {
-                finder = finders.new_table(options),
-                sorter = require("telescope.config").values.generic_sorter({}),
-                attach_mappings = function(prompt_bufnr)
-                    local state = true
-                    actions.select_default:replace(function()
-                        local selection = action_state.get_selected_entry()
-                        if selection == nil then
-                            selection = action_state.get_current_line()
-                            local picker = action_state.get_current_picker(prompt_bufnr)
-
-                            table.insert(options, selection)
-                            picker:refresh(finders.new_table(options), { reset_prompt = false })
-                            state = false
-                        else
-                            actions.close(prompt_bufnr)
-                            coroutine.resume(co, selection[1])
-                        end
-                    end)
-                    return state
-                end,
-            }
-        )
-        :find()
+    vim.ui.select(t, { prompt = title }, function(choice)
+        if choice == "Custom..." then
+            vim.ui.input({ prompt = "Enter custom choice:" }, function(custom)
+                table.insert(options, custom)
+                coroutine.resume(co, custom)
+            end)
+        elseif choice then
+            coroutine.resume(co, choice)
+        end
+    end)
 
     return coroutine.yield()
 end
