@@ -33,6 +33,11 @@ return {
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
+                debugpy = {
+                    type = "server",
+                    host = "127.0.0.1", -- or wherever debugpy.listen is bound
+                    port = 5678,
+                },
             }
             local configurations = {
                 {
@@ -72,6 +77,26 @@ return {
             for index, config in ipairs(configurations) do
                 configurations[index] = vim.tbl_deep_extend("keep", config, defaults)
             end
+
+            -- {
+            --     "name": "Python Debugger: Remote Attach",
+            --     "type": "debugpy",
+            --     "request": "attach",
+            --     "connect": {
+            --         "host": "localhost",
+            --         "port": 5678
+            --     },
+            -- }
+
+            configurations[#configurations + 1] = {
+                type = "debugpy_server",
+                request = "attach",
+                name = "Attach: Script", -- python -m debugpy --listen 5678 --wait-for-client filename
+                -- port = 5678,
+                -- host = "127.0.0.1",
+                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = "." } },
+                console = "integratedTerminal",
+            }
 
             opts.python = { adapters = adapters, configurations = configurations }
         end,
