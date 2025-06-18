@@ -27,6 +27,10 @@ meshify) FUNCTIONS+=(setup_wol) ;;
 # virtm) ;;
 esac
 
+# To no go to sleep
+systemd-inhibit sleep infinity &
+PID=$!
+
 # The machine
 echo "Running functions in setup:"
 TOTAL=${#FUNCTIONS[@]}
@@ -44,3 +48,5 @@ done
 if [ -f /var/run/reboot-required ]; then
     echo 'reboot required'
 fi
+
+kill "$PID"
