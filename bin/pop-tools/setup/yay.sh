@@ -19,7 +19,7 @@ PACKAGES=(
     extension-manager
 
     # Languages
-    rust rust-analyzer cargo-nextest cargo-insta
+    rust rust-analyzer cargo-nextest cargo-insta gdb
 )
 
 PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)

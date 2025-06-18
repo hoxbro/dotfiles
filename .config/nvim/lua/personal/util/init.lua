@@ -8,14 +8,15 @@ Util.selector = function(options, title, custom_input)
     local co = coroutine.running()
     local choices = options
 
-    custom_input = custom_input or "Custom..."
+    -- snacker picker vim.ui.input show full
+    if custom_input == nil then custom_input = "Custom..." end
     if custom_input then
         choices = vim.deepcopy(choices)
         table.insert(choices, custom_input)
     end
 
     vim.ui.select(choices, { prompt = title }, function(choice)
-        if custom_input and choice == "Custom..." then
+        if custom_input and choice == custom_input then
             vim.ui.input({ prompt = "Enter custom choice:" }, function(custom)
                 table.insert(options, custom)
                 coroutine.resume(co, custom)
@@ -66,3 +67,25 @@ Util.shell_split = function(command)
     if #current > 0 then table.insert(result, current) end
     return result
 end
+
+local _platform = function()
+    if vim.fn.has("win32") == 1 then
+        return "Windows"
+    elseif vim.fn.has("macunix") == 1 then
+        return "macOS"
+    elseif vim.fn.has("unix") == 1 then
+        return "Linux"
+    else
+        return "Unknown"
+    end
+end
+
+setmetatable(Util, {
+    __index = function(t, key)
+        if key == "platform" then
+            local platform = _platform()
+            rawset(t, key, platform)
+            return platform
+        end
+    end,
+})

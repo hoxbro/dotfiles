@@ -1,3 +1,35 @@
+local last_pid
+local debugpy = function(callback, config)
+    last_pid = config.pid
+    local server = { type = "server", host = config.host, port = config.port }
+    local already_injected = false
+    if Util.platform == "Linux" then
+        if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
+            vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
+            return
+        end
+        vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
+        already_injected = vim.v.shell_error == 0
+        -- TODO: on mac likely to use `vmmap pid`
+    end
+
+    if already_injected then
+        callback(server)
+        return
+    end
+    -- Inject debugpy
+    vim.fn.jobstart({
+        vim.fn.exepath("python3") and "python3" or "python",
+        "-m",
+        "debugpy",
+        "--listen",
+        config.host .. ":" .. config.port,
+        "--pid",
+        tostring(config.pid),
+    })
+    vim.defer_fn(function() callback(server) end, 200)
+end
+
 return {
     {
         "neovim/nvim-lspconfig",
@@ -29,15 +61,11 @@ return {
             local adapters = {
                 python = {
                     args = { "-m", "debugpy.adapter" },
-                    command = "python3",
+                    command = vim.fn.exepath("python3") and "python3" or "python",
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
-                debugpy = {
-                    type = "server",
-                    host = "127.0.0.1", -- or wherever debugpy.listen is bound
-                    port = 5678,
-                },
+                debugpy = debugpy,
             }
             local configurations = {
                 {
@@ -78,24 +106,29 @@ return {
                 configurations[index] = vim.tbl_deep_extend("keep", config, defaults)
             end
 
-            -- {
-            --     "name": "Python Debugger: Remote Attach",
-            --     "type": "debugpy",
-            --     "request": "attach",
-            --     "connect": {
-            --         "host": "localhost",
-            --         "port": 5678
-            --     },
-            -- }
-
             configurations[#configurations + 1] = {
-                type = "debugpy_server",
+                type = "debugpy",
                 request = "attach",
-                name = "Attach: Script", -- python -m debugpy --listen 5678 --wait-for-client filename
-                -- port = 5678,
-                -- host = "127.0.0.1",
-                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = "." } },
-                console = "integratedTerminal",
+                name = "Attach: Process",
+                pid = function()
+                    local options = { "Panel App :5006", "Select a Process" }
+                    if last_pid then table.insert(options, 1, "Last Process") end
+
+                    local actions = {
+                        ["Last Process"] = function() return last_pid end,
+                        ["Panel App :5006"] = function()
+                            return vim.trim(vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t"))
+                        end,
+                        ["Select a Process"] = require("dap.utils").pick_process,
+                    }
+
+                    local option = Util.selector(options, "Select method", "Manual")
+                    local action = actions[option]
+                    return action and action() or vim.trim(option)
+                end,
+                port = 5678,
+                host = "127.0.0.1",
+                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
             }
 
             opts.python = { adapters = adapters, configurations = configurations }
