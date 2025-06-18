@@ -15,12 +15,13 @@ fi
 
 selected_name=$(basename "$selected" | tr . _)
 
+unset CONDA_DEFAULT_ENV
+unset VIRTUAL_ENV
 args=(-c "$selected")
 if [ -f "$selected/.cenv" ]; then
     env="$(head -n 1 "$selected/.cenv")"
     if [[ $env == "venv" ]]; then
         args+=(-e "VIRTUAL_ENV=$selected/.venv")
-        args+=(-e "CONDA_DEFAULT_ENV=")
     else
         args+=(-e "CONDA_DEFAULT_ENV=$env")
     fi
