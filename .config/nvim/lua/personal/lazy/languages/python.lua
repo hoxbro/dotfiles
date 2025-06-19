@@ -1,35 +1,4 @@
 local last_pid
-local debugpy = function(callback, config)
-    last_pid = config.pid
-    local server = { type = "server", host = config.host, port = config.port }
-    local already_injected = false
-    if Util.platform == "Linux" then
-        if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
-            vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
-            return
-        end
-        vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
-        already_injected = vim.v.shell_error == 0
-        -- TODO: on mac likely to use `vmmap pid`
-    end
-
-    if already_injected then
-        callback(server)
-        return
-    end
-    -- Inject debugpy
-    vim.fn.jobstart({
-        vim.fn.exepath("python3") and "python3" or "python",
-        "-m",
-        "debugpy",
-        "--listen",
-        config.host .. ":" .. config.port,
-        "--pid",
-        tostring(config.pid),
-    })
-    vim.defer_fn(function() callback(server) end, 200)
-end
-
 return {
     {
         "neovim/nvim-lspconfig",
@@ -65,7 +34,32 @@ return {
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
-                debugpy = debugpy,
+                debugpy = function(callback, config)
+                    last_pid = config.pid
+                    local inject = true
+                    if Util.platform == "Linux" then
+                        if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
+                            vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
+                            return
+                        end
+                        vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
+                        inject = vim.v.shell_error ~= 0
+                        -- TODO: on mac likely to use `vmmap pid`
+                    end
+
+                    if inject then
+                        vim.fn.jobstart({
+                            vim.fn.exepath("python3") and "python3" or "python",
+                            "-m",
+                            "debugpy",
+                            "--listen",
+                            config.host .. ":" .. config.port,
+                            "--pid",
+                            tostring(config.pid),
+                        })
+                    end
+                    callback({ type = "server", host = config.host, port = config.port })
+                end,
             }
             local configurations = {
                 {
@@ -129,6 +123,7 @@ return {
                 port = 5678,
                 host = "127.0.0.1",
                 pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
+                justMyCode = "false",
             }
 
             opts.python = { adapters = adapters, configurations = configurations }
