@@ -28,4 +28,4 @@ mkdir -p "${ASSET}"
 cp "${NAME}" "${ASSET}/${ASSET}${EXT}"
 sha256sum -c "${NAME}.sha256"
 rm "${ASSET}/${ASSET}${EXT}"
-echo "${VERSION}" >version
+echo -n "${VERSION}" >version
