@@ -49,7 +49,7 @@ return {
                     name = "Launch: Binary w. args",
                     type = "codelldb",
                     request = "launch",
-                    args = function() vim.fn.input("Arguments: ") end,
+                    args = function() return Util.shell_split(Util.input("Arguments")) end,
                     program = run_build(cmds.BIN),
                     cwd = "${workspaceFolder}",
                     stopOnEntry = false,

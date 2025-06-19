@@ -4,20 +4,19 @@ require("personal.util.yankring")
 
 Util = {}
 
-Util.selector = function(options, title, custom_input)
+Util.selector = function(options, prompt, custom_input)
     local co = coroutine.running()
     local choices = options
 
-    -- snacker picker vim.ui.input show full
     if custom_input == nil then custom_input = "Custom..." end
     if custom_input then
         choices = vim.deepcopy(choices)
         table.insert(choices, custom_input)
     end
 
-    vim.ui.select(choices, { prompt = title }, function(choice)
+    vim.ui.select(choices, { prompt = prompt }, function(choice)
         if custom_input and choice == custom_input then
-            vim.ui.input({ prompt = "Enter custom choice:" }, function(custom)
+            vim.ui.input({ prompt = "Enter custom choice" }, function(custom)
                 table.insert(options, custom)
                 coroutine.resume(co, custom)
             end)
@@ -26,6 +25,12 @@ Util.selector = function(options, title, custom_input)
         end
     end)
 
+    return coroutine.yield()
+end
+
+Util.input = function(prompt, default)
+    local co = coroutine.running()
+    vim.ui.input({ prompt = prompt, default = default }, function(result) coroutine.resume(co, result) end)
     return coroutine.yield()
 end
 
