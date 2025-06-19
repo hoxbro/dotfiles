@@ -2,8 +2,8 @@
 
 set -euox pipefail
 
-zsh -i -c $'
-sleep 1
+ZSH_EAGER=1 zsh -i -c $'
 nvim --headless "+Lazy! restore" +qa
+nvim --headless "+MasonUpdate" +qa
 nvim --headless "+MasonLockRestore" +qa
 '

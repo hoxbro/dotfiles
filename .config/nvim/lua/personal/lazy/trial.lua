@@ -13,5 +13,11 @@ return {
         },
     },
     -- Ideally this should be enabled before mason-installer
-    { "zapling/mason-lock.nvim", opts = {}, event = "VeryLazy", cmd = "MasonLockRestore" },
+    {
+        "zapling/mason-lock.nvim",
+        dependencies = "williamboman/mason.nvim",
+        opts = {},
+        event = "VeryLazy",
+        cmd = "MasonLockRestore",
+    },
 }

@@ -3,8 +3,11 @@ export EDITOR='nvim'
 export TERM='xterm-256color'
 
 # Speed up zsh startup
-source ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh
-# function zsh-defer() { eval "$@" }
+if [[ -z "$ZSH_EAGER" ]]; then
+    source ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh
+else
+    function zsh-defer() { eval "$@" }
+fi
 
 # oh-my-zsh features
 source ~/.config/zsh/omz.zsh
