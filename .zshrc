@@ -6,7 +6,7 @@ export TERM='xterm-256color'
 if [[ -z "$ZSH_EAGER" ]]; then
     source ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh
 else
-    function zsh-defer() { eval "$@" }
+    function zsh-defer() { eval "$@" &>/dev/null }
 fi
 
 # oh-my-zsh features
