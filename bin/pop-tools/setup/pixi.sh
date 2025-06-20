@@ -4,7 +4,7 @@ set -euox pipefail
 
 export PIXI_NO_PATH_UPDATE=1
 export PIXI_HOME=~/.local/pixi
-export PATH="$PIXI_HOME/bin:$PATH"
+PATH="$PIXI_HOME/bin:$PATH"
 
 if [ ! -d "$PIXI_HOME" ]; then
     curl -fsSL https://pixi.sh/install.sh | zsh
