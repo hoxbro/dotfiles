@@ -31,3 +31,39 @@ vim.api.nvim_create_autocmd("VimEnter", {
 -- Because I'm stupid
 vim.api.nvim_create_user_command("W", "w", {})
 vim.api.nvim_create_user_command("Wq", "wq", {})
+
+-- Ruff to quicklist
+local ruff_quicklist = function()
+    local output = vim.fn.systemlist({
+        "ruff",
+        "check",
+        "--no-fix",
+        "--exit-zero",
+        "--output-format",
+        "concise",
+        vim.fn.getcwd(),
+    })
+
+    if vim.fn.match(output[1] or "", "All checks passed!") ~= -1 then
+        -- Just print the output if all checks passed
+        print(table.concat(output, "\n"))
+    else
+        -- Load output into quickfix list
+        local qf_entries = {}
+        for _, line in ipairs(output) do
+            local filename, lnum, col, text = line:match("^(.-):(%d+):(%d+):%s*(.*)")
+            if filename then
+                table.insert(qf_entries, {
+                    filename = filename,
+                    lnum = tonumber(lnum),
+                    col = tonumber(col),
+                    text = text,
+                })
+            end
+        end
+        vim.fn.setqflist(qf_entries, "r")
+        vim.cmd("copen")
+    end
+end
+
+vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {})
