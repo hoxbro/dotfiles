@@ -26,7 +26,6 @@ return {
             sources = {
                 default = { "lazydev", "lsp", "path", "buffer", "snippets", "copilot" },
                 providers = {
-                    -- move copilot into own file see lazyvim
                     copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                 },
