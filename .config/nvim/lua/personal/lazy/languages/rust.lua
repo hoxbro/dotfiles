@@ -49,7 +49,10 @@ return {
                     name = "Launch: Binary w. args",
                     type = "codelldb",
                     request = "launch",
-                    args = function() return Util.shell_split(Util.input("Arguments")) end,
+                    args = function()
+                        local output = Util.input("Arguments")
+                        return require("dap.utils").splitstr(output)
+                    end,
                     program = run_build(cmds.BIN),
                     cwd = "${workspaceFolder}",
                     stopOnEntry = false,

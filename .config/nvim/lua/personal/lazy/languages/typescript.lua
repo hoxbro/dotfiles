@@ -60,7 +60,7 @@ return {
                     cwd = "${workspaceFolder}",
                     args = function()
                         local output = Util.selector(DAP_typescript_commands, "Select an command to run:")
-                        return Util.shell_split(output)
+                        return require("dap.utils").splitstr(output)
                     end,
                     runtimeExecutable = "node",
                     skipFiles = { "<node_internals>/**", "**/node_modules/**" },
