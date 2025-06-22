@@ -113,7 +113,9 @@ return {
                         ["Panel App :5006"] = function()
                             return vim.trim(vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t"))
                         end,
-                        ["Select a Process"] = require("dap.utils").pick_process,
+                        ["Select a Process"] = function()
+                            return require("dap.utils").pick_process({ filter = "python" })
+                        end,
                     }
 
                     local option = Util.selector(options, "Select method", "Manual")

@@ -73,7 +73,19 @@ return {
                     type = "pwa-node",
                     request = "attach",
                     name = "Attach: Process (server)",
-                    processId = require("dap.utils").pick_process,
+                    processId = function()
+                        return require("dap.utils").pick_process({
+                            filter = "--inspect",
+                            prompt = "Select process with --inspect",
+                            label = function(proc)
+                                -- Just to hide fullname of command
+                                local parts = vim.split(proc.name, " ")
+                                parts[1] = vim.fn.fnamemodify(parts[1], ":t")
+                                local name = table.concat(parts, " ")
+                                return string.format("id=%d name=%s", proc.pid, name)
+                            end,
+                        })
+                    end,
                     cwd = "${workspaceFolder}",
                     skipFiles = { "<node_internals>/**", "**/node_modules/**" },
                     sourceMaps = true,
