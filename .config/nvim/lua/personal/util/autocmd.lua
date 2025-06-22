@@ -35,7 +35,7 @@ vim.api.nvim_create_user_command("Wq", "wq", {})
 -- Ruff to quicklist
 local ruff_quicklist = function()
     local output = vim.fn.systemlist({
-        vim.fn.expath("ruff"),
+        vim.fn.exepath("ruff"),
         "check",
         "--no-fix",
         "--exit-zero",
