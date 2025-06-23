@@ -39,6 +39,8 @@ local ruff_quicklist = function()
         "check",
         "--no-fix",
         "--exit-zero",
+        "--exclude",
+        "*.ipynb",
         "--output-format",
         "concise",
         vim.fn.getcwd(),
@@ -63,6 +65,7 @@ local ruff_quicklist = function()
         end
         vim.fn.setqflist(qf_entries, "r")
         vim.cmd("copen")
+        vim.cmd("cfirst")
     end
 end
 
