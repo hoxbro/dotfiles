@@ -18,16 +18,15 @@ return {
         "saghen/blink.cmp",
         event = "VeryLazy",
         version = "1.*",
-        opts_extend = { "default.providers" },
+        opts_extend = { "sources.default" },
         opts = {
             completion = {
                 documentation = { auto_show = false },
                 accept = { auto_brackets = { enabled = false } },
             },
             sources = {
-                default = { "lazydev", "lsp", "path", "buffer", "snippets", "copilot" },
+                default = { "lazydev", "lsp", "path", "buffer", "snippets" },
                 providers = {
-                    copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                 },
             },
