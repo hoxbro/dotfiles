@@ -24,18 +24,12 @@ return {
     {
         "folke/snacks.nvim",
         lazy = false,
-        priority = 1000,
+        priority = 998,
         keys = {
             { "<leader>.", function() require("snacks.scratch")() end, desc = "Toggle Scratch Buffer" },
             { "<leader>S", function() require("snacks.scratch").select() end, desc = "Select Scratch Buffer" },
-            {
-                "<leader>gw",
-                function() require("snacks.gitbrowse")() end,
-                desc = "Open Git Browser",
-                mode = { "n", "v" },
-            },
         },
-        opts = { scratch = { ft = "markdown" }, gitbrowse = {}, quickfile = {}, bigfile = {} },
+        opts = { scratch = { ft = "markdown" }, quickfile = {}, bigfile = {} },
     },
     {
         -- Better Around/Inside textobjects

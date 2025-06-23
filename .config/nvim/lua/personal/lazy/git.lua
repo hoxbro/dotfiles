@@ -72,4 +72,16 @@ return {
             return { keymaps = { view = view } }
         end,
     },
+    {
+        "folke/snacks.nvim",
+        keys = {
+            {
+                "<leader>gw",
+                function() require("snacks.gitbrowse")() end,
+                desc = "Open Git Browser",
+                mode = { "n", "v" },
+            },
+        },
+        opts = { gitbrowse = {} },
+    },
 }
