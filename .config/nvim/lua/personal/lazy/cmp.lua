@@ -11,13 +11,14 @@ local download = function()
         vim.defer_fn(function() vim.cmd("qa!") end, 10)
     end)
 end
+vim.api.nvim_create_user_command("BlinkDownload", download, { desc = "Download binary" })
 
 return {
     {
         "saghen/blink.cmp",
         event = "VeryLazy",
-        cmd = "BlinkDownload",
         version = "1.*",
+        opts_extend = { "default.providers" },
         opts = {
             completion = {
                 documentation = { auto_show = false },
@@ -34,9 +35,5 @@ return {
             signature = { enabled = true },
             keymap = { ["<C-e>"] = { "hide", "show" } },
         },
-        config = function(_, opts)
-            require("blink-cmp").setup(opts)
-            vim.api.nvim_create_user_command("BlinkDownload", download, { desc = "Download binary" })
-        end,
     },
 }
