@@ -2,7 +2,7 @@ return {
     { "williamboman/mason.nvim", lazy = true, opts = {}, cmd = "MasonUpdate" },
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        dependencies = "williamboman/mason.nvim",
+        dependencies = "zapling/mason-lock.nvim",
         event = "VeryLazy",
         cmd = { "MasonToolsUpdate", "MasonToolsInstall", "MasonToolsUpdateSync", "MasonToolsInstallSync" },
         -- `opts` are a table where:
@@ -16,5 +16,12 @@ return {
             mst.setup({ ensure_installed = ensure_installed })
             mst.run_on_start()
         end,
+    },
+    {
+        "zapling/mason-lock.nvim",
+        dependencies = "williamboman/mason.nvim",
+        opts = {},
+        event = "VeryLazy",
+        cmd = "MasonLockRestore",
     },
 }

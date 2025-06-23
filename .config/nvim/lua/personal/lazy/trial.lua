@@ -12,12 +12,4 @@ return {
             { "sl", function() require("treewalker").swap_right() end, mode = "n", desc = "Swap right" },
         },
     },
-    -- Ideally this should be enabled before mason-installer
-    {
-        "zapling/mason-lock.nvim",
-        dependencies = "williamboman/mason.nvim",
-        opts = {},
-        event = "VeryLazy",
-        cmd = "MasonLockRestore",
-    },
 }
