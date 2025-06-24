@@ -5,11 +5,13 @@ local download = function()
     -- Avoid EEXIST error
     vim.fn.mkdir(files.lib_folder, "p")
 
+    local done = false
     print("Downloading pre-built binary\n")
     download.ensure_downloaded(function()
         print("Finished downloading pre-built binary\n")
-        vim.defer_fn(function() vim.cmd("qa!") end, 10)
+        done = true
     end)
+    vim.wait(60000, function() return done end, 1000, false)
 end
 vim.api.nvim_create_user_command("BlinkDownload", download, { desc = "Download binary" })
 
