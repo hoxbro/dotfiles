@@ -18,6 +18,7 @@ echo -e "LANG=en_US.UTF-8\nLC_TIME=en_DK.UTF-8\nLC_MEASUREMENT=en_DK.UTF-8" | su
 
 if [[ "${XDG_CURRENT_DESKTOP:-}" == "GNOME" ]]; then
     gsettings set org.gnome.desktop.sound event-sounds false || true
+    gsettings set org.gnome.mutter check-alive-timeout 10000
 fi
 
 if has bluetoothctl; then
