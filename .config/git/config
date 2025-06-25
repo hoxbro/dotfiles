@@ -26,7 +26,7 @@
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
     freedom = "!rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
     lasts = "!git reflog | grep -oP 'checkout: moving from \\K\\S+' | grep -vE '^(main|[0-9a-f]{40})$' | uniq | head -n 10"
-    purge-remotes = "!git remote | grep -v '^origin$' | xargs -r -I {} sh -c 'echo Removing remote: {} && git remote remove {}'"
+    remove-remotes = "!git remote | grep -v '^origin$' | xargs -r -I {} sh -c 'echo Removing remote: {} && git remote remove {}'"
 [color]
     ui = true
 [color "diff-highlight"]
