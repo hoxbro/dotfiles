@@ -36,8 +36,8 @@ return {
                 },
                 debugpy = function(callback, config)
                     last_pid = config.pid
-                    local inject = true
-                    if Util.platform == "Linux" then
+                    local inject = config.inject
+                    if not inject and Util.platform == "Linux" then
                         if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
                             vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
                             return
@@ -124,6 +124,18 @@ return {
                 end,
                 port = 5678,
                 host = "127.0.0.1",
+                inject = true,
+                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
+                justMyCode = "false",
+            }
+            configurations[#configurations + 1] = {
+                type = "debugpy",
+                request = "attach",
+                name = "Attach: Waiting",
+                pid = function() return vim.trim(vim.fn.system("lsof -i :5678 -sTCP:LISTEN -t")) end,
+                port = 5678,
+                host = "127.0.0.1",
+                inject = false,
                 pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
                 justMyCode = "false",
             }
