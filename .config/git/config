@@ -48,7 +48,7 @@
     pager = diff-so-fancy | less --tabs=4 -RFX
     editor = nvim
     eol = lf
-    excludesfile = ~/.gitignore
+    excludesfile = ~/dotfiles/.config/git/ignore
     # autocrlf = true
 [interactive]
     diffFilter = diff-so-fancy --patch
@@ -72,13 +72,8 @@
     autoStash = true
 [diff]
     algorithm = histogram
-[mergetool "nvim"]
-    cmd = nvim -c DiffviewOpen
 [merge]
-    tool = nvim
-[mergetool]
-    prompt = false
-    keepBackup = false
+    tool = "use mergetool directly"
 [checkout]
     workers = 0
 [log]

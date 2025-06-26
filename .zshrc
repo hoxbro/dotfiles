@@ -37,6 +37,7 @@ alias t='tmux-sessionizer'
 alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
 alias zsh-reload="exec zsh"
 alias ansi-remove='sed "s/\x1B\[[0-9;]*[a-zA-Z]//g"'
+alias mergetool='nvim -c DiffviewOpen'
 
 bootwindows() {
     sudo efibootmgr -n $(efibootmgr | grep "Windows" | grep -oE '[0-9]+') >/dev/null
