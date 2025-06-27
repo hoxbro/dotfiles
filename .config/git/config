@@ -72,10 +72,6 @@
     autoStash = true
 [diff]
     algorithm = histogram
-[merge]
-    tool = "use mergetool directly"
-[mergetool "use mergetool directly"]
-    cmd = echo use mergetool directly && exit 1
 [checkout]
     workers = 0
 [log]

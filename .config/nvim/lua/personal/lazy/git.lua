@@ -68,6 +68,7 @@ return {
                 { "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose theirs" } },
                 { "n", "cn", actions.conflict_choose("base"), { desc = "Choose none" } },
                 { "n", "cb", actions.conflict_choose("all"), { desc = "Choose both" } },
+                { "n", "cf", require("diffview").emit("focus_files"), { desc = "Goto files" } },
             }
             return { keymaps = { view = view } }
         end,
