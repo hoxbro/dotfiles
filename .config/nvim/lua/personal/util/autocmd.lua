@@ -73,7 +73,7 @@ vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {})
 
 -- Paste to clipboard on focus
 -- https://www.reddit.com/r/neovim/comments/1l4tubm/copy_last_yanked_text_to_clipboard_on_focuslost/
-local last_clipboard = ""
+local last_clipboard = vim.fn.getreg("0")
 local group_clipboard = vim.api.nvim_create_augroup("group_clipboard", { clear = true })
 vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
     desc = "Copy to clipboard on FocusLost",

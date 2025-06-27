@@ -21,14 +21,6 @@ vim.keymap.set("x", "p", [["_dP]], { desc = "Paste without yanking" })
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 vim.keymap.set("n", "<leader>D", [["_D]], { desc = "Delete without yanking" })
 vim.keymap.set("n", "<leader>c", [["_c]], { desc = "Change without yanking]" })
-vim.keymap.set("v", "<leader>y", [["+y]], { desc = "Copy to clipboard" })
-vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Copy to clipboard" })
-vim.keymap.set(
-    "n",
-    "<Leader>y",
-    ":call setreg('+', getreg('\"'))<CR>",
-    { noremap = true, silent = true, desc = "Move To Clipboard" }
-)
 
 -- Diagnostic keymaps
 vim.keymap.set(
@@ -84,3 +76,9 @@ vim.keymap.set(
     '<cmd>silent ![ -x "%" ] && chmod u-x "%" || chmod u+x "%"<CR>',
     { desc = "Toggle Executable Bit" }
 )
+
+-- Here because of muscle memory
+local ny = function() vim.notify("just use normal yank") end
+vim.keymap.set("v", "<leader>y", ny)
+vim.keymap.set("n", "<leader>Y", ny)
+vim.keymap.set("n", "<Leader>y", ny)
