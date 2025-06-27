@@ -4,6 +4,7 @@ return {
         "neovim/nvim-lspconfig",
         opts = {
             basedpyright = {
+                python = { pythonPath = vim.fn.exepath("python3") or vim.fn.exepath("python") },
                 basedpyright = {
                     analysis = {
                         typeCheckingMode = "off",
