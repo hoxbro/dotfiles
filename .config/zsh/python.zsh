@@ -3,7 +3,7 @@ export PIXI_HOME=~/.local/pixi
 
 export PATH="$PIXI_HOME/bin:$PATH"
 source "$CONDA_HOME/etc/profile.d/conda.sh"
-# source "$CONDA_HOME/etc/profile.d/mamba.sh"
+source "$CONDA_HOME/etc/profile.d/mamba.sh"
 
 __set_cenv() {
   eval "$(fd '_activate.sh$' "$1/etc/conda/activate.d/" -x echo 'source' || true)"
