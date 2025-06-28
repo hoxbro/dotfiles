@@ -1,10 +1,11 @@
 local last_pid
+local python_exe = vim.fn.exepath("python3") or vim.fn.exepath("python")
 return {
     {
         "neovim/nvim-lspconfig",
         opts = {
             basedpyright = {
-                python = { pythonPath = vim.fn.exepath("python3") or vim.fn.exepath("python") },
+                python = { pythonPath = python_exe },
                 basedpyright = {
                     analysis = {
                         typeCheckingMode = "off",
@@ -31,7 +32,7 @@ return {
             local adapters = {
                 python = {
                     args = { "-m", "debugpy.adapter" },
-                    command = vim.fn.exepath("python3") and "python3" or "python",
+                    command = python_exe,
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
@@ -150,6 +151,7 @@ return {
         opts = {
             ["neotest-python"] = {
                 dap = { justMyCode = false, console = "integratedTerminal" },
+                python = python_exe,
                 args = function(_, position)
                     local Path = require("plenary.path")
                     local elems = vim.split(position.path, Path.path.sep)
