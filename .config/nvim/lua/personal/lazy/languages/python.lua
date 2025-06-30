@@ -39,7 +39,7 @@ return {
                 debugpy = function(callback, config)
                     last_pid = config.pid
                     local inject = config.inject
-                    if not inject and Util.platform == "Linux" then
+                    if inject and Util.platform == "Linux" then
                         if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
                             vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
                             return
@@ -152,6 +152,7 @@ return {
             ["neotest-python"] = {
                 dap = { justMyCode = false, console = "integratedTerminal" },
                 python = python_exe,
+                -- pytest_discover_instances = true,
                 args = function(_, position)
                     local Path = require("plenary.path")
                     local elems = vim.split(position.path, Path.path.sep)
