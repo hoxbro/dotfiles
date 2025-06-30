@@ -43,4 +43,10 @@ return {
         dependencies = { "echasnovski/mini.snippets", "rafamadriz/friendly-snippets" },
         opts = { snippets = { preset = "mini_snippets" } },
     },
+    {
+        "jmbuhr/otter.nvim",
+        keys = { { "<leader>co", function() require("otter").activate() end, desc = "Activate otter" } },
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        opts = {},
+    },
 }
