@@ -77,6 +77,8 @@ vim.keymap.set(
     { desc = "Toggle Executable Bit" }
 )
 
+vim.keymap.set("n", "<leader>tw", function() vim.wo.wrap = not vim.wo.wrap end, { desc = "Toggle text wrap" })
+
 -- Here because of muscle memory
 local ny = function() vim.notify("just use normal yank") end
 vim.keymap.set("v", "<leader>y", ny)
