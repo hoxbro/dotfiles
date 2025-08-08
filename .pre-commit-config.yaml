@@ -22,7 +22,7 @@ repos:
         args: ["--exclude=SC1091,SC2181"]
         exclude: (zshrc|zsh)$
   - repo: https://github.com/hoxbro/prettier-pre-commit
-    rev: v3.6.1
+    rev: v3.6.2
     hooks:
       - id: prettier
         types_or:
