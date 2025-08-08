@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# pdb - Wrapper for debugpy commands
+
+set -e
+
+usage() {
+    echo "Usage: $0 {inject|run} [module_or_args...]"
+    echo
+    echo "  inject     Set ptrace_scope to 0 for debugpy injection"
+    echo "  run        Run a Python module under debugpy"
+    exit 1
+}
+
+case "$1" in
+inject)
+    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+    ;;
+run)
+    echo "Wait for server connect"
+    shift
+    python -m debugpy --listen 5678 --wait-for-client "$@"
+    ;;
+*)
+    usage
+    ;;
+esac

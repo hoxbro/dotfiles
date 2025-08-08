@@ -41,7 +41,7 @@ return {
                     local inject = config.inject
                     if inject and Util.platform == "Linux" then
                         if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
-                            vim.notify("Run debugpy-inject and try again", vim.log.levels.ERROR)
+                            vim.notify("Run `pdb inject` and try again", vim.log.levels.ERROR)
                             return
                         end
                         vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
