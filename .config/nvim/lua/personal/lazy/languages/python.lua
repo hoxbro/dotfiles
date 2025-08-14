@@ -30,13 +30,13 @@ return {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)
             local adapters = {
-                launch = {
+                python = {
                     args = { "-m", "debugpy.adapter" },
                     command = python_exe,
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
-                attach = function(callback, config)
+                ["python-attach"] = function(callback, config)
                     if config.pid == "" then return end
                     last_pid = config.pid
                     local inject = config.inject
@@ -97,7 +97,7 @@ return {
             }
 
             local launch_default = {
-                type = "launch",
+                type = "python",
                 request = "launch",
                 justMyCode = "false",
                 cwd = "${fileDirname}",
@@ -138,7 +138,7 @@ return {
                 },
             }
             local attach_default = {
-                type = "attach",
+                type = "python-attach",
                 request = "attach",
                 port = 5678,
                 host = "127.0.0.1",
