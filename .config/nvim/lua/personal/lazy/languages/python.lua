@@ -30,13 +30,13 @@ return {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)
             local adapters = {
-                python = {
+                launch = {
                     args = { "-m", "debugpy.adapter" },
                     command = python_exe,
                     options = { source_filetype = "python" },
                     type = "executable",
                 },
-                debugpy = function(callback, config)
+                attach = function(callback, config)
                     last_pid = config.pid
                     local inject = config.inject
                     if inject and Util.platform == "Linux" then
@@ -51,7 +51,7 @@ return {
 
                     if inject then
                         vim.fn.jobstart({
-                            vim.fn.exepath("python3") and "python3" or "python",
+                            python_exe,
                             "-m",
                             "debugpy",
                             "--listen",
@@ -63,7 +63,7 @@ return {
                     callback({ type = "server", host = config.host, port = config.port })
                 end,
             }
-            local configurations = {
+            local launch_config = {
                 {
                     name = "Launch: Panel",
                     module = "panel",
@@ -91,57 +91,60 @@ return {
                 },
             }
 
-            local defaults = {
-                type = "python",
+            local launch_default = {
+                type = "launch",
                 request = "launch",
                 justMyCode = "false",
                 cwd = "${fileDirname}",
                 console = "integratedTerminal",
             }
-            for index, config in ipairs(configurations) do
-                configurations[index] = vim.tbl_deep_extend("keep", config, defaults)
+
+            local attach_config = {
+                {
+                    name = "Attach: Process",
+                    inject = true,
+                    pid = function()
+                        local options = { "Panel App :5006", "Select a Process" }
+                        if last_pid then table.insert(options, 1, "Last Process") end
+
+                        local actions = {
+                            ["Last Process"] = function() return last_pid end,
+                            ["Panel App :5006"] = function()
+                                return vim.trim(vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t"))
+                            end,
+                            ["Select a Process"] = function()
+                                return require("dap.utils").pick_process({ filter = "python" })
+                            end,
+                        }
+
+                        local option = Util.selector(options, "Select method", "Manual")
+                        local action = actions[option]
+                        return action and action() or vim.trim(option)
+                    end,
+                },
+                {
+                    name = "Attach: Waiting",
+                    inject = false,
+                    pid = function() return vim.trim(vim.fn.system("lsof -i :5678 -sTCP:LISTEN -t")) end,
+                },
+            }
+            local attach_default = {
+                type = "attach",
+                request = "attach",
+                port = 5678,
+                host = "127.0.0.1",
+                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
+                justMyCode = "false",
+            }
+
+            -- Merge configurations
+            local configurations = {}
+            for _, config in ipairs(launch_config) do
+                configurations[#configurations + 1] = vim.tbl_deep_extend("keep", config, launch_default)
             end
-
-            configurations[#configurations + 1] = {
-                type = "debugpy",
-                request = "attach",
-                name = "Attach: Process",
-                pid = function()
-                    local options = { "Panel App :5006", "Select a Process" }
-                    if last_pid then table.insert(options, 1, "Last Process") end
-
-                    local actions = {
-                        ["Last Process"] = function() return last_pid end,
-                        ["Panel App :5006"] = function()
-                            return vim.trim(vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t"))
-                        end,
-                        ["Select a Process"] = function()
-                            return require("dap.utils").pick_process({ filter = "python" })
-                        end,
-                    }
-
-                    local option = Util.selector(options, "Select method", "Manual")
-                    local action = actions[option]
-                    return action and action() or vim.trim(option)
-                end,
-                port = 5678,
-                host = "127.0.0.1",
-                inject = true,
-                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
-                justMyCode = "false",
-            }
-            configurations[#configurations + 1] = {
-                type = "debugpy",
-                request = "attach",
-                name = "Attach: Waiting",
-                pid = function() return vim.trim(vim.fn.system("lsof -i :5678 -sTCP:LISTEN -t")) end,
-                port = 5678,
-                host = "127.0.0.1",
-                inject = false,
-                pathMappings = { { localRoot = vim.fn.getcwd(), remoteRoot = vim.fn.getcwd() } },
-                justMyCode = "false",
-            }
-
+            for _, config in ipairs(attach_config) do
+                configurations[#configurations + 1] = vim.tbl_deep_extend("keep", config, attach_default)
+            end
             opts.python = { adapters = adapters, configurations = configurations }
         end,
     },
