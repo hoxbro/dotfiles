@@ -37,6 +37,7 @@ return {
                     type = "executable",
                 },
                 attach = function(callback, config)
+                    if config.pid == "" then return end
                     last_pid = config.pid
                     local inject = config.inject
                     if inject and Util.platform == "Linux" then
@@ -50,7 +51,7 @@ return {
                     end
 
                     if inject then
-                        vim.fn.jobstart({
+                        local output = vim.fn.system({
                             python_exe,
                             "-m",
                             "debugpy",
@@ -59,6 +60,10 @@ return {
                             "--pid",
                             tostring(config.pid),
                         })
+                        if vim.v.shell_error ~= 0 then
+                            vim.notify("Injection failed: " .. output, vim.log.levels.ERROR)
+                            return
+                        end
                     end
                     callback({ type = "server", host = config.host, port = config.port })
                 end,
@@ -110,7 +115,11 @@ return {
                         local actions = {
                             ["Last Process"] = function() return last_pid end,
                             ["Panel App :5006"] = function()
-                                return vim.trim(vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t"))
+                                local pid = vim.fn.system("lsof -i :5006 -sTCP:LISTEN -t")
+                                if vim.v.shell_error ~= 0 then
+                                    vim.notify("No PID for port 5006", vim.log.levels.ERROR)
+                                end
+                                return vim.trim(pid)
                             end,
                             ["Select a Process"] = function()
                                 return require("dap.utils").pick_process({ filter = "python" })
