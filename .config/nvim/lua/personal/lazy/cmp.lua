@@ -21,6 +21,7 @@ return {
         event = "VeryLazy",
         version = "1.*",
         opts_extend = { "sources.default" },
+        dependencies = { "echasnovski/mini.snippets", "rafamadriz/friendly-snippets" },
         opts = {
             completion = {
                 documentation = { auto_show = false },
@@ -35,6 +36,33 @@ return {
             fuzzy = { sorts = { "exact", "score", "sort_text" } },
             signature = { enabled = true },
             keymap = { ["<C-e>"] = { "hide", "show" } },
+            snippets = { preset = "mini_snippets" },
+        },
+    },
+    {
+        "echasnovski/mini.snippets",
+        version = "*",
+        lazy = true,
+        opts = function(_, opts)
+            local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
+            opts.snippets = {
+                snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
+                snippets.gen_loader.from_lang(),
+            }
+        end,
+    },
+    {
+        "danymat/neogen",
+        dependencies = { "echasnovski/mini.snippets" },
+        keys = {
+            { "nf", function() require("neogen").generate() end, desc = "Generate docstring" },
+        },
+        opts = {
+            snippet_engine = "mini",
+            languages = {
+                lua = { template = { annotation_convention = "emmylua" } },
+                python = { template = { annotation_convention = "numpydoc" } },
+            },
         },
     },
 }

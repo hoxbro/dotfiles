@@ -41,4 +41,10 @@ return {
             vim.schedule(function() require("mason-lspconfig").setup() end)
         end,
     },
+    {
+        "jmbuhr/otter.nvim",
+        keys = { { "<leader>co", function() require("otter").activate() end, desc = "Activate otter" } },
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        opts = {},
+    },
 }
