@@ -29,8 +29,14 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 -- Because I'm stupid
-vim.api.nvim_create_user_command("W", "w", {})
-vim.api.nvim_create_user_command("Wq", "wq", {})
+local typos = { "W", "Wq", "WQ", "Wqa", "WQa", "WQA", "WqA", "Q", "Qa", "QA" }
+for _, cmd in ipairs(typos) do
+    vim.api.nvim_create_user_command(
+        cmd,
+        function(opts) vim.api.nvim_cmd({ cmd = cmd:lower(), bang = opts.bang, mods = { noautocmd = true } }, {}) end,
+        { bang = true }
+    )
+end
 
 -- Ruff to quicklist
 local ruff_quicklist = function()

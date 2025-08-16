@@ -64,3 +64,8 @@ WORDCHARS='' # Ctrl + w only delete word at a time
 unsetopt menu_complete flowcontrol
 setopt auto_menu complete_in_word always_to_end
 zstyle ':completion:*:*:*:*:*' menu select
+
+# https://stackoverflow.com/questions/890620/unable-to-have-bash-like-c-x-e-in-zsh/903973#903973
+autoload edit-command-line
+zle -N edit-command-line
+bindkey '^X' edit-command-line

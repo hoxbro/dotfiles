@@ -71,7 +71,7 @@ return {
     {
         "rcarriga/nvim-dap-ui",
         lazy = true,
-        opts = {},
+        opts = { controls = { enabled = false } },
         dependencies = {
             "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio",
