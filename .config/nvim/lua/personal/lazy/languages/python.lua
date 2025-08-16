@@ -149,10 +149,10 @@ return {
             -- Merge configurations
             local configurations = {}
             for _, config in ipairs(launch_config) do
-                configurations[#configurations + 1] = vim.tbl_deep_extend("keep", config, launch_default)
+                table.insert(configurations, vim.tbl_deep_extend("keep", config, launch_default))
             end
             for _, config in ipairs(attach_config) do
-                configurations[#configurations + 1] = vim.tbl_deep_extend("keep", config, attach_default)
+                table.insert(configurations, vim.tbl_deep_extend("keep", config, attach_default))
             end
             opts.python = { adapters = adapters, configurations = configurations }
         end,
