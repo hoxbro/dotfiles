@@ -71,7 +71,17 @@ return {
     {
         "rcarriga/nvim-dap-ui",
         lazy = true,
-        opts = { controls = { enabled = false } },
+        opts = {
+            controls = { enabled = false },
+            layouts = {
+                { elements = { "scopes", "breakpoints", "stacks", "watches" }, size = 40, position = "right" },
+                {
+                    elements = { { id = "console", size = 0.4 }, { id = "repl", size = 0.6 } },
+                    size = 0.25,
+                    position = "bottom",
+                },
+            },
+        },
         dependencies = {
             "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio",
