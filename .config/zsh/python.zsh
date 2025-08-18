@@ -62,12 +62,13 @@ va() {
     export PATH="$VIRTUAL_ENV/bin:$PATH"
     zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
   else
-    if [ ! -f ".venv/pyvenv.cfg" ]; then
+    local root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    if [ ! -f "$root/.venv/pyvenv.cfg" ]; then
         echo "Virtual environment not found"
         return 1
     fi
     cad
-    export VIRTUAL_ENV="$(realpath .venv)"
+    export VIRTUAL_ENV="$root/.venv"
     export PATH="$VIRTUAL_ENV/bin:$PATH"
     zsh-defer tmux setenv VIRTUAL_ENV "$VIRTUAL_ENV"
   fi
