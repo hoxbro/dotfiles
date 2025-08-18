@@ -33,6 +33,7 @@ keybind = ctrl+shift+left=unbind
 
 confirm-close-surface = false
 resize-overlay = never
+maximize = true
 
 window-decoration = true
 # gtk-titlebar = false
