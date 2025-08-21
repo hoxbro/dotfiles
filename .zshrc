@@ -77,7 +77,7 @@ zsh-defer source ~/.config/zsh/python.zsh
 # Holoviz
 export HOLOVIZ_REP=~/projects/holoviz/repos/
 export HOLOVIZ_DEV=~/projects/holoviz/
-alias panel-kill='lsof -c panel -t | xargs -r kill'
+alias panel-kill='kill $(lsof -i :5006 -sTCP:LISTEN -t)'
 zsh-defer source ~/projects/holoviz-tools/holoviz.zsh
 
 # Apps

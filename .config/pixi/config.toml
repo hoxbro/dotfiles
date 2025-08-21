@@ -1,7 +1,4 @@
 run-post-link-scripts = "insecure"
 
-[mirrors]
-"https://conda.anaconda.org/conda-forge" = ["https://prefix.dev/conda-forge"]
-
 [shell]
 change-ps1 = false

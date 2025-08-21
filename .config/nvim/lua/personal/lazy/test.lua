@@ -7,6 +7,7 @@ return {
             "nvim-treesitter/nvim-treesitter",
             "nvim-neotest/nvim-nio",
         },
+        commit = "52fca6717ef972113ddd6ca223e30ad0abb2800c", -- https://github.com/nvim-neotest/neotest/issues/531
         keys = {
             {
                 "<F7>",
