@@ -69,7 +69,7 @@ local ruff_quicklist = function()
                 })
             end
         end
-        vim.fn.setqflist(qf_entries, "r")
+        vim.fn.setqflist({}, " ", { title = "Ruff", items = qf_entries })
         vim.cmd("copen")
         vim.cmd("cfirst")
     end
