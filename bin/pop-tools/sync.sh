@@ -22,7 +22,7 @@ copy-path() {
 sync() {
     copy-file .zsh_history
     copy-file .local/share/zoxide/db.zo
-    copy-file .env
+    copy-path .password-store
 
     copy-path .local/share/nvim/harpoon
     copy-path .local/share/nvim/scratch

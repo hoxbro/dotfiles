@@ -3,7 +3,7 @@
 PACKAGES=(
     # Terminal
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
-    ffmpeg parallel trash-cli btop yt-dlp downgrade ufw
+    ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
 
     # Desktop Environment
     noto-fonts ttf-ubuntu-mono-nerd
