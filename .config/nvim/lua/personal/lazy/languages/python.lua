@@ -40,14 +40,18 @@ return {
                     if config.pid == "" then return end
                     last_pid = config.pid
                     local inject = config.inject
-                    if inject and Util.platform == "Linux" then
-                        if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
-                            vim.notify("Run `pdb inject` and try again", vim.log.levels.ERROR)
-                            return
+                    if inject then
+                        if Util.platform == "Linux" then
+                            if vim.trim(vim.fn.system("cat /proc/sys/kernel/yama/ptrace_scope")) == "1" then
+                                vim.notify("Run `pdb inject` and try again", vim.log.levels.ERROR)
+                                return
+                            end
+                            vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
+                            inject = vim.v.shell_error ~= 0
+                        elseif Util.platform == "macOS" then
+                            vim.fn.system("vmmap" .. config.pid .. " | grep -q debugpy")
+                            inject = vim.v.shell_error ~= 0
                         end
-                        vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
-                        inject = vim.v.shell_error ~= 0
-                        -- TODO: on mac likely to use `vmmap pid`
                     end
 
                     if inject then
