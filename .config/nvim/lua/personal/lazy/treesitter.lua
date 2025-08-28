@@ -35,6 +35,7 @@ return {
                 "query",
                 "dockerfile",
                 "nginx",
+                "graphql",
             },
         },
         config = function(_, opts)

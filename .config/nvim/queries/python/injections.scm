@@ -15,16 +15,6 @@
   )
 )
 
-(expression_statement
-  (assignment
-    left: (identifier) @_left (#match? @_left "(js|JS|esm)$")
-    right: (string
-      (string_content) @injection.content
-      (#set! injection.language "javascript")
-    )
-  )
-)
-
 ; CustomJS(code=...) from Bokeh
 (call
   function: (identifier) @_function (#any-of? @_function "CustomJS")
@@ -54,6 +44,17 @@
   )
 )
 
+; Language based on variables endings
+(expression_statement
+  (assignment
+    left: (identifier) @_left (#match? @_left "(js|JS|esm)$")
+    right: (string
+      (string_content) @injection.content
+      (#set! injection.language "javascript")
+    )
+  )
+)
+
 (expression_statement
   (assignment
     left: (identifier) @_left (#match? @_left "(css|CSS|stylesheet)$")
@@ -64,7 +65,6 @@
   )
 )
 
-; Variables ending in "_sql" and "_SQL"
 (expression_statement
   (assignment
     left: (identifier) @_left (#match? @_left "(sql|SQL)$")
@@ -75,7 +75,6 @@
   )
 )
 
-; Variables ending in "_json" and "_JSON"
 (expression_statement
   (assignment
     left: (identifier) @_left (#match? @_left "(json|JSON)$")
@@ -92,6 +91,16 @@
     right: (string
       (string_content) @injection.content
       (#set! injection.language "html")
+    )
+  )
+)
+
+(expression_statement
+  (assignment
+    left: (identifier) @_left (#match? @_left "(gql|GQL)$")
+    right: (string
+      (string_content) @injection.content
+      (#set! injection.language "graphql")
     )
   )
 )
