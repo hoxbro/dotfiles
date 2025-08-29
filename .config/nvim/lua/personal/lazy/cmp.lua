@@ -21,7 +21,7 @@ return {
         event = "VeryLazy",
         version = "1.*",
         opts_extend = { "sources.default" },
-        dependencies = { "echasnovski/mini.snippets", "rafamadriz/friendly-snippets" },
+        dependencies = { "nvim-mini/mini.snippets", "rafamadriz/friendly-snippets" },
         opts = {
             completion = {
                 documentation = { auto_show = false },
@@ -40,7 +40,7 @@ return {
         },
     },
     {
-        "echasnovski/mini.snippets",
+        "nvim-mini/mini.snippets",
         version = "*",
         lazy = true,
         opts = function(_, opts)
@@ -53,7 +53,7 @@ return {
     },
     {
         "danymat/neogen",
-        dependencies = { "echasnovski/mini.snippets" },
+        dependencies = { "nvim-mini/mini.snippets" },
         keys = {
             { "nf", function() require("neogen").generate() end, desc = "Generate docstring" },
         },
