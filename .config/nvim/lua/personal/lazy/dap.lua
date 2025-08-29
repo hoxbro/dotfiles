@@ -9,6 +9,8 @@ local function update_sign(sign_name, new_text, new_texthl)
     })
 end
 
+local last_dap_config = nil
+
 return {
     {
         "mfussenegger/nvim-dap",
@@ -18,7 +20,20 @@ return {
             { "<F3>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
             { "<F4>", function() require("dap").step_into() end, desc = "Debug: Step Into" },
             { "<F5>", function() require("dap").step_out() end, desc = "Debug: Step Out" },
-            { "<F6>", function() require("dap").restart() end, desc = "Debug: Restart" },
+            {
+                "<F6>",
+                function()
+                    local dap = require("dap")
+                    if dap.session() then
+                        dap.restart()
+                    elseif last_dap_config ~= nil then
+                        dap.run(last_dap_config)
+                    else
+                        dap.continue()
+                    end
+                end,
+                desc = "Debug: Restart/Rerun",
+            },
             {
                 "<leader>b",
                 function() require("dap").toggle_breakpoint() end,
@@ -40,6 +55,25 @@ return {
                 function() require("dapui").eval(nil, { enter = true }) end,
                 desc = "Debug: Eval var under cursor",
             },
+            {
+                "<leader>dr",
+                function()
+                    local line = vim.trim(vim.api.nvim_get_current_line())
+
+                    require("dap").repl.execute(line)
+
+                    for _, win in ipairs(vim.api.nvim_list_wins()) do
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        local buf_name = vim.api.nvim_buf_get_name(buf)
+                        if buf_name:match("dap%-repl") then
+                            vim.api.nvim_set_current_win(win)
+                            vim.cmd("startinsert")
+                            break
+                        end
+                    end
+                end,
+                desc = "Debug: Execute current line in REPL",
+            },
         },
         -- `opts` are a table where:
         --
@@ -59,6 +93,11 @@ return {
                 end
                 -- Configurations
                 dap.configurations[language_name] = language_opts.configurations
+            end
+
+            dap.listeners.on_config["store-last-config"] = function(config)
+                last_dap_config = vim.deepcopy(config)
+                return config
             end
 
             -- Update sign and color
