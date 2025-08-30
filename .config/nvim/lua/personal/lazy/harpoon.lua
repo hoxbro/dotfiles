@@ -4,8 +4,6 @@ local function get_git_branch()
     return git_branch[1]
 end
 
-_G.__harpoon = _G.__harpoon or nil -- To be able to lazy load it
-
 local function harpoon_list()
     local branch = get_git_branch()
     if branch == nil then
