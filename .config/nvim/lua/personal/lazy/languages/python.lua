@@ -1,5 +1,5 @@
 local last_pid
-local python_exe = vim.fn.exepath("python3") or vim.fn.exepath("python")
+local python_exe = vim.fn.exepath("python")
 return {
     {
         "neovim/nvim-lspconfig",
@@ -47,11 +47,17 @@ return {
                                 return
                             end
                             vim.fn.system("cat /proc/" .. config.pid .. "/maps | grep -q debugpy")
-                            inject = vim.v.shell_error ~= 0
                         elseif Util.platform == "macOS" then
                             vim.fn.system("vmmap" .. config.pid .. " | grep -q debugpy")
-                            inject = vim.v.shell_error ~= 0
+                        elseif Util.platform == "Windows" then
+                            local cmd =
+                                "powershell -NoProfile -NonInteractive -Command '(Get-Process -Id %d).Modules'| grep -q debugpy"
+                            vim.fn.system({ "bash", "-c", string.format(cmd, config.pid) })
+                        else
+                            vim.notify("Couldn't detect platform", vim.log.levels.ERROR)
+                            return
                         end
+                        inject = vim.v.shell_error ~= 0
                     end
 
                     if inject then

@@ -13,7 +13,7 @@ exposed = {}
 [envs.nodejs]
 channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
-exposed = { npx = "npx", node = "node", corepack = "corepack", npm = "npm" }
+exposed = { npx = "npx", node = "node", npm = "npm" }
 
 [envs.fzf]
 channels = ["conda-forge"]
