@@ -21,6 +21,7 @@ vim.keymap.set("x", "p", [["_dP]], { desc = "Paste without yanking" })
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 vim.keymap.set("n", "<leader>D", [["_D]], { desc = "Delete without yanking" })
 vim.keymap.set("n", "<leader>c", [["_c]], { desc = "Change without yanking]" })
+vim.keymap.set("i", "<A-v>", "<C-r>0", { desc = "Paste in insertmode", noremap = true, silent = true })
 
 -- Diagnostic keymaps
 vim.keymap.set(
