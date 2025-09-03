@@ -59,3 +59,12 @@ vim.opt.diffopt = {
     "linematch:200",
     "indent-heuristic",
 }
+
+-- Jump list per path
+local function get_shada_path()
+    local cwd = vim.fn.getcwd()
+    local safe_path = cwd:gsub("/", "%%"):gsub(":", "%%")
+    return vim.fn.stdpath("data") .. "/shada/" .. safe_path .. ".shada"
+end
+vim.fn.mkdir(vim.fn.stdpath("data") .. "/shada", "p")
+vim.opt.shadafile = get_shada_path()
