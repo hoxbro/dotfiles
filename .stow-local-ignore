@@ -4,3 +4,4 @@
 .gitmodules
 README.md
 .pre-commit-config.yaml
+.claude

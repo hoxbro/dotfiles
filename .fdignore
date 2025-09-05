@@ -7,3 +7,4 @@ crates/
 .git/
 .pixi/
 archive/
+.claude/

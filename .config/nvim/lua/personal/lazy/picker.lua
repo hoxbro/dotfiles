@@ -9,6 +9,7 @@ local exclude = {
     ".pixi/",
     "node_modules/",
     ".venv/",
+    ".claude/",
 
     "lazy-lock.json",
     "pixi.lock",

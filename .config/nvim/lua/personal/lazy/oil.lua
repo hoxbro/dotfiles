@@ -11,6 +11,8 @@ local always_hidden = {
     "__pycache__",
     "node_modules",
     ".venv",
+    ".hypothesis",
+    ".claude",
 }
 
 return {

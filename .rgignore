@@ -4,6 +4,7 @@
 .pixi/
 __pycache__/
 node_modules/
+.claude/
 
 pixi.lock
 uv.lock
