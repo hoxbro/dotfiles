@@ -91,6 +91,11 @@ else
   ca base
 fi
 
+__create_cenv() {
+  echo "[+] mamba env create --name \"$env_name\" ${quoted_packages}--yes --quiet $*"
+  mamba env create --name "$env_name" "${packages[@]}" --yes --quiet "$@"
+}
+
 ce() {
   if [[ -z "$1" ]]; then
     echo "Usage: ce <env_name> package1 package2 ..." >&2
@@ -99,11 +104,12 @@ ce() {
   if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else
-    if [ $# -eq 1 ]; then packages="python"; else packages="${@:2}"; fi
-    ee() {echo "[+] $1" && eval "$1"}
-    cmd="mamba env create --name \"$1\" $packages --yes --quiet"
-    ee "$cmd --offline" || ee "$cmd" || return 1
-    ca "$1"
+    local env_name="$1"
+    shift
+    local packages=("${@:-python}")
+    local quoted_packages=$(printf '"%s" ' "${packages[@]}")
+    __create_cenv --offline || __create_cenv || return 1
+    ca "$env_name"
     mamba list
   fi
 }
