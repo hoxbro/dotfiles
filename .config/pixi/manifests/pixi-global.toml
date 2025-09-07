@@ -30,11 +30,6 @@ channels = ["conda-forge"]
 dependencies = { gh = "*" }
 exposed = { gh = "gh" }
 
-[envs.pre-commit]
-channels = ["conda-forge"]
-dependencies = { python = "3.13.*", pre-commit = "*" }
-exposed = { pre-commit = "pre-commit" }
-
 [envs.git-absorb]
 channels = ["conda-forge"]
 dependencies = { git-absorb = "*" }
