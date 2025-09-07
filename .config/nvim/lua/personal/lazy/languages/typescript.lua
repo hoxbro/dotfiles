@@ -103,6 +103,30 @@ return {
                     userDataDir = false,
                     runtimeExecutable = vim.fn.exepath("chromium"),
                 },
+                {
+                    type = "pwa-chrome",
+                    request = "launch",
+                    name = "Launch: Chrome (BokehJS)",
+                    url = "http://127.0.0.1:5777/examples/legends",
+                    webRoot = "${workspaceFolder}",
+                    protocol = "inspector",
+                    sourceMaps = true,
+                    sourceMapPathOverrides = {
+                        -- Handle the @@/ prefixed paths in bundled source maps
+                        ["@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
+                        ["/static/js/@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
+                        ["static/js/@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
+
+                        -- Handle individual lib file maps
+                        ["../../../src/lib/*.ts"] = "${workspaceFolder}/src/lib/*.ts",
+
+                        -- Handle examples
+                        ["../../../examples/*.ts"] = "${workspaceFolder}/examples/*.ts",
+                        ["/static/examples/*.ts"] = "${workspaceFolder}/examples/*.ts",
+                    },
+                    userDataDir = false,
+                    runtimeExecutable = vim.fn.exepath("chromium"),
+                },
             }
             opts.typescript = { adapters = adapters, configurations = configurations }
             opts.javascript = { configurations = configurations }
