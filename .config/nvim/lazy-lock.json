@@ -26,7 +26,7 @@
   "mini.snippets": { "branch": "main", "commit": "d005684e620e76eb2a5fbbbd211a1eba7212b4aa" },
   "mini.surround": { "branch": "main", "commit": "5aab42fcdcf31fa010f012771eda5631c077840a" },
   "neogen": { "branch": "main", "commit": "d7f9461727751fb07f82011051338a9aba07581d" },
-  "neotest": { "branch": "master", "commit": "52fca6717ef972113ddd6ca223e30ad0abb2800c" },
+  "neotest": { "branch": "master", "commit": "2cf3544fb55cdd428a9a1b7154aea9c9823426e8" },
   "neotest-python": { "branch": "master", "commit": "ed9b4d794b89044cc32e5476e637936331473c6e" },
   "neotest-rust": { "branch": "main", "commit": "2c9941d4a358839918fac21d20fc8fef0e1ad05f" },
   "nvim-dap": { "branch": "master", "commit": "f777d1d20ed50c2f312e286892c062d9c2f1c6fe" },
