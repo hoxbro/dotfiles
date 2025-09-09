@@ -69,3 +69,5 @@ zstyle ':completion:*:*:*:*:*' menu select
 autoload edit-command-line
 zle -N edit-command-line
 bindkey '^X' edit-command-line
+
+setopt autocd
