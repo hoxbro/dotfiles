@@ -114,3 +114,8 @@ exposed = { prettier = "prettier" }
 channels = ["conda-forge"]
 dependencies = { tree-sitter-cli = "*" }
 exposed = { tree-sitter = "tree-sitter" }
+
+[envs.prek]
+channels = ["conda-forge"]
+dependencies = { prek = "*" }
+exposed = { prek = "prek" }
