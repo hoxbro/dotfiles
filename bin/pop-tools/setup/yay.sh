@@ -12,7 +12,7 @@ PACKAGES=(
 
     # GUI
     librewolf-bin ghostty 1password synology-drive clockify-desktop
-    celluloid remmina geary ulauncher timeshift pavucontrol seahorse
+    celluloid geary ulauncher timeshift pavucontrol seahorse
     nemo nemo-fileroller
     code spotify slack-desktop parsec discord zoom ksnip
     libreoffice-still chromium

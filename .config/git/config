@@ -16,7 +16,7 @@
     s = status
     can = commit --amend --no-edit --date now
     redo = reset @{'10 minutes ago'}
-    mom = clean -fxd --exclude=".cenv" --exclude="pixi.lock" --exclude="example*.py" --exclude=".lazy.lua"
+    mom = clean -fxd --exclude=".cenv" --exclude="pixi.lock" --exclude="example*.py" --exclude=".lazy.lua" --exclude="perf*.py"
     pr = push --force-with-lease
     co = checkout
     cob = checkout -b

@@ -11,7 +11,7 @@ local function run_cmd(pattern, command)
     })
 end
 
-run_cmd("python", "!python3")
+run_cmd("python", "!python")
 run_cmd("sh", "!bash")
 run_cmd("javascript", "!node")
 run_cmd("lua", "source")

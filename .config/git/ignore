@@ -1,4 +1,5 @@
 .cenv
 example*.py
+perf*.py
 .lazy.lua
 **/.claude/settings.local.json
