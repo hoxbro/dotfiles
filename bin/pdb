@@ -16,9 +16,14 @@ inject)
     echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope >/dev/null
     ;;
 run)
-    echo "Wait for server connect"
     shift
-    python -m debugpy --listen 5678 --wait-for-client "$@"
+    if [[ -n "$NODEBUG" ]]; then
+        echo "[+] Running in NODEBUG mode"
+        python "$@"
+    else
+        echo "[+] Wait for server connect"
+        python -m debugpy --listen 5678 --wait-for-client "$@"
+    fi
     ;;
 *)
     usage
