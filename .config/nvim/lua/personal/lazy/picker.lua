@@ -73,6 +73,16 @@ return {
             desc = "Search By Grep",
         },
         {
+            "<leader>sg",
+            function()
+                vim.cmd('normal! "zy')
+                local query = vim.trim(vim.fn.getreg("z"))
+                require("snacks").picker.grep({ search = query })
+            end,
+            desc = "Search By Grep",
+            mode = "v",
+        },
+        {
             "<leader>sh",
             function() require("snacks").picker.files({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Files HoloViz" }) end,
             desc = "Search Files (Holoviz)",
