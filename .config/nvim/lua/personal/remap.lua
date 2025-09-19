@@ -40,11 +40,15 @@ vim.keymap.set("n", "<leader>m", vim.diagnostic.open_float, { desc = "Show Diagn
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open Diagnostic Quickfix List" })
 
 -- Replace keymaps
-vim.keymap.set("n", "<leader>r", function()
-    local pattern = vim.fn.expand("<cword>")
-    vim.api.nvim_input("<Esc>:%s/" .. pattern .. "/" .. pattern .. "/gI<Left><Left><Left>")
-end, { desc = "Find And Replace Word In File" })
-vim.keymap.set("v", "<leader>r", function()
+local function get_replace_config()
+    if vim.bo.buftype == "quickfix" then
+        return "cdo s/", "/gc"
+    else
+        return "%s/", "/gI"
+    end
+end
+
+local function get_visual_pattern()
     local _, ls, cs = unpack(vim.fn.getpos("v"))
     local _, le, ce = unpack(vim.fn.getpos("."))
     if cs == ce and le == ls then -- v-line
@@ -52,14 +56,26 @@ vim.keymap.set("v", "<leader>r", function()
         ce = string.len(line)
         cs = string.find(line, "%S") or ce
     end
-    if cs == ce then return end
+    if cs == ce then return nil end
     if ls > le or (ls == le and cs > ce) then
         ls, le, cs, ce = le, ls, ce, cs
     end
     local pattern = table.concat(vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {}))
-    pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
-    vim.api.nvim_input("<Esc>:%s/" .. pattern .. "/" .. pattern .. "/gI<Left><Left><Left>")
-end, { desc = "Find And Replace Highlighted Text In File" })
+    return vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
+end
+
+vim.keymap.set("n", "<leader>r", function()
+    local pattern = vim.fn.expand("<cword>")
+    local cmd, flags = get_replace_config()
+    vim.api.nvim_input("<Esc>:" .. cmd .. pattern .. "/" .. pattern .. flags .. string.rep("<Left>", #flags))
+end, { desc = "Find And Replace Word" })
+
+vim.keymap.set("v", "<leader>r", function()
+    local pattern = get_visual_pattern()
+    if not pattern then return end
+    local cmd, flags = get_replace_config()
+    vim.api.nvim_input("<Esc>:" .. cmd .. pattern .. "/" .. pattern .. flags .. string.rep("<Left>", #flags))
+end, { desc = "Find And Replace Highlighted Text" })
 
 -- Inlay Hints
 vim.keymap.set(
