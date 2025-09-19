@@ -47,7 +47,7 @@
 ; Language based on variables endings
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(js|JS|esm)$")
+    left: (identifier) @_left (#match? @_left "(js|JS|esm|ESM)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "javascript")
@@ -57,7 +57,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(css|CSS|stylesheet)$")
+    left: (identifier) @_left (#match? @_left "(css|CSS|stylesheet|STYLESHEET)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "css")
