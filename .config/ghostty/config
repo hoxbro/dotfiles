@@ -37,7 +37,7 @@ maximize = true
 
 window-decoration = true
 # gtk-titlebar = false
-gtk-adwaita = false
+# gtk-adwaita = false
 gtk-single-instance = true
 
 macos-icon = custom-style
