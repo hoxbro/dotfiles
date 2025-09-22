@@ -104,3 +104,13 @@
     )
   )
 )
+
+(expression_statement
+  (assignment
+    left: (identifier) @_left (#match? @_left "(py|PY)$")
+    right: (string
+      (string_content) @injection.content
+      (#set! injection.language "python")
+    )
+  )
+)
