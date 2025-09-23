@@ -81,12 +81,15 @@ vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {})
 -- https://www.reddit.com/r/neovim/comments/1l4tubm/copy_last_yanked_text_to_clipboard_on_focuslost/
 local last_clipboard = vim.fn.getreg("0")
 local group_clipboard = vim.api.nvim_create_augroup("group_clipboard", { clear = true })
+local skip_reset = false
 
 -- Reset last_clipboard on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Reset last_clipboard on yank",
     group = group_clipboard,
-    callback = function() last_clipboard = "" end,
+    callback = function()
+        if not skip_reset then last_clipboard = "" end
+    end,
 })
 
 vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
@@ -97,6 +100,8 @@ vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
         if cur_clipboard ~= last_clipboard then
             vim.fn.setreg("+", cur_clipboard)
             last_clipboard = cur_clipboard
+            skip_reset = true
+            vim.defer_fn(function() skip_reset = false end, 10)
         end
     end,
 })
