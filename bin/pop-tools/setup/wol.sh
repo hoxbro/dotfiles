@@ -12,11 +12,11 @@ Description=Enable Wake On Lan
 
 [Service]
 Type=oneshot
-ExecStart = /sbin/ethtool --change $INTERFACE wol g
+ExecStart=/sbin/ethtool --change $INTERFACE wol g
 
 [Install]
-WantedBy=basic.target
+WantedBy=multi-user.target
 EOF
 
 sudo systemctl daemon-reload
-sudo systemctl enable wol.service
+sudo systemctl enable --now wol.service

@@ -33,6 +33,7 @@ export COLOR_DARK='#21283b'
 
 alias folder='xdg-open'
 alias wol='curl -X POST http://10.0.1.2:8000/wol && ping 10.0.1.11'
+alias nosleep='sudo systemctl mask --runtime sleep.target suspend.target hibernate.target hybrid-sleep.target'
 alias t='tmux-sessionizer'
 alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
 alias zsh-reload="exec zsh"
