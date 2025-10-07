@@ -70,8 +70,7 @@ export PYDEVD_DISABLE_FILE_VALIDATION=1
 export JUPYTER_PLATFORM_DIRS=1
 alias pipe='python -m pip install --no-deps --disable-pip-version-check -ve .'
 alias ppt='pytest -n logical --dist loadgroup -qq'
-alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq'
-import-time() { python -X importtime -c "import $1" 2> /tmp/tuna.log && tuna /tmp/tuna.log }
+alias pptx='pytest -n logical --dist loadscope --nbval-lax -p no:python -qq -p no:randomly'
 zsh-defer source ~/.config/zsh/python.zsh
 
 # Holoviz
