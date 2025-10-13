@@ -85,7 +85,7 @@ __fzf() { eval "$(fzf --zsh)" && unset -f __fzf }; zsh-defer __fzf
 export FZF_DEFAULT_COMMAND="fd --type=f --hidden --follow --strip-cwd-prefix"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --follow --strip-cwd-prefix"
-export FZF_DEFAULT_OPTS="--bind=shift-tab:down,tab:up --color=fg:$COLOR_LIGHT,fg+:$COLOR_DARK,bg+:$COLOR_LIGHT,prompt:1,pointer:$COLOR_LIGHT,gutter:-1,hl:1,hl+:1"
+export FZF_DEFAULT_OPTS="--bind=shift-tab:down,tab:up --color=fg:$COLOR_LIGHT,fg+:$COLOR_DARK,bg+:$COLOR_LIGHT,prompt:1,pointer:$COLOR_LIGHT,hl:1,hl+:1 --gutter=' '"
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --icons=always --tree --color=always {} | head -200'"
 eval "$(starship init zsh)"
