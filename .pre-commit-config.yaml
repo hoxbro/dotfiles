@@ -42,8 +42,15 @@ repos:
             "indent_string=    ",
           ]
   - repo: https://github.com/johnnymorganz/stylua
-    rev: v2.2.0
+    rev: v2.3.0
     hooks:
       - id: stylua-github
         name: stylua
-        args: ["--config-path", ".config/nvim/stylua.toml"]
+        args:
+          [
+            --line-endings=Unix,
+            --indent-type=Spaces,
+            --indent-width=4,
+            --collapse-simple-statement=Always,
+            --sort-requires,
+          ]
