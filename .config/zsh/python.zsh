@@ -19,7 +19,7 @@ ca() { # conda activate
   local ENV="$1"
   if [[ "$ENV" == "base" ]]; then
     local ENV_PATH="$CONDA_HOME"
-  elif [[ -d "$ENV" ]]; then
+  elif [[ -d "$ENV/conda-meta" ]]; then
     local ENV_PATH="$(realpath $ENV)"
     local ENV="$ENV_PATH"
   else
