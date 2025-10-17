@@ -5,7 +5,7 @@ local exclude = {
     "formal/",
     "archive/",
     "patch/",
-    "*_cache/",
+    ".*_cache/",
     ".pixi/",
     "node_modules/",
     ".venv/",

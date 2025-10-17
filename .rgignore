@@ -1,4 +1,4 @@
-*_cache/
+.*_cache/
 .git/
 .ipynb_checkpoints/
 .pixi/
