@@ -46,7 +46,7 @@ return {
             end
 
             ---@diagnostic disable-next-line: missing-fields
-            require("neotest").setup({ adapters = adapters })
+            require("neotest").setup({ adapters = adapters, quickfix = { enabled = false } })
         end,
     },
 }

@@ -38,45 +38,6 @@ for _, cmd in ipairs(typos) do
     )
 end
 
--- Ruff to quicklist
-local ruff_quicklist = function()
-    local output = vim.fn.systemlist({
-        vim.fn.exepath("ruff"),
-        "check",
-        "--no-fix",
-        "--exit-zero",
-        "--exclude",
-        "*.ipynb",
-        "--output-format",
-        "concise",
-        vim.fn.getcwd(),
-    })
-
-    if vim.fn.match(output[1] or "", "All checks passed!") ~= -1 then
-        -- Just print the output if all checks passed
-        print(table.concat(output, "\n"))
-    else
-        -- Load output into quickfix list
-        local qf_entries = {}
-        for _, line in ipairs(output) do
-            local filename, lnum, col, text = line:match("^(.-):(%d+):(%d+):%s*(.*)")
-            if filename then
-                table.insert(qf_entries, {
-                    filename = filename,
-                    lnum = tonumber(lnum),
-                    col = tonumber(col),
-                    text = text,
-                })
-            end
-        end
-        vim.fn.setqflist({}, " ", { title = "Ruff", items = qf_entries })
-        vim.cmd("copen")
-        vim.cmd("cfirst")
-    end
-end
-
-vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {})
-
 -- Paste to clipboard on focus
 -- https://www.reddit.com/r/neovim/comments/1l4tubm/copy_last_yanked_text_to_clipboard_on_focuslost/
 local last_clipboard = vim.fn.getreg("0")
