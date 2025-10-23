@@ -73,6 +73,32 @@ Util.shell_split = function(command)
     return result
 end
 
+Util.smart_trim_and_dedent = function(lines)
+    -- Remove leading/trailing blank lines
+    while #lines > 0 and lines[1]:match("^%s*$") do
+        table.remove(lines, 1)
+    end
+    while #lines > 0 and lines[#lines]:match("^%s*$") do
+        table.remove(lines, #lines)
+    end
+
+    -- Dedent by smallest common indent
+    local min_indent = math.huge
+    for _, line in ipairs(lines) do
+        if line:find("%S") then
+            local indent = #(line:match("^(%s*)"))
+            min_indent = math.min(min_indent, indent)
+        end
+    end
+    if min_indent < math.huge and min_indent > 0 then
+        for i, line in ipairs(lines) do
+            lines[i] = line:sub(min_indent + 1)
+        end
+    end
+
+    return table.concat(lines, "\n")
+end
+
 local _platform = function()
     if vim.fn.has("win32") == 1 then
         return "Windows"

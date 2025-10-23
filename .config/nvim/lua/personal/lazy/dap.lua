@@ -56,11 +56,23 @@ return {
                 desc = "Debug: Eval var under cursor",
             },
             {
-                "<leader>dr",
+                "<F9>",
                 function()
-                    local line = vim.trim(vim.api.nvim_get_current_line())
+                    local mode = vim.fn.mode()
+                    local lines
 
-                    require("dap").repl.execute(line)
+                    if mode == "v" or mode == "V" or mode == "\22" then
+                        local start_line = math.min(vim.fn.getpos("v")[2], vim.fn.getpos(".")[2])
+                        local end_line = math.max(vim.fn.getpos("v")[2], vim.fn.getpos(".")[2])
+                        lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+                        -- Exit visual mode
+                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+                    else
+                        lines = { vim.api.nvim_get_current_line() }
+                    end
+
+                    local text = Util.smart_trim_and_dedent(lines)
+                    require("dap").repl.execute(text)
 
                     for _, win in ipairs(vim.api.nvim_list_wins()) do
                         local buf = vim.api.nvim_win_get_buf(win)
@@ -72,7 +84,8 @@ return {
                         end
                     end
                 end,
-                desc = "Debug: Execute current line in REPL",
+                mode = { "n", "v" },
+                desc = "Debug: Execute current line(s) in REPL",
             },
         },
         -- `opts` are a table where:
