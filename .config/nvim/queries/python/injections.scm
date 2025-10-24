@@ -8,8 +8,8 @@
 
     (argument_list
       (string
-	(string_content) @injection.content
-	(#set! injection.language "sql")
+        (string_content) @injection.content
+        (#set! injection.language "sql")
       )
     )
   )
@@ -17,7 +17,7 @@
 
 ; CustomJS(code=...) from Bokeh
 (call
-  function: (identifier) @_function (#any-of? @_function "CustomJS")
+  function: (identifier) @_function (#match? @_function "^CustomJS[a-zA-Z]*$")
   arguments: (argument_list
     (keyword_argument
       name: (identifier) @_name (#match? @_name "code")
