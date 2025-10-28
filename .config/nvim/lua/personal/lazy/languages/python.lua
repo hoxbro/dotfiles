@@ -54,33 +54,41 @@ local pytest_quicklist = function()
     local qf_entries = {}
 
     for _, line in ipairs(lines) do
-        -- Match either file::Class::test or file::test
-        local filename, cls, testname = line:match("^(.-)::(.-)::(.-)$")
-        if not testname then
-            filename, testname = line:match("^(.-)::(.-)$")
-        end
+        if not line or line == "" then
+            -- skip empty lines
+        else
+            -- Split at the LAST :: to isolate test_raw (greedy .* ensures it's the last)
+            local prefix, test_raw = line:match("^(.*)::([^:]+)$")
+            if prefix and test_raw then
+                -- Strip trailing [params] if present
+                local testname = test_raw:gsub("%b[]$", "")
 
-        if filename and testname then
-            local lnum, col = 1, 1
-            if vim.fn.filereadable(filename) == 1 then
-                local content = vim.fn.readfile(filename)
-                for i, l in ipairs(content) do
-                    if l:match("def%s+" .. vim.pesc(testname) .. "%s*%(") then
-                        lnum = i
-                        -- Find first non-whitespace character
-                        local _, cstart = l:find("^%s*")
-                        col = (cstart or 0) + 1
-                        break
+                -- From prefix, optionally split filename and class (again split at last ::)
+                local filename, _ = prefix:match("^(.*)::([^:]+)$")
+                if not filename then filename = prefix end
+
+                if filename and testname and filename ~= "" and testname ~= "" then
+                    local lnum, col = 1, 1
+                    if vim.fn.filereadable(filename) == 1 then
+                        local content = vim.fn.readfile(filename)
+                        for i, l in ipairs(content) do
+                            if l:match("def%s+" .. vim.pesc(testname) .. "%s*%(") then
+                                lnum = i
+                                local _, cstart = l:find("^%s*")
+                                col = (cstart or 0) + 1
+                                break
+                            end
+                        end
                     end
+
+                    table.insert(qf_entries, {
+                        filename = filename,
+                        lnum = lnum,
+                        col = col,
+                        text = line,
+                    })
                 end
             end
-
-            table.insert(qf_entries, {
-                filename = filename,
-                lnum = lnum,
-                col = col,
-                text = line,
-            })
         end
     end
 
