@@ -23,6 +23,7 @@ sync() {
     copy-file .zsh_history
     copy-file .local/share/zoxide/db.zo
     copy-path .password-store
+    copy-path .claude
 
     copy-path .local/share/nvim/harpoon
     copy-path .local/share/nvim/scratch

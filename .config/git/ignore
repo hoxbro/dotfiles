@@ -4,3 +4,4 @@ perf*.py
 .lazy.lua
 **/.claude/settings.local.json
 failing_tests.txt
+claude/
