@@ -51,18 +51,4 @@ return {
             }
         end,
     },
-    {
-        "danymat/neogen",
-        dependencies = { "nvim-mini/mini.snippets" },
-        keys = {
-            { "nf", function() require("neogen").generate() end, desc = "Generate docstring" },
-        },
-        opts = {
-            snippet_engine = "mini",
-            languages = {
-                lua = { template = { annotation_convention = "emmylua" } },
-                python = { template = { annotation_convention = "numpydoc" } },
-            },
-        },
-    },
 }
