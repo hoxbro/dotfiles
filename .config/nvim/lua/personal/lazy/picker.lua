@@ -39,37 +39,37 @@ return {
     keys = {
         {
             "<leader>sb",
-            function() require("snacks").picker.buffers() end,
+            function() Snacks.picker.buffers() end,
             desc = "Find Existing Buffers",
         },
         {
             "<leader>gf",
-            function() require("snacks").picker.git_diff() end,
+            function() Snacks.picker.git_diff() end,
             desc = "Search Git Status",
         },
         {
             "<leader>sd",
-            function() require("snacks").picker.diagnostics() end,
+            function() Snacks.picker.diagnostics() end,
             desc = "Search Diagnostics",
         },
         {
             "<leader>sr",
-            function() require("snacks").picker.registers() end,
+            function() Snacks.picker.registers() end,
             desc = "Search Registers",
         },
         {
             "<leader>/",
-            function() require("snacks").picker.lines({ layout = "default" }) end,
+            function() Snacks.picker.lines({ layout = "default" }) end,
             desc = "Fuzzily Search In Current Buffer",
         },
         {
             "<leader>sf",
-            function() require("snacks").picker.files() end,
+            function() Snacks.picker.files() end,
             desc = "Search Files",
         },
         {
             "<leader>sg",
-            function() require("snacks").picker.grep() end,
+            function() Snacks.picker.grep() end,
             desc = "Search By Grep",
         },
         {
@@ -77,29 +77,29 @@ return {
             function()
                 vim.cmd('normal! "zy')
                 local query = vim.trim(vim.fn.getreg("z"))
-                require("snacks").picker.grep({ search = query })
+                Snacks.picker.grep({ search = query })
             end,
             desc = "Search By Grep",
             mode = "v",
         },
         {
             "<leader>sh",
-            function() require("snacks").picker.files({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Files HoloViz" }) end,
+            function() Snacks.picker.files({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Files HoloViz" }) end,
             desc = "Search Files (Holoviz)",
         },
         {
             "<leader>sj",
-            function() require("snacks").picker.grep({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Grep HoloViz" }) end,
+            function() Snacks.picker.grep({ cwd = vim.fn.getenv("HOLOVIZ_DEV"), title = "Grep HoloViz" }) end,
             desc = "Search Files (Holoviz)",
         },
         {
             "<leader>sk",
-            function() require("snacks").picker.keymaps() end,
+            function() Snacks.picker.keymaps() end,
             desc = "Search keymaps",
         },
         {
             "<leader>sl",
-            function() require("snacks").picker.resume() end,
+            function() Snacks.picker.resume() end,
             desc = "Last search",
         },
     },

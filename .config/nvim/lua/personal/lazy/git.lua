@@ -23,7 +23,7 @@ return {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPost", "BufWritePost" },
         keys = {
-            { "<leader>gp", function() require("gitsigns").preview_hunk_inline() end, desc = "Git Preview Hunk" },
+            { "<leader>gd", function() require("gitsigns").preview_hunk_inline() end, desc = "Git Preview Hunk" },
             { "<leader>gr", function() require("gitsigns").reset_hunk() end, desc = "Git Reset Hunk" },
         },
         opts = {
@@ -76,13 +76,16 @@ return {
     {
         "folke/snacks.nvim",
         keys = {
+            { "<leader>gw", function() Snacks.gitbrowse() end, desc = "Open Git Browser", mode = { "n", "v" } },
+            { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
+            { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+            { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
             {
-                "<leader>gw",
-                function() require("snacks.gitbrowse")() end,
-                desc = "Open Git Browser",
-                mode = { "n", "v" },
+                "<leader>gP",
+                function() Snacks.picker.gh_pr({ state = "all" }) end,
+                desc = "GitHub Pull Requests (all)",
             },
         },
-        opts = { gitbrowse = {} },
+        opts = { gitbrowse = {}, gh = {} },
     },
 }

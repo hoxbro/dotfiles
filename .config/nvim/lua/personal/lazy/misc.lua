@@ -26,8 +26,8 @@ return {
         lazy = false,
         priority = 998,
         keys = {
-            { "<leader>.", function() require("snacks.scratch")() end, desc = "Toggle Scratch Buffer" },
-            { "<leader>S", function() require("snacks.scratch").select() end, desc = "Select Scratch Buffer" },
+            { "<leader>.", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+            { "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
         },
         opts = { scratch = { ft = "markdown" }, quickfile = {}, bigfile = {} },
     },

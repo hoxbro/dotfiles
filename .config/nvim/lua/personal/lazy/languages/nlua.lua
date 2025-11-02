@@ -77,6 +77,7 @@ return {
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
                 { path = "luassert-types/library", words = { "assert" } },
                 { path = "busted-types/library", words = { "describe" } },
+                { path = "snacks.nvim", words = { "Snacks" } },
             },
         },
     },
