@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+URI="qemu:///system"
+
+VM_NAME=$(virsh --connect "$URI" list --all --name | grep -v '^$' | fzf --tmux --with-nth 1 --select-1 --query "'${1%/}")
+
+if ! virsh --connect "$URI" start "$VM_NAME"; then
+    exit 1
+fi
+
+PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin" nohup virt-manager --connect "$URI" --show-domain-console "$VM_NAME" >/dev/null 2>&1 &
