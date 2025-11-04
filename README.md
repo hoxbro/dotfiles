@@ -36,5 +36,5 @@ Foreground is ![#ffffff](https://placehold.co/15x15/ffffff/ffffff.png) `#ffffff`
 Run pre-commit hooks with:
 
 ```bash
-pre-commit install
+prek install
 ```
