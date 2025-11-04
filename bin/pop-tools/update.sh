@@ -14,14 +14,11 @@ update_dotfiles() {
 
 update_yay() {
     sudo -v || exit 1 # Set sudo
-    yay --noconfirm
+    PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin" yay --noconfirm
 }
 
 update_conda() {
-    # shellcheck disable=SC1091
-    source "$CONDA_HOME/etc/profile.d/conda.sh"
-    conda activate base
-    mamba update --all -y
+    mamba update --all -n base -y
 }
 
 update_pixi() {
