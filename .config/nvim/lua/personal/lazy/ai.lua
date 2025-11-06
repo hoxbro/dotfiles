@@ -1,3 +1,13 @@
+local ai = function()
+    require("copilot")
+    local sk = require("sidekick")
+    vim.keymap.set("n", "<Tab>", function()
+        if not sk.nes_jump_or_apply() then return "<Tab>" end
+    end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
+end
+
+vim.api.nvim_create_user_command("AI", ai, { desc = "Start AI" })
+
 return {
     {
         "zbirenbaum/copilot.lua",
@@ -15,10 +25,6 @@ return {
                 gitrebase = true,
             },
         },
-        config = function(_, opts)
-            require("copilot").setup(opts)
-            require("sidekick").setup()
-        end,
     },
     {
         "saghen/blink.cmp",
@@ -35,10 +41,5 @@ return {
         "folke/sidekick.nvim",
         lazy = true,
         dependencies = { "zbirenbaum/copilot.lua" },
-        config = function()
-            vim.keymap.set("n", "<Tab>", function()
-                if not require("sidekick").nes_jump_or_apply() then return "<Tab>" end
-            end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
-        end,
     },
 }
