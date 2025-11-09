@@ -15,7 +15,7 @@ PACKAGES=(
     librewolf-bin ghostty 1password synology-drive clockify-desktop
     celluloid geary ulauncher timeshift pavucontrol seahorse
     nemo nemo-fileroller
-    code spotify slack-desktop parsec discord zoom ksnip
+    code spotify slack-desktop parsec ferdium-bin zoom gradia
     libreoffice-still chromium
     extension-manager
 
