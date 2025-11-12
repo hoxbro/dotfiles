@@ -4,16 +4,31 @@ return {
     {
         "neovim/nvim-lspconfig",
         opts = {
-            basedpyright = {
-                python = { pythonPath = python_exe },
-                basedpyright = {
-                    analysis = {
-                        typeCheckingMode = "off",
-                        autoSearchPaths = true,
-                        diagnosticMode = "openFilesOnly",
-                        useLibraryCodeForTypes = true,
-                        diagnosticSeverityOverrides = {
-                            reportUnusedParameter = false,
+            -- basedpyright = {
+            --     python = { pythonPath = python_exe },
+            --     basedpyright = {
+            --         analysis = {
+            --             typeCheckingMode = "off",
+            --             autoSearchPaths = true,
+            --             diagnosticMode = "openFilesOnly",
+            --             useLibraryCodeForTypes = true,
+            --             diagnosticSeverityOverrides = {
+            --                 reportUnusedParameter = false,
+            --             },
+            --         },
+            --     },
+            -- },
+            pyrefly = {
+                {
+                    python = { pythonPath = python_exe },
+                    pyrefly = {
+                        analysis = {
+                            displayTypeErrors = "force-off",
+                            autoSearchPaths = true,
+                            useLibraryCodeForTypes = true,
+                            errors = {
+                                reportUnusedParameter = false,
+                            },
                         },
                     },
                 },
@@ -23,7 +38,7 @@ return {
 
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { python = { "basedpyright" } },
+        opts = { python = { "pyrefly" } },
     },
 
     {
