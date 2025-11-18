@@ -10,11 +10,10 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-json
       - id: detect-private-key
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.39.2
     hooks:
-      - id: codespell
-        args: ["--write-changes"]
+      - id: typos
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
