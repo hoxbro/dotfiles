@@ -35,6 +35,7 @@ return {
                     on_attach = on_attach,
                     settings = config,
                     filetypes = (config or {}).filetypes,
+                    cmd = (config or {}).cmd,
                 })
             end
             -- https://www.reddit.com/r/neovim/comments/1l7pz1l/starting_from_0112_i_have_a_weird_issue/

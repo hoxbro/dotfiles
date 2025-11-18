@@ -19,17 +19,21 @@ return {
             --     },
             -- },
             pyrefly = {
-                {
-                    python = { pythonPath = python_exe },
+                python = {
+                    pythonPath = python_exe,
+                    defaultInterpreterPath = python_exe,
                     pyrefly = {
-                        analysis = {
-                            displayTypeErrors = "force-off",
-                            autoSearchPaths = true,
-                            useLibraryCodeForTypes = true,
-                            errors = {
-                                reportUnusedParameter = false,
-                            },
-                        },
+                        displayTypeErrors = "force-off",
+                        --     autoSearchPaths = true,
+                        --     useLibraryCodeForTypes = true,
+                        --     errors = {
+                        --         reportUnusedParameter = false,
+                        --         ["report-unused-parameter"] = false,
+                        --         reportBadAssignment = false,
+                        --         ["report-bad-assignment"] = false,
+                        --         ["bad-assignment"] = false,
+                        --         badAssignment = false,
+                        --     },
                     },
                 },
             },
