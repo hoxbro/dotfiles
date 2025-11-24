@@ -64,7 +64,7 @@ return {
         },
         {
             "<leader>sf",
-            function() Snacks.picker.files() end,
+            function() Snacks.picker.smart() end,
             desc = "Search Files",
         },
         {
