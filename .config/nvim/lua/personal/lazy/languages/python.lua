@@ -151,7 +151,26 @@ return {
                                 return vim.trim(pid)
                             end,
                             ["Select a Process"] = function()
-                                return require("dap.utils").pick_process({ filter = "python" })
+                                return require("dap.utils").pick_process({
+                                    filter = "python",
+                                    label = function(proc)
+                                        local tokens = vim.split(proc.name, "%s+")
+
+                                        local function should_shorten(tok)
+                                            return tok:match("[Pp]ython[%d%.]*$")
+                                                or tok:match("%.py$")
+                                                or tok:find("^/home/")
+                                        end
+
+                                        for i, tok in ipairs(tokens) do
+                                            if should_shorten(tok) and tok:find("/") then
+                                                tokens[i] = "…/" .. vim.fn.fnamemodify(tok, ":t")
+                                            end
+                                        end
+
+                                        return string.format("id=%d cmd=%s", proc.pid, table.concat(tokens, " "))
+                                    end,
+                                })
                             end,
                         }
 
