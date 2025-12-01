@@ -14,4 +14,17 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     spec = { { import = "personal.lazy" }, { import = "personal.lazy.languages" } },
     change_detection = { notify = false },
+    performance = {
+        rtp = {
+            disabled_plugins = {
+                "gzip",
+                "netrwPlugin",
+                "rplugin",
+                "tarPlugin",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
+            },
+        },
+    },
 })
