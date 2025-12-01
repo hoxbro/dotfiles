@@ -71,3 +71,4 @@ zle -N edit-command-line
 bindkey '^X' edit-command-line
 
 setopt autocd
+setopt NO_GLOB
