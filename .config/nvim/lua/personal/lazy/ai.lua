@@ -4,9 +4,11 @@ local ai = function()
     vim.keymap.set("n", "<Tab>", function()
         if not sk.nes_jump_or_apply() then return "<Tab>" end
     end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
+    print("Started AI")
 end
 
 vim.api.nvim_create_user_command("AI", ai, { desc = "Start AI" })
+vim.keymap.set({ "n", "i" }, "<leader>ai", ai, { desc = "Start AI" })
 
 return {
     {
