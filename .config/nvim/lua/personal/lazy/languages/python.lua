@@ -4,45 +4,35 @@ return {
     {
         "neovim/nvim-lspconfig",
         opts = {
-            -- basedpyright = {
-            --     python = { pythonPath = python_exe },
-            --     basedpyright = {
-            --         analysis = {
-            --             typeCheckingMode = "off",
-            --             autoSearchPaths = true,
-            --             diagnosticMode = "openFilesOnly",
-            --             useLibraryCodeForTypes = true,
-            --             diagnosticSeverityOverrides = {
-            --                 reportUnusedParameter = false,
-            --             },
-            --         },
-            --     },
-            -- },
-            pyrefly = {
-                python = {
-                    pythonPath = python_exe,
-                    defaultInterpreterPath = python_exe,
-                    pyrefly = {
-                        displayTypeErrors = "force-off",
-                        --     autoSearchPaths = true,
-                        --     useLibraryCodeForTypes = true,
-                        --     errors = {
-                        --         reportUnusedParameter = false,
-                        --         ["report-unused-parameter"] = false,
-                        --         reportBadAssignment = false,
-                        --         ["report-bad-assignment"] = false,
-                        --         ["bad-assignment"] = false,
-                        --         badAssignment = false,
-                        --     },
+            basedpyright = {
+                python = { pythonPath = python_exe },
+                basedpyright = {
+                    analysis = {
+                        typeCheckingMode = "off",
+                        autoSearchPaths = true,
+                        diagnosticMode = "openFilesOnly",
+                        useLibraryCodeForTypes = true,
+                        diagnosticSeverityOverrides = {
+                            reportUnusedParameter = false,
+                        },
                     },
                 },
             },
+            -- pyrefly = {
+            --     python = {
+            --         pythonPath = python_exe,
+            --         defaultInterpreterPath = python_exe,
+            --         pyrefly = {
+            --             displayTypeErrors = "force-off",
+            --         },
+            --     },
+            -- },
         },
     },
 
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { python = { "pyrefly" } },
+        opts = { python = { "basedpyright" } },
     },
 
     {

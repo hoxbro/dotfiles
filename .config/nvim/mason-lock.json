@@ -1,4 +1,5 @@
 {
+  "basedpyright": "1.34.0",
   "bash-debug-adapter": "untagged-438733f35feb8659d939",
   "bash-language-server": "5.6.0",
   "codelldb": "v1.11.8",
@@ -12,7 +13,6 @@
   "lua-language-server": "3.15.0",
   "marksman": "2025-11-25",
   "prettierd": "0.26.2",
-  "pyrefly": "0.43.1",
   "ruff": "0.14.6",
   "rust-analyzer": "2025-11-24",
   "shfmt": "v3.12.0",
