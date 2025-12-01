@@ -41,11 +41,7 @@ return {
             shfmt = { prepend_args = { "-i", "4" } },
             prettierd = { prepend_args = { "--single-quote=false" } },
             taplo = {
-                inherit = false,
-                command = "taplo",
-                args = {
-                    "format",
-                    "-",
+                append_args = {
                     "--option",
                     "align_comments=false",
                     "--option",
