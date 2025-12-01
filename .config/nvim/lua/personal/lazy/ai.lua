@@ -8,7 +8,7 @@ local ai = function()
 end
 
 vim.api.nvim_create_user_command("AI", ai, { desc = "Start AI" })
-vim.keymap.set({ "n", "i" }, "<leader>ai", ai, { desc = "Start AI" })
+vim.keymap.set("n", "<leader>ai", ai, { desc = "Start AI" })
 
 return {
     {
