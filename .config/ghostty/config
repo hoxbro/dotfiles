@@ -20,6 +20,7 @@ palette = 13=#bfa0fe
 palette = 14=#94d8e5
 palette = 15=#f8f8f2
 
+app-notifications = no-clipboard-copy
 shell-integration-features = no-cursor
 cursor-style = block
 cursor-style-blink = false
