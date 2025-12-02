@@ -17,7 +17,10 @@ end
 vim.api.nvim_create_user_command("BlinkDownload", blink_download, { desc = "Download binary" })
 
 -- Ruff to quicklist
-local ruff_quicklist = function()
+local ruff_quicklist = function(opts)
+    local path = opts.args
+    if not path or path == "" then path = vim.fn.getcwd() end
+
     local output = vim.fn.systemlist({
         vim.fn.exepath("ruff"),
         "check",
@@ -27,7 +30,7 @@ local ruff_quicklist = function()
         "*.ipynb",
         "--output-format",
         "concise",
-        vim.fn.getcwd(),
+        path,
     })
 
     if vim.fn.match(output[1] or "", "All checks passed!") ~= -1 then
@@ -53,7 +56,10 @@ local ruff_quicklist = function()
     end
 end
 
-vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {})
+vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {
+    nargs = "?",
+    complete = "file",
+})
 
 -- Pytest failing tests to quickfix (with line + column detection)
 local pytest_quicklist = function()
