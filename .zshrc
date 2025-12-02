@@ -49,17 +49,6 @@ __env_vars() {
     export SUDO_EDITOR=$(command -v nvim)
     source ~/.env || true
 
-    if [[ "$(uname)" == "Darwin" ]]; then
-        export COPY_CMD="pbcopy"
-    elif [[ "$(uname -r)" =~ "[Mm]icrosoft" ]]; then
-        export COPY_CMD="clip.exe"
-    elif [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
-        export COPY_CMD="wl-copy"
-    else
-        export COPY_CMD="xclip -selection clipboard -i"
-    fi
-    alias copy="$COPY_CMD"
-
     unset -f __env_vars
 }
 zsh-defer __env_vars
