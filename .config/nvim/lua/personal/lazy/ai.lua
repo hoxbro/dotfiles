@@ -1,15 +1,3 @@
-local ai = function()
-    require("copilot")
-    local sk = require("sidekick")
-    vim.keymap.set("n", "<Tab>", function()
-        if not sk.nes_jump_or_apply() then return "<Tab>" end
-    end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
-    print("Started AI")
-end
-
-vim.api.nvim_create_user_command("AI", ai, { desc = "Start AI" })
-vim.keymap.set("n", "<leader>ai", ai, { desc = "Start AI" })
-
 return {
     {
         "zbirenbaum/copilot.lua",
@@ -44,9 +32,19 @@ return {
         lazy = true,
         dependencies = { "zbirenbaum/copilot.lua" },
         opts = {
-            cli = { mux = { backend = "tmux", enabled = true } },
+            cli = {
+                mux = { backend = "tmux", enabled = true },
+                win = {
+                    keys = { nav_left = { "<Esc>", "nav_left", expr = true, desc = "navigate to the left window" } },
+                },
+            },
         },
         keys = {
+            {
+                "<leader>ai",
+                function() print("    🤖") end,
+                desc = "Start AI",
+            },
             {
                 "<leader>aa",
                 function() require("sidekick.cli").toggle({ name = "claude", focus = true }) end,
@@ -81,5 +79,14 @@ return {
                 desc = "Sidekick Select Prompt",
             },
         },
+        config = function(_, opts)
+            local sidekick = require("sidekick")
+            sidekick.setup(opts)
+
+            -- Setting to not start AI on when pressing tab
+            vim.keymap.set("n", "<Tab>", function()
+                if not sidekick.nes_jump_or_apply() then return "<Tab>" end
+            end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
+        end,
     },
 }
