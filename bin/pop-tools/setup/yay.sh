@@ -4,7 +4,6 @@ PACKAGES=(
     # Terminal
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
-    asciinema asciinema-agg-bin
 
     # Desktop Environment
     noto-fonts ttf-ubuntu-mono-nerd
@@ -15,7 +14,8 @@ PACKAGES=(
     librewolf-bin ghostty 1password synology-drive clockify-desktop
     celluloid geary ulauncher timeshift pavucontrol seahorse
     nemo nemo-fileroller
-    code spotify slack-desktop parsec ferdium-bin zoom gradia
+    code spotify slack-desktop parsec ferdium-bin zoom
+    gradia tesseract-data-eng
     libreoffice-still chromium
     extension-manager
 

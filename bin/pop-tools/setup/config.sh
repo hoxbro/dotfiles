@@ -53,12 +53,6 @@ if has 1password librewolf; then
     echo "librewolf" | sudo tee /etc/1password/custom_allowed_browsers
 fi
 
-case $(uname -n) in
-meshify) ;;
-framework) ;;
-virtm) ;;
-esac
-
 git clone git@github.com:hoxbro/dotfiles.git ~/dotfiles || true
 git -C ~/dotfiles submodule update --init
 stow -d ~/dotfiles --no-folding .

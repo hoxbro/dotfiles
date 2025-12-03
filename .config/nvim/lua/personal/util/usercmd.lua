@@ -16,6 +16,26 @@ local blink_download = function()
 end
 vim.api.nvim_create_user_command("BlinkDownload", blink_download, { desc = "Download binary" })
 
+-- Setup nvim
+local setup = function()
+    vim.notify("Setting up nvim", vim.log.levels.INFO)
+
+    vim.cmd("Lazy! restore")
+    vim.notify("✓ Lazy restore complete", vim.log.levels.INFO)
+
+    vim.cmd("MasonUpdate")
+    vim.notify("✓ MasonUpdate complete", vim.log.levels.INFO)
+
+    vim.cmd("MasonLockRestore")
+    vim.notify("✓ MasonLockRestore complete", vim.log.levels.INFO)
+
+    vim.cmd("BlinkDownload")
+    vim.notify("✓ BlinkDownload complete", vim.log.levels.INFO)
+
+    vim.notify("All setup commands completed!", vim.log.levels.INFO)
+end
+vim.api.nvim_create_user_command("Setup", setup, { desc = "Run all setup commands" })
+
 -- Ruff to quicklist
 local ruff_quicklist = function(opts)
     local path = opts.args
