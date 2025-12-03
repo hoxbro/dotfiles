@@ -53,7 +53,7 @@ if has 1password librewolf; then
     echo "librewolf" | sudo tee /etc/1password/custom_allowed_browsers
 fi
 
-case $(cat /etc/hostname) in
+case $(uname -n) in
 meshify) ;;
 framework) ;;
 virtm) ;;

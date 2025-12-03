@@ -49,7 +49,7 @@ sync-large() {
 }
 
 check-hostname() {
-    if [[ $(cat /etc/hostname) != "$1" ]]; then
+    if [[ $(uname -n) != "$1" ]]; then
         printf "\033[0;31mNot on %s\033[0m\n" "$1"
         exit 1
     fi

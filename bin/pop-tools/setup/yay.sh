@@ -40,7 +40,7 @@ if [[ ! $(command -v yay) ]]; then
     sudo pacman -U --noconfirm /tmp/yay/yay-[0-9]*.tar.zst
 fi
 
-case $(cat /etc/hostname) in
+case $(uname -n) in
 meshify) PACKAGES+=("${PACKAGES_MESHIFY[@]}") ;;
 framework) PACKAGES+=("${PACKAGES_FRAMEWORK[@]}") ;;
 virtm) PACKAGES+=("${PACKAGES_VIRTM[@]}") ;;

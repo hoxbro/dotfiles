@@ -5,7 +5,7 @@ sudo -v || exit 1
 
 pkgs=(podman podman-desktop podman-compose crun)
 
-case $(cat /etc/hostname) in
+case $(uname -n) in
 meshify) pkgs+=(nvidia-container-toolkit) ;;
 esac
 

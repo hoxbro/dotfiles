@@ -21,7 +21,7 @@ FUNCTIONS=(
     setup_nvim
 )
 
-case $(cat /etc/hostname) in
+case $(uname -n) in
 meshify) FUNCTIONS+=(setup_wol) ;;
 # framework) ;;
 # virtm) ;;
