@@ -1,7 +1,7 @@
 default_stages: [pre-commit]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
     hooks:
       - id: end-of-file-fixer
         exclude: .json$
@@ -11,24 +11,24 @@ repos:
       - id: check-json
       - id: detect-private-key
   - repo: https://github.com/crate-ci/typos
-    rev: v1.40.0
+    rev: 24c5854966d17070a3b25e2c2dfc63ec5bc94cf4 # frozen: v1.40.0
     hooks:
       - id: typos
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: 745eface02aef23e168a8afb6b5737818efbea95 # frozen: v0.11.0.1
     hooks:
       - id: shellcheck
         args: ["--exclude=SC1091,SC2181"]
         exclude: (zshrc|zsh)$
   - repo: https://github.com/hoxbro/prettier-pre-commit
-    rev: v3.7.1
+    rev: bae77de89db2ee6b2052f9647b14246e9ee19cd1 # frozen: v3.7.4
     hooks:
       - id: prettier
         types_or:
           - markdown
           - yaml
   - repo: https://github.com/hoxbro/taplo-pre-commit
-    rev: v0.9.3
+    rev: 605f960c3c571f814f535622a688bcde63ee87f6 # frozen: v0.9.3
     hooks:
       - id: taplo
         args:
@@ -41,7 +41,7 @@ repos:
             "indent_string=    ",
           ]
   - repo: https://github.com/johnnymorganz/stylua
-    rev: v2.3.1
+    rev: 3701d2cb65198ec748d3a593628625be9f91fe27 # frozen: v2.3.1
     hooks:
       - id: stylua-github
         name: stylua
