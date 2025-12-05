@@ -78,6 +78,12 @@ return {
                 mode = { "n", "x" },
                 desc = "Sidekick Select Prompt",
             },
+            {
+                "<leader>aq",
+                function() require("sidekick.nes").disable() end,
+                mode = "n",
+                desc = "Sidekick Quit NES",
+            },
         },
         config = function(_, opts)
             local sidekick = require("sidekick")
