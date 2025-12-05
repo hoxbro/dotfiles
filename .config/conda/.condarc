@@ -1,10 +1,11 @@
-ssl_verify: true
+anaconda_anon_usage: false
 changeps1: false
 channel_priority: strict
-experimental_sat_error_message: true
+solver: libmamba
+ssl_verify: true
 channels:
   - conda-forge
-solver: libmamba
-anaconda_anon_usage: false
 conda_build:
   pkg_format: '2'
+plugins:
+  use_sharded_repodata: true
