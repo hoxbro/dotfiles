@@ -32,6 +32,7 @@ PACKAGES_VIRTM=(spice-vdagent)
 set -euxo pipefail
 
 sudo -v || exit 1
+sudo pacman -Syy
 
 if [[ ! $(command -v yay) ]]; then
     sudo pacman -S --needed git base-devel go --noconfirm
