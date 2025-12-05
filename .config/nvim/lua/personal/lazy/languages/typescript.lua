@@ -18,13 +18,13 @@ return {
     {
         "neovim/nvim-lspconfig",
         opts = {
-            vtsls = { typescript = vtsls, javascript = vtsls },
+            tsgo = { typescript = vtsls, javascript = vtsls },
             eslint = {},
         },
     },
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { typescript = { "vtsls", "js-debug-adapter" } },
+        opts = { typescript = { "tsgo", "js-debug-adapter" } },
     },
 
     {
