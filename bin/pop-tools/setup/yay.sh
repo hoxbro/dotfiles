@@ -15,7 +15,6 @@ PACKAGES=(
     celluloid geary ulauncher timeshift pavucontrol seahorse
     nemo nemo-fileroller
     code spotify slack-desktop parsec ferdium-bin zoom
-    gradia tesseract-data-eng
     libreoffice-still chromium
     extension-manager
 
