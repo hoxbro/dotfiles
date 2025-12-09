@@ -14,14 +14,6 @@ return {
         opts = { marksman = { root_markers = { ".marksman.toml", ".git" } } },
     },
     {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        keys = { { "<leader>mw", "<Plug>MarkdownPreview", desc = "Markdown Preview" } },
-        build = "cd app && npm install && git restore yarn.lock",
-        init = function() vim.g.mkdp_filetypes = { "markdown" } end,
-        ft = "markdown",
-    },
-    {
         "folke/snacks.nvim",
         ft = "markdown",
         opts = { image = {} },

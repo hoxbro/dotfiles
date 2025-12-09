@@ -46,12 +46,14 @@ return {
                 -- Navigation
                 map({ "n", "v" }, "]c", function()
                     if vim.wo.diff then return "]c" end
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.schedule(function() gs.nav_hunk("next") end)
                     return "<Ignore>"
                 end, { expr = true, desc = "Jump to next hunk" })
 
                 map({ "n", "v" }, "[c", function()
                     if vim.wo.diff then return "[c" end
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.schedule(function() gs.nav_hunk("prev") end)
                     return "<Ignore>"
                 end, { expr = true, desc = "Jump to previous hunk" })

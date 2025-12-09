@@ -103,6 +103,12 @@ return {
                 desc = "Treesitter split and join",
                 mode = { "n", "x" },
             },
+            {
+                "<leader>cS",
+                function() require("treesj").split() end,
+                desc = "Treesitter split",
+                mode = { "n", "x" },
+            },
         },
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         opts = { use_default_keymaps = false },
