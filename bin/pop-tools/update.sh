@@ -34,7 +34,7 @@ update_nvim() {
 }
 
 run() {
-    LOGNAME=/tmp/update"$COUNT"_"${FUNCTION/install_/}"_$(date +%Y-%m-%d_%H.%M).log
+    LOGNAME="$HOME/.cache/pop/${DATE}_${FUNCTION}.log"
     (set -euxo pipefail && $FUNCTION) &>"$LOGNAME"
     if (($? > 0)); then
         echo !!! Failed $COUNT/"$TOTAL" "${FUNCTION//_/ }" !!!
@@ -52,6 +52,7 @@ main() {
 
     TOTAL=${#FUNCTIONS[@]}
     COUNT=1
+    DATE=$(date +%Y%m%d_%H%M%S)
 
     SECONDS=0
     for FUNCTION in "${FUNCTIONS[@]}"; do
@@ -62,10 +63,11 @@ main() {
     echo -e "\nUpdate time: $((("$SECONDS" / 60) % 60)) min and $(("$SECONDS" % 60)) sec"
 }
 
+mkdir -p ~/.cache/pop
 if [[ -z $1 ]]; then
     main
 else
-    update_"$1"
+    "update_$1"
 fi
 
 if [ -f /var/run/reboot-required ]; then
