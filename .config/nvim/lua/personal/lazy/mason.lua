@@ -98,8 +98,17 @@ function M.setup(opts)
     end)
 
     registry.refresh(function()
+        local should_keep = vim.tbl_keys(lockfile)
         for _, pkg_name in ipairs(ensure_installed) do
             M.ensure_installed(pkg_name, lockfile[pkg_name])
+            table.insert(should_keep, pkg_name)
+        end
+
+        for _, pkg in ipairs(registry.get_installed_packages()) do
+            if not vim.tbl_contains(should_keep, pkg.name) then
+                vim.notify(string.format("Uninstalling %s", pkg.name))
+                pkg:uninstall()
+            end
         end
     end)
 end

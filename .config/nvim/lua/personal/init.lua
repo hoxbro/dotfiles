@@ -1,3 +1,5 @@
+vim.g.mapleader = " "
+
 require("personal.setting")
 require("personal.util")
 require("personal.package")

@@ -28,11 +28,6 @@ update_pixi() {
     pixi completion --shell zsh >~/.local/bin/_pixi
 }
 
-update_nvim() {
-    nvim --headless "+Lazy! sync" +qa
-    nvim --headless "+MasonToolsUpdateSync" +qa
-}
-
 run() {
     LOGNAME="$HOME/.cache/pop/${DATE}_${FUNCTION}.log"
     (set -euxo pipefail && $FUNCTION) &>"$LOGNAME"

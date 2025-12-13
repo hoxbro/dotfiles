@@ -21,7 +21,7 @@ return {
         event = "VeryLazy",
         version = "1.*",
         opts_extend = { "sources.default" },
-        dependencies = { "nvim-mini/mini.snippets", "rafamadriz/friendly-snippets" },
+        dependencies = { "nvim-mini/mini.snippets" },
         opts = {
             completion = {
                 documentation = { auto_show = false },
@@ -43,6 +43,7 @@ return {
         "nvim-mini/mini.snippets",
         version = "*",
         lazy = true,
+        dependencies = { "rafamadriz/friendly-snippets" },
         opts = function(_, opts)
             local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
             opts.snippets = {
