@@ -1,5 +1,5 @@
 {
-  "basedpyright": "1.35.0",
+  "basedpyright": "1.36.1",
   "bash-debug-adapter": "untagged-438733f35feb8659d939",
   "bash-language-server": "5.6.0",
   "codelldb": "v1.12.0",
@@ -13,10 +13,10 @@
   "lua-language-server": "3.16.1",
   "marksman": "2025-11-30",
   "prettierd": "0.26.2",
-  "ruff": "0.14.8",
+  "ruff": "0.14.9",
   "rust-analyzer": "2025-12-08",
   "shfmt": "v3.12.0",
   "stylua": "v2.3.1",
   "taplo": "0.10.0",
-  "tsgo": "7.0.0-dev.20251208.1"
+  "tsgo": "7.0.0-dev.20251213.1"
 }
