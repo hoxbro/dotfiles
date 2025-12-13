@@ -1,21 +1,3 @@
--- Blink Download
-local blink_download = function()
-    local download = require("blink.cmp.fuzzy.download")
-    local files = require("blink.cmp.fuzzy.download.files")
-
-    -- Avoid EEXIST error
-    vim.fn.mkdir(files.lib_folder, "p")
-
-    local done = false
-    print("Downloading pre-built binary\n")
-    download.ensure_downloaded(function()
-        print("Finished downloading pre-built binary\n")
-        done = true
-    end)
-    vim.wait(60000, function() return done end, 1000, false)
-end
-vim.api.nvim_create_user_command("BlinkDownload", blink_download, { desc = "Download binary" })
-
 -- Setup nvim
 local setup = function()
     vim.notify("Setting up nvim", vim.log.levels.INFO)
