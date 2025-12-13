@@ -7,8 +7,8 @@ return {
     },
 
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { bash = { "bashls", "bash-debug-adapter" } },
+        "williamboman/mason.nvim",
+        opts = { bash = { "bash-language-server", "bash-debug-adapter" } },
     },
 
     {

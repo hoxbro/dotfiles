@@ -12,7 +12,7 @@ return {
     },
     dependencies = {
         {
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "williamboman/mason.nvim",
             opts = { formatters = { "stylua", "ruff", "prettierd", "shfmt", "eslint_d", "taplo" } },
         },
     },

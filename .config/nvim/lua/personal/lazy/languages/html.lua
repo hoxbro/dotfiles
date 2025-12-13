@@ -6,7 +6,7 @@ return {
         },
     },
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { html = { "html", "css-lsp" } },
+        "williamboman/mason.nvim",
+        opts = { html = { "html-lsp", "css-lsp" } },
     },
 }

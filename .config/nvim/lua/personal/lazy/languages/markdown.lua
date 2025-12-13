@@ -6,7 +6,7 @@ return {
         opts = {},
     },
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        "williamboman/mason.nvim",
         opts = { markdown = { "marksman" } },
     },
     {

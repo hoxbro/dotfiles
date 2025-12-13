@@ -31,7 +31,7 @@ return {
     },
 
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        "williamboman/mason.nvim",
         opts = { python = { "basedpyright" } },
     },
 

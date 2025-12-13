@@ -23,11 +23,8 @@ local setup = function()
     vim.cmd("Lazy! restore")
     vim.notify("✓ Lazy restore complete", vim.log.levels.INFO)
 
-    vim.cmd("MasonUpdate")
-    vim.notify("✓ MasonUpdate complete", vim.log.levels.INFO)
-
-    vim.cmd("MasonLockRestore")
-    vim.notify("✓ MasonLockRestore complete", vim.log.levels.INFO)
+    vim.cmd("MasonSetup")
+    vim.notify("✓ MasonSetup complete", vim.log.levels.INFO)
 
     vim.cmd("BlinkDownload")
     vim.notify("✓ BlinkDownload complete", vim.log.levels.INFO)

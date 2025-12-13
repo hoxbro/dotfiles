@@ -4,8 +4,8 @@ return {
         opts = { rust_analyzer = {} },
     },
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { rust = { "codelldb", "rust_analyzer" } },
+        "williamboman/mason.nvim",
+        opts = { rust = { "codelldb", "rust-analyzer" } },
     },
     {
         "mfussenegger/nvim-dap",

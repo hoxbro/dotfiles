@@ -14,8 +14,8 @@ return {
         },
     },
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = { lua = { "lua_ls" } },
+        "williamboman/mason.nvim",
+        opts = { lua = { "lua-language-server" } },
     },
     {
         "mfussenegger/nvim-dap",
