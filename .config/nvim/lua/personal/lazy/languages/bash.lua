@@ -8,7 +8,7 @@ return {
 
     {
         "williamboman/mason.nvim",
-        opts = { bash = { "bash-language-server", "bash-debug-adapter" } },
+        opts = { bash = { "bash-language-server", "bash-debug-adapter", "shellcheck" } },
     },
 
     {

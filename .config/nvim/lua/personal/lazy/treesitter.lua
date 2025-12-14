@@ -25,6 +25,7 @@ return {
                 "vimdoc",
                 "vim",
                 "bash",
+                "zsh",
                 "html",
                 "css",
                 "yaml",
