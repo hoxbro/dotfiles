@@ -2,6 +2,7 @@ local M = {}
 
 M.lockfile_path = vim.fn.stdpath("config") .. "/mason-lock.json"
 M.pending_installs = 0
+M.schedule_installs = true
 
 function M.read_lockfile()
     local file = io.open(M.lockfile_path, "r")
@@ -81,7 +82,6 @@ function M.ensure_installed(pkg_name, locked_version)
 end
 
 function M.setup(opts)
-    require("mason").setup()
     local registry = require("mason-registry")
     local lockfile = M.read_lockfile()
     local ensure_installed = vim.iter(vim.tbl_values(opts)):flatten():totable()
@@ -114,8 +114,10 @@ function M.setup(opts)
 end
 
 vim.api.nvim_create_user_command("MasonSetup", function()
+    M.schedule_installs = false
     require("mason")
     vim.wait(60000, function() return M.pending_installs == 0 end, 1000, false)
+    M.schedule_installs = true
 end, { desc = "Wait for all Mason package installations to complete" })
 
 return {
@@ -125,5 +127,12 @@ return {
     --
     --  - Keys (`String`) unique name, which will be discarded.
     --  - Values (`List`) the packages which needs to be installed
-    config = function(_, opts) M.setup(opts) end,
+    config = function(_, opts)
+        require("mason").setup()
+        if M.schedule_installs then
+            vim.schedule(function() M.setup(opts) end)
+        else
+            M.setup(opts)
+        end
+    end,
 }
