@@ -17,13 +17,15 @@ inject)
     ;;
 run)
     shift
-    if [[ -n "$NODEBUG" ]]; then
-        echo "[+] Running in NODEBUG mode"
-        python "$@"
+    if [[ "$1" == "-m" ]]; then
+        args=("$@")
+    elif [[ "$1" == *.py || "$1" == */* ]]; then
+        args=("$@")
     else
-        echo "[+] Wait for server connect"
-        python -m debugpy --listen 5678 --wait-for-client "$@"
+        args=("-m" "$@")
     fi
+
+    python -m debugpy --listen 5678 --wait-for-client "${args[@]}"
     ;;
 *)
     usage
