@@ -1,5 +1,9 @@
 return {
     {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "rust" } },
+    },
+    {
         "neovim/nvim-lspconfig",
         opts = { rust_analyzer = {} },
     },

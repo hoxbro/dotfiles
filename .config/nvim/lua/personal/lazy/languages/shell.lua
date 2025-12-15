@@ -1,16 +1,18 @@
 return {
     {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "bash", "zsh" } },
+    },
+    {
         "neovim/nvim-lspconfig",
         opts = {
             bashls = { bashIde = { shellcheckArguments = "--exclude=SC1091,SC2181" } },
         },
     },
-
     {
         "williamboman/mason.nvim",
         opts = { install = { "bash-language-server", "bash-debug-adapter", "shellcheck" } },
     },
-
     {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)

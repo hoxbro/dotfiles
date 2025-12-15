@@ -15,36 +15,14 @@ return {
             { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 10 } },
         },
         build = ":TSUpdate",
-        opts = {
-            ensure_installed = {
-                "lua",
-                "python",
-                "rust",
-                "javascript",
-                "typescript",
-                "vimdoc",
-                "vim",
-                "bash",
-                "zsh",
-                "html",
-                "css",
-                "yaml",
-                "toml",
-                "sql",
-                "markdown",
-                "markdown_inline",
-                "query",
-                "dockerfile",
-                "nginx",
-                "graphql",
-            },
-        },
+        opts_extend = { "install" },
+        opts = { install = { "yaml", "toml", "sql" } },
         config = function(_, opts)
             require("nvim-treesitter").setup()
 
             -- Install parsers
             local installed = require("nvim-treesitter.config").get_installed()
-            local to_install = vim.iter(opts.ensure_installed)
+            local to_install = vim.iter(opts.install or {})
                 :filter(function(parser) return not vim.tbl_contains(installed, parser) end)
                 :totable()
             if #to_install > 0 then require("nvim-treesitter").install(to_install) end

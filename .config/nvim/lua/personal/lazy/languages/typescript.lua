@@ -16,17 +16,20 @@ if DAP_typescript_commands == nil then DAP_typescript_commands = {
 
 return {
     {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "javascript", "typescript" } },
+    },
+    {
+        "williamboman/mason.nvim",
+        opts = { install = { "tsgo", "js-debug-adapter" } },
+    },
+    {
         "neovim/nvim-lspconfig",
         opts = {
             tsgo = { typescript = vtsls, javascript = vtsls },
             eslint = {},
         },
     },
-    {
-        "williamboman/mason.nvim",
-        opts = { install = { "tsgo", "js-debug-adapter" } },
-    },
-
     {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)

@@ -1,5 +1,13 @@
 return {
     {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "lua", "vimdoc", "vim", "query" } },
+    },
+    {
+        "williamboman/mason.nvim",
+        opts = { install = { "lua-language-server" } },
+    },
+    {
         "neovim/nvim-lspconfig",
         opts = {
             lua_ls = {
@@ -12,10 +20,6 @@ return {
                 },
             },
         },
-    },
-    {
-        "williamboman/mason.nvim",
-        opts = { install = { "lua-language-server" } },
     },
     {
         "mfussenegger/nvim-dap",

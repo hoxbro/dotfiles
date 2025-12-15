@@ -1,6 +1,15 @@
 local last_pid
 local python_exe = vim.fn.exepath("python")
+
 return {
+    {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "python" } },
+    },
+    {
+        "williamboman/mason.nvim",
+        opts = { install = { "basedpyright" } },
+    },
     {
         "neovim/nvim-lspconfig",
         opts = {
@@ -29,12 +38,6 @@ return {
             -- },
         },
     },
-
-    {
-        "williamboman/mason.nvim",
-        opts = { install = { "basedpyright" } },
-    },
-
     {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)

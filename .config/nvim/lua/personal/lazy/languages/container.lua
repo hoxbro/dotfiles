@@ -1,5 +1,9 @@
 return {
     {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { install = { "dockerfile" } },
+    },
+    {
         "williamboman/mason.nvim",
         opts = {
             install = {
