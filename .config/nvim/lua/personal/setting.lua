@@ -30,7 +30,7 @@ vim.opt.updatetime = 50
 vim.opt.showmode = false
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
+vim.opt.iskeyword:append("-")
 
 vim.diagnostic.config({
     signs = {

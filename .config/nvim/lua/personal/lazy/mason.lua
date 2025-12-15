@@ -84,7 +84,6 @@ end
 function M.setup(opts)
     local registry = require("mason-registry")
     local lockfile = M.read_lockfile()
-    local ensure_installed = vim.iter(vim.tbl_values(opts)):flatten():totable()
 
     registry:on("package:install:success", function()
         M.pending_installs = M.pending_installs - 1
@@ -99,7 +98,7 @@ function M.setup(opts)
 
     registry.refresh(function()
         local should_keep = vim.tbl_keys(lockfile)
-        for _, pkg_name in ipairs(ensure_installed) do
+        for _, pkg_name in ipairs(opts.install or {}) do
             M.ensure_installed(pkg_name, lockfile[pkg_name])
             table.insert(should_keep, pkg_name)
         end
@@ -123,10 +122,7 @@ end, { desc = "Wait for all Mason package installations to complete" })
 return {
     "williamboman/mason.nvim",
     event = "VeryLazy",
-    -- `opts` are a table where:
-    --
-    --  - Keys (`String`) unique name, which will be discarded.
-    --  - Values (`List`) the packages which needs to be installed
+    opts_extend = { "install" },
     config = function(_, opts)
         require("mason").setup()
         if M.schedule_installs then

@@ -32,7 +32,7 @@ return {
 
     {
         "williamboman/mason.nvim",
-        opts = { python = { "basedpyright" } },
+        opts = { install = { "basedpyright" } },
     },
 
     {

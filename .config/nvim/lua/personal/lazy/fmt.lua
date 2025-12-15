@@ -13,7 +13,7 @@ return {
     dependencies = {
         {
             "williamboman/mason.nvim",
-            opts = { formatters = { "stylua", "ruff", "prettierd", "shfmt", "eslint_d", "taplo" } },
+            opts = { install = { "stylua", "ruff", "prettierd", "shfmt", "eslint_d", "taplo" } },
         },
     },
     opts = {

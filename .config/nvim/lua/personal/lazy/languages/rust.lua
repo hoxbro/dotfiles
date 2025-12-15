@@ -5,7 +5,7 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { rust = { "codelldb", "rust-analyzer" } },
+        opts = { install = { "codelldb", "rust-analyzer" } },
     },
     {
         "mfussenegger/nvim-dap",

@@ -2,7 +2,7 @@ return {
     {
         "williamboman/mason.nvim",
         opts = {
-            container = {
+            install = {
                 "docker-compose-language-service",
                 "dockerfile-language-server",
                 "hadolint",

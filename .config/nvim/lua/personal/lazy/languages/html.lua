@@ -7,6 +7,6 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { html = { "html-lsp", "css-lsp" } },
+        opts = { install = { "html-lsp", "css-lsp" } },
     },
 }

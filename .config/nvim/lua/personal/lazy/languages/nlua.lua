@@ -15,7 +15,7 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { lua = { "lua-language-server" } },
+        opts = { install = { "lua-language-server" } },
     },
     {
         "mfussenegger/nvim-dap",

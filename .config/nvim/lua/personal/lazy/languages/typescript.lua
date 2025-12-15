@@ -24,7 +24,7 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { typescript = { "tsgo", "js-debug-adapter" } },
+        opts = { install = { "tsgo", "js-debug-adapter" } },
     },
 
     {

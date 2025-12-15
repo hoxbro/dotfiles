@@ -7,7 +7,7 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { markdown = { "marksman" } },
+        opts = { install = { "marksman" } },
     },
     {
         "neovim/nvim-lspconfig",
