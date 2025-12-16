@@ -32,20 +32,6 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.iskeyword:append("-")
 
-vim.diagnostic.config({
-    signs = {
-        severity = { min = vim.diagnostic.severity.INFO },
-        text = {
-            [vim.diagnostic.severity.ERROR] = "󰅚 ",
-            [vim.diagnostic.severity.WARN] = "󰀪 ",
-            [vim.diagnostic.severity.INFO] = "󰋽 ",
-            [vim.diagnostic.severity.HINT] = "󰌶 ",
-        },
-    },
-    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
-})
-vim.treesitter.language.register("python", "pyodide")
-
 vim.opt.formatoptions:append({ c = true, r = true, q = true })
 
 vim.opt.fillchars = { diff = "╱" }
@@ -59,11 +45,20 @@ vim.opt.diffopt = {
     "indent-heuristic",
 }
 
--- Jump list per path
-local function get_shada_path()
-    local cwd = vim.fn.getcwd()
-    local safe_path = cwd:gsub("/", "%%"):gsub(":", "%%")
-    return vim.fn.stdpath("data") .. "/shada/" .. safe_path .. ".shada"
-end
-vim.fn.mkdir(vim.fn.stdpath("data") .. "/shada", "p")
-vim.opt.shadafile = get_shada_path()
+local shada_path = vim.fn.stdpath("data") .. "/shada/"
+vim.fn.mkdir(shada_path, "p")
+vim.opt.shadafile = shada_path .. vim.fn.getcwd():gsub("/", "%%"):gsub(":", "%%")
+
+vim.diagnostic.config({
+    signs = {
+        severity = { min = vim.diagnostic.severity.INFO },
+        text = {
+            [vim.diagnostic.severity.ERROR] = "󰅚 ",
+            [vim.diagnostic.severity.WARN] = "󰀪 ",
+            [vim.diagnostic.severity.INFO] = "󰋽 ",
+            [vim.diagnostic.severity.HINT] = "󰌶 ",
+        },
+    },
+    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+})
+vim.treesitter.language.register("python", "pyodide")

@@ -20,7 +20,7 @@ palette = 13=#bfa0fe
 palette = 14=#94d8e5
 palette = 15=#f8f8f2
 
-title = " "
+title = "👻"
 app-notifications = no-clipboard-copy
 shell-integration-features = no-cursor
 cursor-style = block
@@ -36,11 +36,13 @@ keybind = ctrl+shift+left=unbind
 confirm-close-surface = false
 resize-overlay = never
 maximize = true
+window-padding-y = 2,4
 
 window-decoration = true
 # gtk-titlebar = false
 # gtk-adwaita = false
 gtk-single-instance = true
+gtk-titlebar-hide-when-maximized=true
 
 macos-icon = custom-style
 macos-icon-ghost-color = #000000
