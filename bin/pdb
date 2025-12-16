@@ -24,6 +24,7 @@ run)
     else
         args=("-m" "$@")
     fi
+    echo "[+] Wait for server connect"
 
     python -m debugpy --listen 5678 --wait-for-client "${args[@]}"
     ;;
