@@ -144,3 +144,21 @@ pth() {
     echo "No conda environment is activated." >&2
   fi
 }
+
+__toggle-pdb() {
+  [[ -z "$BUFFER" ]] && return
+
+  if [[ $BUFFER == "pdb run -m "* ]]; then
+    BUFFER=${BUFFER#pdb run -m }
+  elif [[ $BUFFER == "pdb run "* ]]; then
+    BUFFER="python ${BUFFER#pdb run }"
+  elif [[ $BUFFER == "python "* ]]; then
+    BUFFER="pdb run ${BUFFER#python }"
+  else
+    BUFFER="pdb run -m $BUFFER"
+  fi
+  CURSOR=${#BUFFER}
+}
+
+zle -N __toggle-pdb
+bindkey '^P' __toggle-pdb
