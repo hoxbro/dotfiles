@@ -7,7 +7,6 @@
   "docker-compose-language-service": "0.4.0",
   "dockerfile-language-server": "0.15.0",
   "eslint_d": "14.3.0",
-  "hadolint": "v2.14.0",
   "html-lsp": "4.10.0",
   "js-debug-adapter": "v1.105.0",
   "lua-language-server": "3.16.1",
