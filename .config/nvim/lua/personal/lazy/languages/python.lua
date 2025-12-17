@@ -8,25 +8,25 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "basedpyright" } },
+        opts = { install = { "ty" } },
     },
     {
         "neovim/nvim-lspconfig",
         opts = {
-            basedpyright = {
-                python = { pythonPath = python_exe },
-                basedpyright = {
-                    analysis = {
-                        typeCheckingMode = "off",
-                        autoSearchPaths = true,
-                        diagnosticMode = "openFilesOnly",
-                        useLibraryCodeForTypes = true,
-                        diagnosticSeverityOverrides = {
-                            reportUnusedParameter = false,
-                        },
-                    },
-                },
-            },
+            -- basedpyright = {
+            --     python = { pythonPath = python_exe },
+            --     basedpyright = {
+            --         analysis = {
+            --             typeCheckingMode = "off",
+            --             autoSearchPaths = true,
+            --             diagnosticMode = "openFilesOnly",
+            --             useLibraryCodeForTypes = true,
+            --             diagnosticSeverityOverrides = {
+            --                 reportUnusedParameter = false,
+            --             },
+            --         },
+            --     },
+            -- },
             -- pyrefly = {
             --     python = {
             --         pythonPath = python_exe,
@@ -36,6 +36,7 @@ return {
             --         },
             --     },
             -- },
+            ty = { python = python_exe },
         },
     },
     {
