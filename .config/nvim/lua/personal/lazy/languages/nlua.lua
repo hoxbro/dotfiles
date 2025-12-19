@@ -79,12 +79,12 @@ return {
         opts = {
             library = {
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                { path = "luassert-types/library", words = { "assert" } },
-                { path = "busted-types/library", words = { "describe" } },
+                { path = "types-luassert/library", words = { "assert" } },
+                { path = "types-busted/library", words = { "describe" } },
                 { path = "snacks.nvim", words = { "Snacks" } },
             },
         },
     },
-    { "LuaCATS/luassert", name = "luassert-types", lazy = true },
-    { "LuaCATS/busted", name = "busted-types", lazy = true },
+    { "LuaCATS/luassert", name = "types-luassert", lazy = true },
+    { "LuaCATS/busted", name = "types-busted", lazy = true },
 }
