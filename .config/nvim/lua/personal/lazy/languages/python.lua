@@ -36,7 +36,13 @@ return {
             --         },
             --     },
             -- },
-            ty = { python = python_exe },
+            ty = {
+                python = python_exe,
+                on_init = function(client)
+                    -- https://github.com/astral-sh/ty/issues/1755
+                    client.server_capabilities.diagnosticProvider = false
+                end,
+            },
         },
     },
     {

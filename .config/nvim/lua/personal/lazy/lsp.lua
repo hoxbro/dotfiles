@@ -1,4 +1,4 @@
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
     local map = function(mode, keys, func, desc)
         vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
     end
@@ -31,15 +31,19 @@ return {
         --  - Values (`Table`) are the settings for the lspconfig.
         config = function(_, opts)
             for server_name, config in pairs(opts) do
+                local on_init = (config or {}).on_init
+                config.on_init = nil
+
                 vim.lsp.config(server_name, {
                     on_attach = on_attach,
+                    on_init = on_init,
                     settings = config,
                     filetypes = (config or {}).filetypes,
                     cmd = (config or {}).cmd,
                 })
             end
             -- https://www.reddit.com/r/neovim/comments/1l7pz1l/starting_from_0112_i_have_a_weird_issue/
-            vim.schedule(function() require("mason-lspconfig").setup() end)
+            vim.schedule(require("mason-lspconfig").setup)
         end,
     },
     {
