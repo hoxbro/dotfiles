@@ -91,11 +91,6 @@ else
   ca base
 fi
 
-__create_cenv() {
-  echo "[+] mamba env create --name \"$env_name\" ${quoted_packages}--yes --quiet $*"
-  mamba env create --name "$env_name" "${packages[@]}" --yes --quiet "$@"
-}
-
 ce() {
   if [[ -z "$1" ]]; then
     echo "Usage: ce <env_name> package1 package2 ..." >&2
@@ -108,7 +103,12 @@ ce() {
     shift
     local packages=("${@:-python}")
     local quoted_packages=$(printf '"%s" ' "${packages[@]}")
-    __create_cenv --offline || __create_cenv || return 1
+
+    create_cenv() {
+      echo "[+] mamba env create --name \"$env_name\" ${quoted_packages}--yes --quiet $*"
+      mamba env create --name "$env_name" "${packages[@]}" --yes --quiet "$@"
+    }
+    create_cenv --offline || create_cenv || return 1
     ca "$env_name"
     mamba list
   fi
@@ -136,16 +136,7 @@ cer() {
 
 cel() { mamba env list }
 
-pth() {
-  if [ -n "$CONDA_PREFIX" ]; then
-    local PTH_FILE="$(python -c "import site; print(site.getsitepackages()[0])")/my.pth"
-    echo "$(pwd)" >>"$PTH_FILE"
-  else
-    echo "No conda environment is activated." >&2
-  fi
-}
-
-__toggle-pdb() {
+__toggle_pdb() {
   [[ -z "$BUFFER" ]] && return
 
   if [[ $BUFFER == "pdb run -m "* ]]; then
@@ -160,5 +151,5 @@ __toggle-pdb() {
   CURSOR=${#BUFFER}
 }
 
-zle -N __toggle-pdb
-bindkey '^P' __toggle-pdb
+zle -N __toggle_pdb
+bindkey '^P' __toggle_pdb
