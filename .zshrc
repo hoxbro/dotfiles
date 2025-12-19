@@ -38,6 +38,7 @@ alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
 alias zsh-reload="exec zsh"
 alias ansi-remove='sed "s/\x1B\[[0-9;]*[a-zA-Z]//g"'
 alias mergetool='nvim -c DiffviewOpen'
+alias prek-update="prek autoupdate --freeze && sed -i 's/  # frozen:/ # frozen:/g' .pre-commit-config.yaml && prek run --all-files"
 
 copy() { printf '\033Ptmux;\033\033]52;c;%s\033\033\\\033\\' "$(base64 | tr -d '\n')" }
 bootwindows() {

@@ -16,14 +16,13 @@ end
 vim.api.nvim_create_user_command("Setup", setup, { desc = "Run all setup commands" })
 
 -- Ruff to quicklist
-local ruff_quicklist = function(opts)
+local astral_quicklist = function(command, opts)
     local path = opts.args
     if not path or path == "" then path = vim.fn.getcwd() end
 
     local output = vim.fn.systemlist({
-        vim.fn.exepath("ruff"),
+        vim.fn.exepath(command),
         "check",
-        "--no-fix",
         "--exit-zero",
         "--exclude",
         "*.ipynb",
@@ -55,7 +54,12 @@ local ruff_quicklist = function(opts)
     end
 end
 
-vim.api.nvim_create_user_command("RuffQuickfix", ruff_quicklist, {
+vim.api.nvim_create_user_command("RuffQuickfix", function(opts) astral_quicklist("ruff", opts) end, {
+    nargs = "?",
+    complete = "file",
+})
+
+vim.api.nvim_create_user_command("TyQuickfix", function(opts) astral_quicklist("ty", opts) end, {
     nargs = "?",
     complete = "file",
 })
