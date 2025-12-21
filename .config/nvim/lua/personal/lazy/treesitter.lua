@@ -16,7 +16,7 @@ return {
         },
         build = ":TSUpdate",
         opts_extend = { "install" },
-        opts = { install = { "yaml", "toml", "sql" } },
+        opts = { install = { "hyprlang", "json", "jsonc", "sql", "toml", "xml", "yaml" } },
         config = function(_, opts)
             require("nvim-treesitter").setup()
 

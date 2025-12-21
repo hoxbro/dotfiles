@@ -3,8 +3,7 @@ local function file_mode_numeric()
     if vim.fn.filereadable(file) == 0 then return "" end
     local stat = (vim.uv or vim.loop).fs_stat(file)
     if not stat then return "" end
-    local mode = stat.mode
-    return "0x" .. string.format("%03o", mode % 512)
+    return string.format("0x%03o", stat.mode % 512)
 end
 
 return {

@@ -22,6 +22,7 @@
     cob = checkout -b
     cof = checkout -B
     po = "!git pull --set-upstream origin \"$(git branch --show-current)\""
+    ci = checkout
     skipci  = "!git commit --amend -m \"$(git log --format=%B -n1)\" -m \"[skip ci]\""
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
     freedom = "!rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"

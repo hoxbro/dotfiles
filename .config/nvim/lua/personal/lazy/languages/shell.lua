@@ -1,3 +1,26 @@
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+    pattern = "*.sh",
+    group = vim.api.nvim_create_augroup("shebang-env", { clear = true }),
+    callback = function(args)
+        local ns = vim.api.nvim_create_namespace("shebang-env")
+        local lines = vim.api.nvim_buf_get_lines(args.buf, 0, 1, false)
+        local first = lines[1] or ""
+        local shell = first:match("^#!/usr/bin/env%s+(%S+)$")
+        if not (shell == "sh" or shell == "bash" or shell == "zsh") then
+            vim.diagnostic.set(ns, args.buf, {
+                {
+                    lnum = 0,
+                    col = 0,
+                    message = "Shebang should use #!/usr/bin/env sh|bash|zsh",
+                    severity = vim.diagnostic.severity.WARN,
+                },
+            }, {})
+        else
+            vim.diagnostic.set(ns, args.buf, {}, {})
+        end
+    end,
+})
+
 return {
     {
         "nvim-treesitter/nvim-treesitter",
