@@ -5,10 +5,27 @@ PACKAGES=(
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
 
-    # System
-    noto-fonts ttf-ubuntu-mono-nerd
+    # Desktop Environment
+    hyprland hyprpaper hyprlock hyprpolkitagent
+    xdg-desktop-portal-hyprland xdg-user-dirs
+    uwsm mako waybar network-manager-applet blueman
+    gnome-keyring gnome-online-accounts
+
+    # Theming
+    noto-fonts noto-fonts-emoji otf-san-francisco ttf-ubuntu-mono-nerd
+    papirus-icon-theme
+
+    # Audio
     bluez bluez-utils pipewire-pulse
+
+    # Spellchecking
     hunspell hunspell-en_US hunspell-da
+
+    # Launcher
+    walker-bin elephant elephant-desktopapplications elephant-clipboard elephant-calc
+
+    # Screenshot
+    gpu-screen-recorder slurp grim
 
     # GUI
     librewolf-bin ghostty 1password synology-drive
@@ -17,32 +34,15 @@ PACKAGES=(
     nemo nemo-fileroller
     code spotify parsec ferdium-bin zoom
     libreoffice-still chromium
-    # slack-desktop
 
-    # Languages
-    rust rust-analyzer cargo-nextest cargo-insta gdb
+    # Programming
+    rust rust-analyzer cargo-nextest cargo-insta gdb claude-code
 )
 
 # Computers
 PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
 PACKAGES_FRAMEWORK=(amd-ucode plymouth)
 PACKAGES_VIRTM=(spice-vdagent)
-
-# Desktop Environments
-case "${XDG_CURRENT_DESKTOP:-}" in
-GNOME) PACKAGES+=(ulauncher extension-manager) ;;
-Hyprland) PACKAGES+=(
-    hyprland hyprpaper hyprlock xdg-desktop-portal-hyprland hyprpolkitagent
-    otf-san-francisco papirus-icon-theme noto-fonts-emoji
-    waybar network-manager-applet blueman
-    uwsm mako xdg-user-dirs
-    gnome-keyring gnome-online-accounts
-    walker-bin elephant elephant-desktopapplications elephant-clipboard elephant-calc
-    gpu-screen-recorder slurp grim
-    claude-code
-    # hyprsunset
-) ;;
-esac
 
 # =============================================================================
 

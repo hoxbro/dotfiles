@@ -10,13 +10,11 @@
     "tray",
     "memory",
     "cpu",
-    // "custom/cliphist",
     "wireplumber",
     "backlight",
     "battery",
     "hyprland/language",
     "idle_inhibitor",
-    // "custom/power",
     "clock",
   ],
 
@@ -57,6 +55,7 @@
       "on-scroll-down": "shift_down",
     },
   },
+
   "wireplumber": {
     "format": "\udb81\udd7e  {volume}%",
     "max-volume": 100,
@@ -86,33 +85,6 @@
     "format": "\uf4bc   {usage}%",
   },
 
-  "network": {
-    "format": "",
-    "format-ethernet": "\udb83\udc9d",
-    "format-wifi": "{icon}",
-    "format-disconnected": "\udb83\udc9c",
-    "format-icons": [
-      "\udb82\udd2f",
-      "\udb82\udd1f",
-      "\udb82\udd22",
-      "\udb82\udd25",
-      "\udb82\udd28",
-    ],
-    "tooltip-format-wifi": "{essid} ({signalStrength}%)",
-    "tooltip-format-ethernet": "{ifname}",
-    "tooltip-format-disconnected": "Disconnected",
-  },
-
-  "bluetooth": {
-    "format": "\udb80\udcaf",
-    "format-disabled": "\udb80\udcb2",
-    "format-connected": "\udb80\udcb1",
-    // "tooltip-format": "{controller_alias}\t{controller_address}",
-    // "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-    // "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
-    "on-click": "blueman-manager",
-  },
-
   "hyprland/language": {
     "format": "{short}",
   },
@@ -121,6 +93,7 @@
     "icon-size": 16,
     "spacing": 16,
   },
+
   "idle_inhibitor": {
     "format": "{icon}   ",
     "format-icons": {
@@ -128,24 +101,7 @@
       "deactivated": "\udb81\udeca",
     },
   },
-  "custom/cliphist": {
-    "format": "\uf07f   ",
-    "on-click": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh",
-    "on-click-right": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh d",
-    "on-click-middle": "sleep 0.1 && ~/.config/waybar/scripts/cliphist.sh w",
-    "tooltip-format": "Left: Open clipboard Manager\nRight: Delete an entry\nMiddle: Clear list",
-  },
-  "custom/power": {
-    "format": "\uf011   ",
-    "tooltip-format": "System commands",
-    "menu": "on-click",
-    "menu-file": "~/.config/waybar/menu/power.xml",
-    "menu-actions": {
-      "shutdown": "systemctl poweroff -i",
-      "reboot": "systemctl reboot -i",
-      "suspend": "systemctl suspend -i",
-    },
-  },
+
   "custom/recording": {
     "exec": "~/.config/waybar/scripts/recording-status.sh",
     "return-type": "json",

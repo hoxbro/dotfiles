@@ -9,6 +9,7 @@ has() {
 
 mkdir -p ~/.local/bin
 mkdir -p ~/projects
+xdg-user-dirs-update
 
 sudo chsh "$(whoami)" -s "$(which zsh)"
 
@@ -16,22 +17,14 @@ sudo sed -i 's/^#en_DK.UTF-8 UTF-8/en_DK.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen
 echo -e "LANG=en_US.UTF-8\nLC_TIME=en_DK.UTF-8\nLC_MEASUREMENT=en_DK.UTF-8" | sudo tee /etc/locale.conf
 
-if [[ "${XDG_CURRENT_DESKTOP:-}" == "GNOME" ]]; then
-    gsettings set org.gnome.desktop.sound event-sounds false || true
-    gsettings set org.gnome.mutter check-alive-timeout 10000
-fi
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+mkdir ~/.config/gtk-3.0 && printf '[Settings]\ngtk-application-prefer-dark-theme=1' >~/.config/gtk-3.0/settings.ini
 
-if [[ "${XDG_CURRENT_DESKTOP:-}" == "Hyprland" ]]; then
-    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    mkdir ~/.config/gtk-3.0 && printf '[Settings]\ngtk-application-prefer-dark-theme=1' >~/.config/gtk-3.0/settings.ini
-
-    xdg-user-dirs-update
+if has nmcli; then
     sudo systemctl enable --now NetworkManager
-    systemctl --user enable --now hyprpolkitagent.service
     gsettings set org.gnome.nm-applet disable-connected-notifications "true"
     gsettings set org.gnome.nm-applet disable-disconnected-notifications "true"
-
 fi
 
 if has bluetoothctl; then
@@ -50,10 +43,6 @@ fi
 if has timeshift; then
     sudo systemctl enable --now cronie.service
 fi
-
-# if has ulauncher; then
-#     systemctl --user enable --now ulauncher
-# fi
 
 if has librewolf; then
     xdg-settings set default-web-browser librewolf.desktop
@@ -85,3 +74,5 @@ hyprctl reload
 
 ln -sf ~/dotfiles ~/projects/
 ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
+
+systemctl --user enable --now hyprpolkitagent.service
