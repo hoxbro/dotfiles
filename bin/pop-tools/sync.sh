@@ -27,25 +27,11 @@ sync() {
 
     copy-path .local/share/nvim/harpoon
     copy-path .local/share/nvim/scratch
-
-    # Inspired by: https://github.com/vikdevelop/SaveDesktop
-    # copy-path .config/dconf
-    # copy-path .config/gtk-3.0
-    # copy-path .config/gtk-4.0
-    # copy-path .config/nemo
-    # copy-path .config/ulauncher
-    # copy-path .local/share/gnome-shell
-    # copy-path .config/pop-shell
-    # copy-path .config/cosmic
-    # copy-path .local/state/cosmic
 }
 
 sync-large() {
     copy-path projects
     copy-path Downloads
-    # copy-path Desktop
-
-    # copy-path .local/share/backgrounds
 }
 
 check-hostname() {
