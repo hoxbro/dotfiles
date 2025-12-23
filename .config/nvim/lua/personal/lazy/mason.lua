@@ -87,8 +87,10 @@ function M.setup(opts)
 
     registry:on("package:install:success", function()
         M.pending_installs = M.pending_installs - 1
-        local packages = M.get_installed_packages()
-        M.write_lockfile(packages)
+        if M.pending_installs == 0 then
+            local packages = M.get_installed_packages()
+            M.write_lockfile(packages)
+        end
     end)
 
     registry:on("package:uninstall:success", function()
