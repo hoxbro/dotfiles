@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Virtual Machine Start
+Exec=~/bin/walker/vm-start
+Terminal=false
+Comment=Start Virtual Machine
+Icon=system

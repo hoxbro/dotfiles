@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+set -euxo pipefail
+
 URI="qemu:///system"
 
-VM_NAME=$(virsh --connect "$URI" list --all --name | grep -v '^$' | fzf --tmux --with-nth 1 --select-1 --query "'${1%/}")
+VM_NAME=$(virsh --connect "$URI" list --all --name | grep -v '^$' | walker --dmenu)
 
 if ! virsh --connect "$URI" start "$VM_NAME"; then
     exit 1

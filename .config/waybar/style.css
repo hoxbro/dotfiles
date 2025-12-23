@@ -1,0 +1,52 @@
+@define-color foreground #eeeeee;
+@define-color foreground-inactive #595959;
+@define-color background rgba(0, 0, 0, 0.7);
+
+* {
+  font-family: otf-san-francisco;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+#waybar {
+  color: @foreground;
+  background-color: @background;
+}
+
+#workspaces {
+  padding-left: 0.5em;
+}
+
+#workspaces button {
+  color: @foreground;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
+}
+
+#workspaces button.active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#workspaces button.empty {
+  color: @foreground-inactive;
+}
+
+#backlight,
+#battery,
+#bluetooth,
+#clock,
+#language,
+#memory,
+#network,
+#cpu,
+#tray,
+#cliphist,
+#wireplumber {
+  padding-right: 1em;
+}
+
+#idle_inhibitor {
+  padding-top: 0.2em;
+  font-size: 15px;
+}

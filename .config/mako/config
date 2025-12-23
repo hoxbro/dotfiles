@@ -1,0 +1,9 @@
+font=otf-san-francisco 10
+background-color=#21283bF2
+text-color=#FFFFFF
+border-color=#90a0bf
+border-size=1
+padding=10
+border-radius=8
+max-icon-size=48
+default-timeout=5000

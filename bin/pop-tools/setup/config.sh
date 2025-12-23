@@ -21,6 +21,19 @@ if [[ "${XDG_CURRENT_DESKTOP:-}" == "GNOME" ]]; then
     gsettings set org.gnome.mutter check-alive-timeout 10000
 fi
 
+if [[ "${XDG_CURRENT_DESKTOP:-}" == "Hyprland" ]]; then
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    mkdir ~/.config/gtk-3.0 && printf '[Settings]\ngtk-application-prefer-dark-theme=1' >~/.config/gtk-3.0/settings.ini
+
+    xdg-user-dirs-update
+    sudo systemctl enable --now NetworkManager
+    systemctl --user enable --now hyprpolkitagent.service
+    gsettings set org.gnome.nm-applet disable-connected-notifications "true"
+    gsettings set org.gnome.nm-applet disable-disconnected-notifications "true"
+
+fi
+
 if has bluetoothctl; then
     sudo systemctl enable --now bluetooth.service
 fi
@@ -38,9 +51,9 @@ if has timeshift; then
     sudo systemctl enable --now cronie.service
 fi
 
-if has ulauncher; then
-    systemctl --user enable --now ulauncher
-fi
+# if has ulauncher; then
+#     systemctl --user enable --now ulauncher
+# fi
 
 if has librewolf; then
     xdg-settings set default-web-browser librewolf.desktop
@@ -57,8 +70,18 @@ if has ufw; then
     sudo systemctl enable ufw
 fi
 
-git clone git@github.com:hoxbro/dotfiles.git ~/dotfiles || true
+if has elephant; then
+    elephant service enable
+    systemctl --user enable --now elephant.service
+fi
+
+git -C ~/dotfiles remote remove origin || true
+git -C ~/dotfiles remote add origin git@github.com:hoxbro/dotfiles.git
+
 git -C ~/dotfiles submodule update --init
+rm -f ~/.config/hypr/hyprland.conf
 stow -d ~/dotfiles --no-folding .
+hyprctl reload
+
 ln -sf ~/dotfiles ~/projects/
 ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
