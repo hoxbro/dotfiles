@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+DATE=$(date +%Y-%m-%d\ %H-%M-%S)
+SCREENSHOT_FILE="$HOME/Downloads/screenshot-$DATE.png"
+SCREENRECORD_FILE="$HOME/Downloads/screenrecord-$DATE.mp4"
+REGION_CACHE="/tmp/walker-screen-region"
+
+if pgrep -f "gpu-screen-recorder" >/dev/null; then
+    pkill -SIGINT -f "gpu-screen-recorder"
+    exit 0
+fi
+
+select_region() {
+    local region
+    if [[ -f "$REGION_CACHE" ]]; then
+        choice=$(printf '%s\n' "Use Last Region" "Select New Region" | walker --dmenu)
+        case "$choice" in
+        "Use Last Region") region=$(cat "$REGION_CACHE") ;;
+        "Select New Region") region=$(slurp -f "%w %h %x %y" | tee $REGION_CACHE) ;;
+        *) exit 1 ;;
+        esac
+    else
+        region=$(slurp -f "%w %h %x %y" | tee $REGION_CACHE)
+    fi
+    echo "$region"
+}
+
+select_window() {
+    windows=$(hyprctl clients -j | jq -r '.[] | "\(.title) - \(.class)\t\(.address)"')
+    selected=$(echo "$windows" | cut -d$'\t' -f1 | walker --dmenu)
+
+    window_data=$(echo "$windows" | grep -F "$selected" | head -n1)
+    address=$(echo "$window_data" | cut -d$'\t' -f2)
+
+    hyprctl dispatch focuswindow address:"$address" >/dev/null
+    hyprctl activewindow -j | jq -r '"\(.size[0]) \(.size[1]) \(.at[0]) \(.at[1])"'
+}
+
+format_for_shot() {
+    read -r w h x y <<<"$1"
+    echo "${x},${y} ${w}x${h}"
+}
+
+format_for_record() {
+    awk -v \
+        s="$(hyprctl monitors -j | jq -r '.[0].scale')" \
+        '{printf "%dx%d+%d+%d", int($1*s+0.5), int($2*s+0.5), int($3*s+0.5), int($4*s+0.5)}' \
+        <<<"$1"
+}
+
+if [[ -z "${1-}" ]]; then
+    OPTIONS=(
+        "Screenshot | Full"
+        "Screenshot | Section"
+        "Screenshot | Window"
+        "Screenrecord | Full"
+        "Screenrecord | Section"
+        "Screenrecord | Window"
+    )
+    OPTION=$(printf '%s\n' "${OPTIONS[@]}" | walker --dmenu)
+else
+    OPTION=$1
+fi
+
+case "$OPTION" in
+"Screenrecord | Full") gpu-screen-recorder -w screen -f 60 -o "$SCREENRECORD_FILE" ;;
+"Screenrecord | Section") gpu-screen-recorder -w region -region "$(format_for_record "$(select_region)")" -f 60 -o "$SCREENRECORD_FILE" ;;
+"Screenrecord | Window") gpu-screen-recorder -w region -region "$(format_for_record "$(select_window)")" -f 60 -o "$SCREENRECORD_FILE" ;;
+"Screenshot | Full") grim "$SCREENSHOT_FILE" ;;
+"Screenshot | Section") grim -g "$(format_for_shot "$(select_region)")" "$SCREENSHOT_FILE" ;;
+"Screenshot | Window")
+    current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
+    grim -g "$(format_for_shot "$(select_window)")" "$SCREENSHOT_FILE"
+    hyprctl dispatch workspace "$current_workspace" >/dev/null
+    ;;
+*) exit 1 ;;
+esac

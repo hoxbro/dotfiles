@@ -1,0 +1,9 @@
+@import url("/etc/xdg/walker/themes/default/style.css");
+
+@define-color window_bg_color #21283b;
+@define-color accent_bg_color #90a0bf;
+@define-color theme_fg_color #ffffff;
+
+.box-wrapper {
+  box-shadow: none;
+}

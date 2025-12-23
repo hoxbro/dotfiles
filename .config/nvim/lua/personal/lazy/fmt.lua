@@ -27,6 +27,7 @@ return {
             css = { "prettierd" },
             markdown = { "prettierd", "injected" },
             json = { "prettierd" },
+            jsonc = { "prettierd" },
             yaml = { "prettierd" },
             sh = { "shfmt" },
             bash = { "shfmt" },

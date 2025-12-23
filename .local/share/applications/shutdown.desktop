@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Shutdown
+Exec=~/bin/walker/hypr-kill shutdown
+Terminal=false
+Icon=system-shutdown
+Comment=Shutdown Computer

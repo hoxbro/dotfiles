@@ -1,30 +1,48 @@
 #!/usr/bin/env bash
 
 PACKAGES=(
-    # Terminal
+    # CLI / TUI
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
 
-    # Desktop Environment
+    # System
     noto-fonts ttf-ubuntu-mono-nerd
     bluez bluez-utils pipewire-pulse
     hunspell hunspell-en_US hunspell-da
 
     # GUI
-    librewolf-bin ghostty 1password synology-drive clockify-desktop
-    celluloid geary ulauncher timeshift pavucontrol seahorse
+    librewolf-bin ghostty 1password synology-drive
+    clockify-desktop
+    celluloid geary timeshift pavucontrol seahorse
     nemo nemo-fileroller
-    code spotify slack-desktop parsec ferdium-bin zoom
+    code spotify parsec ferdium-bin zoom
     libreoffice-still chromium
-    extension-manager
+    # slack-desktop
 
     # Languages
     rust rust-analyzer cargo-nextest cargo-insta gdb
 )
 
+# Computers
 PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
 PACKAGES_FRAMEWORK=(amd-ucode plymouth)
 PACKAGES_VIRTM=(spice-vdagent)
+
+# Desktop Environments
+case "${XDG_CURRENT_DESKTOP:-}" in
+GNOME) PACKAGES+=(ulauncher extension-manager) ;;
+Hyprland) PACKAGES+=(
+    hyprland hyprpaper hyprlock xdg-desktop-portal-hyprland hyprpolkitagent
+    otf-san-francisco papirus-icon-theme noto-fonts-emoji
+    waybar network-manager-applet blueman
+    uwsm mako xdg-user-dirs
+    gnome-keyring gnome-online-accounts
+    walker-bin elephant elephant-desktopapplications elephant-clipboard elephant-calc
+    gpu-screen-recorder slurp grim
+    claude-code
+    # hyprsunset
+) ;;
+esac
 
 # =============================================================================
 
@@ -47,3 +65,6 @@ virtm) PACKAGES+=("${PACKAGES_VIRTM[@]}") ;;
 esac
 
 yay -S "${PACKAGES[@]}" --batchinstall --needed --noconfirm --removemake
+
+# Archinstall default
+yay -R dolphin dunst kitty wofi --noconfirm || true

@@ -32,6 +32,7 @@ systemd-inhibit sleep infinity &
 PID=$!
 
 # The machine
+mkdir -p ~/Downloads
 echo "Running functions in setup:"
 TOTAL=${#FUNCTIONS[@]}
 COUNT=1

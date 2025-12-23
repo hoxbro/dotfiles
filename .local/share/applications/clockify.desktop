@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Clockify
+Exec=/opt/Clockify/clockify --ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations %U
+Terminal=false
+Type=Application
+Icon=clockify
+StartupWMClass=Clockify
+Comment=Clockify App 100% Free Time Tracker
+MimeType=x-scheme-handler/clockify;
+Categories=Development;
