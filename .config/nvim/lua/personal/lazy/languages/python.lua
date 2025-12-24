@@ -13,35 +13,15 @@ return {
     {
         "neovim/nvim-lspconfig",
         opts = {
-            -- basedpyright = {
-            --     python = { pythonPath = python_exe },
-            --     basedpyright = {
-            --         analysis = {
-            --             typeCheckingMode = "off",
-            --             autoSearchPaths = true,
-            --             diagnosticMode = "openFilesOnly",
-            --             useLibraryCodeForTypes = true,
-            --             diagnosticSeverityOverrides = {
-            --                 reportUnusedParameter = false,
-            --             },
-            --         },
-            --     },
-            -- },
-            -- pyrefly = {
-            --     python = {
-            --         pythonPath = python_exe,
-            --         defaultInterpreterPath = python_exe,
-            --         pyrefly = {
-            --             displayTypeErrors = "force-off",
-            --         },
-            --     },
-            -- },
             ty = {
-                python = python_exe,
-                on_init = function(client)
-                    -- https://github.com/astral-sh/ty/issues/1755
-                    client.server_capabilities.diagnosticProvider = false
-                end,
+                ty = {
+                    diagnosticMode = "off",
+                    configuration = {
+                        rules = {
+                            ["unresolved-import"] = "ignore",
+                        },
+                    },
+                },
             },
         },
     },
