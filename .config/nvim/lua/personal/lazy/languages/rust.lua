@@ -78,7 +78,7 @@ return {
     },
     {
         "nvim-neotest/neotest",
-        dependencies = { "rouge8/neotest-rust" },
+        dependencies = { "hoxbro/neotest-rust" },
         opts = { ["neotest-rust"] = {} },
     },
 }
