@@ -1,6 +1,6 @@
-@define-color foreground #eeeeee;
-@define-color foreground-inactive #595959;
-@define-color background rgba(0, 0, 0, 0.7);
+@define-color foreground #ffffff;
+@define-color foreground-inactive #90a0bf;
+@define-color background rgba(33, 40, 59, 0.7);
 
 * {
   font-family: otf-san-francisco;
