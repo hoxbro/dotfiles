@@ -8,7 +8,7 @@ PACKAGES=(
     # Desktop Environment
     hyprland hyprpaper hyprlock hyprpolkitagent
     xdg-desktop-portal-hyprland xdg-user-dirs
-    uwsm mako waybar network-manager-applet blueman
+    uwsm mako waybar network-manager-applet
     gnome-keyring gnome-online-accounts
 
     # Theming
@@ -33,7 +33,7 @@ PACKAGES=(
     celluloid geary timeshift pavucontrol seahorse
     nemo nemo-fileroller
     code spotify parsec ferdium-bin zoom
-    libreoffice-still chromium
+    libreoffice-still chromium gnome-text-editor loupe
 
     # Programming
     rust rust-analyzer cargo-nextest cargo-insta gdb claude-code

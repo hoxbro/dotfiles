@@ -6,4 +6,4 @@ export PATH="$HOME/bin:$HOME/.local/pixi/bin:$HOME/.local/bin:$PATH"
 export XCURSOR_SIZE=24
 export HYPRCURSOR_SIZE=24
 export GDK_SCALE=2
-export QT_SCALE_FACTOR=2
+# export QT_SCALE_FACTOR=2

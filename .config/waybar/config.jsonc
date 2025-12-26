@@ -58,10 +58,11 @@
 
   "wireplumber": {
     "format": "\udb81\udd7e  {volume}%",
+    "format-muted": "\udb81\udd7f  {volume}%",
     "max-volume": 100,
     "scroll-step": 5,
-    "on-click": "pavucontrol",
-    // "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "pavucontrol",
   },
 
   "battery": {
@@ -73,6 +74,7 @@
 
   "backlight": {
     "format": "\udb80\udcdf  {percent}%",
+    "scroll-step": 5,
   },
 
   "memory": {
@@ -87,6 +89,7 @@
 
   "hyprland/language": {
     "format": "{short}",
+    "on-click": "hyprctl switchxkblayout $(hyprctl devices -j | jq -r '.keyboards[0].name') next",
   },
 
   "tray": {
