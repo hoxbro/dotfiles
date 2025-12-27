@@ -8,6 +8,9 @@ local setup = function()
     vim.cmd("MasonSetup")
     vim.notify("✓ MasonSetup complete", vim.log.levels.INFO)
 
+    require("nvim-treesitter")
+    vim.notify("✓ Treesitter setup complete", vim.log.levels.INFO)
+
     vim.cmd("BlinkDownload")
     vim.notify("✓ BlinkDownload complete", vim.log.levels.INFO)
 
