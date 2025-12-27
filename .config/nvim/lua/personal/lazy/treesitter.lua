@@ -8,11 +8,12 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPost", "BufWritePost", "BufNewFile", "VeryLazy" },
-        cmd = { "TSUpdateSync", "TSUpdate" },
+        cmd = { "TSUpdate" },
         branch = "main",
         dependencies = {
             { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
             { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 10 } },
+            { "williamboman/mason.nvim", opts = { install = { "tree-sitter-cli" } } },
         },
         build = ":TSUpdate",
         opts_extend = { "install" },
