@@ -1,5 +1,4 @@
 local always_hidden = {
-    ".SynologyWorkingDirectory",
     ".benchmarks",
     ".git",
     ".ipynb_checkpoints",

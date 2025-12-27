@@ -28,7 +28,7 @@ PACKAGES=(
     gpu-screen-recorder slurp grim
 
     # GUI
-    librewolf-bin ghostty 1password synology-drive
+    librewolf-bin ghostty 1password nextcloud-client
     clockify-desktop
     celluloid geary timeshift pavucontrol seahorse
     nemo nemo-fileroller
