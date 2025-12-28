@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Hide Apps
+Exec=~/bin/walker/hide-apps
+Terminal=false
+Icon=applications-other
+Comment=Hide Apps from Launcher

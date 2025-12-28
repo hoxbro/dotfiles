@@ -1,0 +1,173 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Global application directories (XDG standard locations)
+GLOBAL_DIRS=(
+    "/usr/share/applications"
+    # "/usr/local/share/applications"
+    # "/var/lib/flatpak/exports/share/applications"
+    # "/var/lib/snapd/desktop/applications"
+)
+LOCAL_APPS="$HOME/dotfiles/.local/share/applications"
+
+# Ensure local applications directory exists
+mkdir -p "$LOCAL_APPS"
+
+# Create a temporary file to store app info
+temp_file=$(mktemp)
+trap 'rm -f "$temp_file"' EXIT
+
+# Parse all .desktop files from global directories
+for global_dir in "${GLOBAL_DIRS[@]}"; do
+    if [[ ! -d "$global_dir" ]]; then
+        continue
+    fi
+
+    while IFS= read -r desktop_file; do
+        if [[ -f "$desktop_file" ]]; then
+            # Extract the Name field from the desktop file
+            name=$(grep -m 1 "^Name=" "$desktop_file" 2>/dev/null | cut -d'=' -f2- || echo "")
+            filename=$(basename "$desktop_file")
+
+            # Skip if already added (deduplicate)
+            if grep -q $'\t'"$filename$" "$temp_file" 2>/dev/null; then
+                continue
+            fi
+
+            # Skip if no name found
+            if [[ -z "$name" ]]; then
+                continue
+            fi
+
+            # Check if already hidden in local applications
+            local_file="$LOCAL_APPS/$filename"
+            if [[ -f "$local_file" ]]; then
+                if grep -q "^Hidden=true" "$local_file" 2>/dev/null; then
+                    continue
+                fi
+                if grep -q "^NoDisplay=true" "$local_file" 2>/dev/null; then
+                    continue
+                fi
+            fi
+
+            # Check if hidden or not displayed in global file
+            if grep -q "^Hidden=true" "$desktop_file" 2>/dev/null; then
+                continue
+            fi
+            if grep -q "^NoDisplay=true" "$desktop_file" 2>/dev/null; then
+                continue
+            fi
+
+            # Add to list (using tab as delimiter)
+            printf "%s\t%s\n" "$name" "$filename" >>"$temp_file"
+        fi
+    done < <(find "$global_dir" -maxdepth 1 -name "*.desktop" \( -type f -o -type l \))
+done
+
+# Sort by name
+sort -t$'\t' -k1 "$temp_file" -o "$temp_file"
+
+# Use walker in a loop to select applications
+selected_apps=()
+echo "Select applications to hide (Cancel/Esc to finish)"
+
+while true; do
+    # Show remaining apps (exclude already selected ones)
+    available_file=$(mktemp)
+
+    # Add "Done" option at the top if we have selections
+    if [[ ${#selected_apps[@]} -gt 0 ]]; then
+        echo "✓ Done - Hide ${#selected_apps[@]} app(s)" > "$available_file"
+    fi
+
+    if [[ ${#selected_apps[@]} -eq 0 ]]; then
+        cat "$temp_file" >> "$available_file"
+    else
+        # Filter out already selected apps
+        while IFS=$'\t' read -r name filename; do
+            already_selected=false
+            for selected in "${selected_apps[@]}"; do
+                selected_filename=$(echo "$selected" | cut -f2)
+                if [[ "$filename" == "$selected_filename" ]]; then
+                    already_selected=true
+                    break
+                fi
+            done
+            if [[ "$already_selected" == false ]]; then
+                printf "%s\t%s\n" "$name" "$filename" >> "$available_file"
+            fi
+        done < "$temp_file"
+    fi
+
+    # Exit if no more apps available (and no selections made)
+    if [[ ! -s "$available_file" ]]; then
+        rm -f "$available_file"
+        echo "No more applications available to hide"
+        break
+    fi
+
+    # Use walker to select one app
+    selection=$(cat "$available_file" | cut -f1 | walker --dmenu --placeholder "Select app to hide (${#selected_apps[@]} selected so far)")
+    rm -f "$available_file"
+
+    # If cancelled or empty, break the loop
+    if [[ -z "$selection" ]]; then
+        break
+    fi
+
+    # If "Done" was selected, break
+    if [[ "$selection" == "✓ Done - Hide"* ]]; then
+        break
+    fi
+
+    # Find the full line with filename - match exactly on first field
+    selected_line=$(awk -F'\t' -v name="$selection" '$1 == name {print; exit}' "$temp_file")
+
+    if [[ -n "$selected_line" ]]; then
+        selected_apps+=("$selected_line")
+        echo "✓ Selected: $selection (${#selected_apps[@]} total)"
+    fi
+done
+
+# Exit if nothing selected
+if [[ ${#selected_apps[@]} -eq 0 ]]; then
+    echo "No applications selected"
+    exit 0
+fi
+
+echo ""
+echo "Hiding ${#selected_apps[@]} application(s)..."
+echo ""
+
+# Process each selected application
+count=0
+
+for line in "${selected_apps[@]}"; do
+    [[ -z "$line" ]] && continue
+
+    # Split on tab character
+    name=$(echo "$line" | cut -f1)
+    filename=$(echo "$line" | cut -f2)
+
+    [[ -z "$filename" ]] && continue
+
+    local_file="$LOCAL_APPS/$filename"
+
+    # Check if already hidden (shouldn't happen due to filtering above, but just in case)
+    if [[ -f "$local_file" ]] && grep -q "^Hidden=true" "$local_file" 2>/dev/null; then
+        echo "⏭️  $name - already hidden"
+        continue
+    fi
+
+    # Create a minimal .desktop file with just Hidden=true
+    cat > "$local_file" <<EOF
+[Desktop Entry]
+Hidden=true
+EOF
+
+    echo "✓ Hidden: $name"
+    count=$((count + 1))
+done
+
+echo ""
+echo "Successfully hid $count application(s)"
