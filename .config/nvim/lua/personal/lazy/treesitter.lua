@@ -15,9 +15,12 @@ return {
             { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 10 } },
             { "williamboman/mason.nvim", opts = { install = { "tree-sitter-cli" } } },
         },
-        build = ":TSUpdate",
+        build = function()
+            if vim.fn.exepath("tree-sitter") == "" then return end
+            require("nvim-treesitter").update()
+        end,
         opts_extend = { "install" },
-        opts = { install = { "hyprlang", "json", "jsonc", "sql", "toml", "xml", "yaml" } },
+        opts = { install = { "json", "sql", "toml", "xml", "yaml" } },
         config = function(_, opts)
             require("nvim-treesitter").setup()
 
@@ -26,7 +29,11 @@ return {
             local to_install = vim.iter(opts.install or {})
                 :filter(function(parser) return not vim.tbl_contains(installed, parser) end)
                 :totable()
-            if #to_install > 0 then require("nvim-treesitter").install(to_install) end
+            if #to_install > 0 then
+                local installers = require("nvim-treesitter").install(to_install)
+                local is_headless = #vim.api.nvim_list_uis() == 0
+                if is_headless then installers:wait(600000) end
+            end
 
             -- Autostart
             local autostart_group = vim.api.nvim_create_augroup("TreesitterAutoStart", { clear = true })
