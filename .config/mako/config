@@ -1,4 +1,5 @@
 font=otf-san-francisco 10
+width=360
 background-color=#21283bF2
 text-color=#FFFFFF
 border-color=#90a0bf
@@ -7,3 +8,9 @@ padding=10
 border-radius=8
 max-icon-size=48
 default-timeout=5000
+
+[urgency=low]
+border-color=#268bd2
+
+[urgency=critical]
+border-color=#e01b24
