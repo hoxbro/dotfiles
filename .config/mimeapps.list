@@ -1,0 +1,11 @@
+[Default Applications]
+; application/x-gnome-saved-search=nemo.desktop
+image/*=org.gnome.Loupe.desktop
+inode/directory=nemo.desktop
+text/html=librewolf.desktop
+text/plain=org.gnome.TextEditor.desktop
+video/*=io.github.celluloid_player.Celluloid.desktop
+x-scheme-handler/about=librewolf.desktop
+x-scheme-handler/http=librewolf.desktop
+x-scheme-handler/https=librewolf.desktop
+; x-scheme-handler/unknown=librewolf.desktop

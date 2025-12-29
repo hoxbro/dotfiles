@@ -32,12 +32,7 @@ if has bluetoothctl; then
 fi
 
 if has nemo; then
-    xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
     gsettings set org.cinnamon.desktop.default-applications.terminal exec ghostty
-fi
-
-if has celluloid; then
-    xdg-mime default io.github.celluloid_player.Celluloid.desktop video/*
 fi
 
 if has timeshift; then
