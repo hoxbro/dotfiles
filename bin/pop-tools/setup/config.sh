@@ -51,7 +51,8 @@ if has 1password librewolf; then
 fi
 
 if has ufw; then
-    sudo systemctl enable ufw
+    sudo systemctl enable --now ufw
+    sudo ufw enable
 fi
 
 if has elephant; then
@@ -59,11 +60,21 @@ if has elephant; then
     systemctl --user enable --now elephant.service
 fi
 
+if [[ $(uname -n) == "meshify" ]]; then
+    sudo systemctl enable --now sshd
+    if has ufw; then
+        sudo ufw allow ssh
+    fi
+fi
+
 git -C ~/dotfiles remote remove origin || true
 git -C ~/dotfiles remote add origin git@github.com:hoxbro/dotfiles.git
 
 git -C ~/dotfiles submodule update --init
-rm -f ~/.config/hypr/hyprland.conf
+stow -d ~/dotfiles --no-folding -n . 2>&1 |
+    grep -oP '(?<=existing target ).*(?= since)' |
+    sed "s|^|$HOME/|" |
+    xargs -r rm -f || true
 stow -d ~/dotfiles --no-folding .
 hyprctl reload
 

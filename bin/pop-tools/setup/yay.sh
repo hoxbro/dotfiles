@@ -33,7 +33,7 @@ PACKAGES=(
     celluloid geary timeshift pavucontrol seahorse
     nemo nemo-fileroller
     code spotify parsec ferdium-bin zoom
-    libreoffice-still chromium gnome-text-editor loupe
+    libreoffice-still chromium gnome-text-editor loupe evince
 
     # Programming
     rust rust-analyzer cargo-nextest cargo-insta gdb claude-code
