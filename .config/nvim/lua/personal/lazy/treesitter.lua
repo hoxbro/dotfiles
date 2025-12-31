@@ -8,7 +8,6 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPost", "BufWritePost", "BufNewFile", "VeryLazy" },
-        cmd = { "TSUpdate" },
         branch = "main",
         dependencies = {
             { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
