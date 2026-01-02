@@ -3,15 +3,15 @@
 set -euo pipefail
 
 __hypr_kill() {
-    hyprctl clients -j |
+    hyprctl clients -j -i 0 |
         jq -r ".[].address" |
-        xargs -I{} hyprctl dispatch closewindow address:{}
+        xargs -I{} hyprctl dispatch -i 0 closewindow address:{}
 
     local timeout=50
     while ((timeout-- > 0)) && [[ $(hyprctl clients -j | jq 'length') -gt 0 ]]; do
         sleep 0.1
     done
-    hyprctl dispatch workspace 1
+    hyprctl dispatch -i 0 workspace 1
 }
 
 selected="${1:-}"
