@@ -47,7 +47,7 @@ vim.opt.diffopt = {
 
 local shada_path = vim.fn.stdpath("data") .. "/shada/"
 vim.fn.mkdir(shada_path, "p")
-vim.opt.shadafile = shada_path .. vim.fn.getcwd():gsub("/", "%%"):gsub(":", "%%")
+vim.opt.shadafile = shada_path .. vim.fn.getcwd():gsub("[/\\:]", "%%")
 
 vim.diagnostic.config({
     signs = {
