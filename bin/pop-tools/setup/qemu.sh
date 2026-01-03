@@ -14,6 +14,14 @@ if (($(grep -E -c '(vmx|svm)' /proc/cpuinfo) > 0)); then
 
     sudo systemctl enable --now libvirtd
     sudo virsh net-autostart default
+
+    if command -v ufw &>/dev/null; then
+        sudo ufw default allow routed
+        sudo ufw allow in on virbr0
+        sudo ufw allow out on virbr0
+    fi
+
+    echo "Remember to not backup with timeshift"
 else
     echo "Missing virtualization extension!!!"
     exit 10
