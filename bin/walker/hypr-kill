@@ -8,7 +8,7 @@ __hypr_kill() {
         xargs -I{} hyprctl dispatch -i 0 closewindow address:{}
 
     local timeout=50
-    while ((timeout-- > 0)) && [[ $(hyprctl clients -j | jq 'length') -gt 0 ]]; do
+    while ((timeout-- > 0)) && [[ $(hyprctl clients -j -i 0 | jq 'length') -gt 0 ]]; do
         sleep 0.1
     done
     hyprctl dispatch -i 0 workspace 1
