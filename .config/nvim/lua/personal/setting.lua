@@ -5,7 +5,6 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -16,22 +15,20 @@ vim.opt.backup = false
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undofile = true
 vim.opt.writebackup = false
-
-vim.opt.incsearch = true
-
-vim.opt.termguicolors = true
+vim.opt.shadafile = vim.fn.stdpath("data") .. "/shada/" .. vim.fn.getcwd():gsub("[/\\:]", "%%")
 
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
+vim.opt.incsearch = true
+vim.opt.termguicolors = true
 vim.opt.updatetime = 50
 
 vim.opt.showmode = false
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.iskeyword:append("-")
-
 vim.opt.formatoptions:append({ c = true, r = true, q = true })
 
 vim.opt.fillchars = { diff = "╱" }
@@ -44,10 +41,6 @@ vim.opt.diffopt = {
     "linematch:200",
     "indent-heuristic",
 }
-
-local shada_path = vim.fn.stdpath("data") .. "/shada/"
-vim.fn.mkdir(shada_path, "p")
-vim.opt.shadafile = shada_path .. vim.fn.getcwd():gsub("[/\\:]", "%%")
 
 vim.diagnostic.config({
     signs = {
