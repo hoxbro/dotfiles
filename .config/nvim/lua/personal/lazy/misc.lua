@@ -45,7 +45,7 @@ return {
     {
         -- Add/delete/replace surroundings (brackets, quotes, etc.)
         -- - saiw) - [S]urround [A]dd [I]inner [W]ord [)]Paren
-        -- - sd'   - [S]urround [D]elete [']quotes
+        -- - sd'   - [S]urround [D]delete [']quotes
         -- - sr)'  - [S]urround [R]eplace [)] [']
         "nvim-mini/mini.surround",
         version = "*",
