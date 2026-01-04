@@ -42,7 +42,7 @@ return {
         keys = {
             {
                 "<leader>ai",
-                function() print("    🤖") end,
+                function() print("🤖") end,
                 desc = "Start AI",
             },
             {
@@ -79,10 +79,14 @@ return {
                 desc = "Sidekick Select Prompt",
             },
             {
-                "<leader>aq",
-                function() require("sidekick.nes").disable() end,
+                "<leader>an",
+                function()
+                    local nes = require("sidekick.nes")
+                    nes.toggle()
+                    print("NES " .. (nes.enabled and "Enabled" or "Disabled"))
+                end,
                 mode = "n",
-                desc = "Sidekick Quit NES",
+                desc = "Sidekick NES toggle",
             },
         },
         config = function(_, opts)
