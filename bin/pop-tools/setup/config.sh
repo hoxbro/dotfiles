@@ -60,6 +60,11 @@ if has elephant; then
     systemctl --user enable --now elephant.service
 fi
 
+if has keyd; then
+    sudo sh -c 'mkdir -p /etc/keyd && echo -e "[ids]\n*\n\n[main]\nrightalt = leftmeta" > /etc/keyd/default.conf'
+    sudo systemctl enable --now keyd
+fi
+
 if [[ $(uname -n) == "meshify" ]]; then
     sudo systemctl enable --now sshd
     if has ufw; then

@@ -7,7 +7,7 @@ PACKAGES=(
 
     # Desktop Environment
     hyprland hyprpaper hyprlock hyprpolkitagent
-    xdg-desktop-portal-hyprland xdg-user-dirs
+    xdg-desktop-portal-hyprland xdg-user-dirs keyd
     uwsm mako waybar network-manager-applet blueman
     gnome-keyring gnome-online-accounts
 
