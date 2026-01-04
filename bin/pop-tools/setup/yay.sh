@@ -6,7 +6,7 @@ PACKAGES=(
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
 
     # Desktop Environment
-    hyprland hyprpaper hyprlock hyprpolkitagent
+    hyprland hyprpaper hyprlock hypridle hyprpolkitagent
     xdg-desktop-portal-hyprland xdg-user-dirs keyd
     uwsm mako waybar network-manager-applet blueman
     gnome-keyring gnome-online-accounts
