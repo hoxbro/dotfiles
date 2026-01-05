@@ -1,10 +1,5 @@
 version = 1
 
-[envs.git-cliff]
-channels = ["conda-forge"]
-dependencies = { git-cliff = "*" }
-exposed = { git-cliff = "git-cliff" }
-
 [envs.tmux]
 channels = ["conda-forge"]
 dependencies = { tmux = "!=3.6" }
