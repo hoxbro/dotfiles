@@ -17,6 +17,7 @@ return {
                 ty = {
                     diagnosticMode = "off",
                     configuration = {
+                        environment = { python = python_exe },
                         rules = {
                             ["unresolved-import"] = "ignore",
                         },

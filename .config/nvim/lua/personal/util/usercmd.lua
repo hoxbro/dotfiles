@@ -128,3 +128,13 @@ local pytest_quicklist = function()
 end
 
 vim.api.nvim_create_user_command("PytestQuickfix", pytest_quicklist, {})
+
+-- Because I'm stupid
+local typos = { "W", "Wq", "WQ", "Wqa", "WQa", "WQA", "WqA", "Q", "Qa", "QA", "Wa", "WA" }
+for _, cmd in ipairs(typos) do
+    vim.api.nvim_create_user_command(
+        cmd,
+        function(opts) vim.api.nvim_cmd({ cmd = cmd:lower(), bang = opts.bang, mods = { noautocmd = true } }, {}) end,
+        { bang = true }
+    )
+end

@@ -28,16 +28,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end,
 })
 
--- Because I'm stupid
-local typos = { "W", "Wq", "WQ", "Wqa", "WQa", "WQA", "WqA", "Q", "Qa", "QA", "Wa", "WA" }
-for _, cmd in ipairs(typos) do
-    vim.api.nvim_create_user_command(
-        cmd,
-        function(opts) vim.api.nvim_cmd({ cmd = cmd:lower(), bang = opts.bang, mods = { noautocmd = true } }, {}) end,
-        { bang = true }
-    )
-end
-
 -- Paste to clipboard on focus
 -- https://www.reddit.com/r/neovim/comments/1l4tubm/copy_last_yanked_text_to_clipboard_on_focuslost/
 local last_clipboard = vim.fn.getreg("0")
