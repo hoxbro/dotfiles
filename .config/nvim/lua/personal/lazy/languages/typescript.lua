@@ -1,4 +1,4 @@
-local vtsls = {
+local tsls = {
     preferGoToSourceDefinition = true,
     inlayHints = {
         parameterNames = { enabled = "literals" },
@@ -17,16 +17,16 @@ if DAP_typescript_commands == nil then DAP_typescript_commands = {
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        opts = { install = { "javascript", "typescript" } },
+        opts = { install = { "javascript", "typescript", "tsx" } },
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "tsgo", "js-debug-adapter" } },
+        opts = { install = { "tsgo", "js-debug-adapter", "eslint-lsp" } },
     },
     {
         "neovim/nvim-lspconfig",
         opts = {
-            tsgo = { typescript = vtsls, javascript = vtsls },
+            tsgo = { typescript = tsls, javascript = tsls, typescriptreact = tsls, javascriptreact = tsls },
             eslint = {},
         },
     },

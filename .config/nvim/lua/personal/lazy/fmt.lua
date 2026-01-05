@@ -22,6 +22,8 @@ return {
             python = { "ruff_fix", "ruff_format", "injected" },
             javascript = { "prettierd", "eslint_d" },
             typescript = { "prettierd", "eslint_d" },
+            javascriptreact = { "prettierd", "eslint_d" },
+            typescriptreact = { "prettierd", "eslint_d" },
             html = { "prettierd" },
             rust = { "rustfmt" },
             css = { "prettierd" },
