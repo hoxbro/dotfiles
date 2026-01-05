@@ -1,46 +1,44 @@
-vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.o.nu = true
+vim.o.relativenumber = true
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.smartindent = true
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+vim.o.smartindent = true
 
-vim.opt.wrap = false
-vim.opt.linebreak = true
+vim.o.wrap = false
+vim.o.linebreak = true
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
-vim.opt.undofile = true
-vim.opt.writebackup = false
-vim.opt.shadafile = vim.fn.stdpath("data") .. "/shada/" .. vim.fn.getcwd():gsub("[/\\:]", "%%")
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.undodir = vim.fn.stdpath("data") .. "/undodir"
+vim.o.undofile = true
+vim.o.writebackup = false
+vim.o.shadafile = vim.fn.stdpath("data") .. "/shada/" .. vim.fn.getcwd():gsub("[/\\:]", "%%")
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
+vim.o.scrolloff = 8
+vim.o.signcolumn = "yes"
+vim.o.isfname = vim.o.isfname .. ",@-@"
 
-vim.opt.incsearch = true
-vim.opt.termguicolors = true
-vim.opt.updatetime = 50
+vim.o.incsearch = true
+vim.o.termguicolors = true
+vim.o.updatetime = 50
 
-vim.opt.showmode = false
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.iskeyword:append("-")
-vim.opt.formatoptions:append({ c = true, r = true, q = true })
+vim.o.showmode = false
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.iskeyword = vim.o.iskeyword .. ",-"
+vim.o.formatoptions = vim.o.formatoptions .. "q"
 
-vim.opt.fillchars = { diff = "╱" }
-vim.opt.diffopt = {
-    "internal",
-    "filler",
-    "closeoff",
-    "context:12",
-    "algorithm:histogram",
-    "linematch:200",
-    "indent-heuristic",
-}
+vim.o.fillchars = "diff:╱"
+vim.o.diffopt = "internal,"
+    .. "filler,"
+    .. "closeoff,"
+    .. "context:12,"
+    .. "algorithm:histogram,"
+    .. "linematch:200,"
+    .. "indent-heuristic,"
 
 vim.diagnostic.config({
     signs = {
