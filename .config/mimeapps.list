@@ -1,10 +1,10 @@
 [Default Applications]
-; application/x-gnome-saved-search=nemo.desktop
 application/pdf=org.gnome.Evince.desktop
 audio/*=io.github.celluloid_player.Celluloid.desktop
 image/*=org.gnome.Loupe.desktop
 inode/directory=nemo.desktop
-message/rfc822=org.gnome.Geary.desktop
+message/rfc822=eu.betterbird.Betterbird.desktop
+text/calendar=eu.betterbird.Betterbird.desktop
 text/html=librewolf.desktop
 text/plain=org.gnome.TextEditor.desktop
 video/*=io.github.celluloid_player.Celluloid.desktop

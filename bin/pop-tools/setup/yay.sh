@@ -9,7 +9,6 @@ PACKAGES=(
     hyprland hyprpaper hyprlock hypridle hyprpolkitagent
     xdg-desktop-portal-hyprland xdg-user-dirs keyd
     uwsm mako waybar network-manager-applet blueman
-    gnome-keyring gnome-online-accounts
 
     # Theming
     noto-fonts noto-fonts-emoji otf-san-francisco ttf-ubuntu-mono-nerd
@@ -29,8 +28,8 @@ PACKAGES=(
 
     # GUI
     librewolf-bin ghostty 1password nextcloud-client
-    clockify-desktop
-    celluloid geary timeshift pavucontrol seahorse
+    celluloid betterbird timeshift pavucontrol clockify-desktop
+    seahorse gnome-keyring
     nemo nemo-fileroller
     code spotify parsec ferdium-bin zoom
     libreoffice-still chromium gnome-text-editor loupe evince
