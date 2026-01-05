@@ -22,7 +22,7 @@ return {
         "neovim/nvim-lspconfig",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         dependencies = {
-            { "williamboman/mason-lspconfig.nvim", dependencies = { "williamboman/mason.nvim" } },
+            "williamboman/mason.nvim",
             { "j-hui/fidget.nvim", opts = {} },
         },
         -- `opts` are a table where:
@@ -43,7 +43,7 @@ return {
                 })
             end
             -- https://www.reddit.com/r/neovim/comments/1l7pz1l/starting_from_0112_i_have_a_weird_issue/
-            vim.schedule(require("mason-lspconfig").setup)
+            vim.schedule(function() vim.lsp.enable(vim.tbl_keys(opts)) end)
         end,
     },
     {
