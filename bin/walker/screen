@@ -68,11 +68,11 @@ case "$OPTION" in
 "Screenrecord | Full") gpu-screen-recorder -w screen -f 60 -o "$SCREENRECORD_FILE" ;;
 "Screenrecord | Section") gpu-screen-recorder -w region -region "$(format_for_record "$(select_region)")" -f 60 -o "$SCREENRECORD_FILE" ;;
 "Screenrecord | Window") gpu-screen-recorder -w region -region "$(format_for_record "$(select_window)")" -f 60 -o "$SCREENRECORD_FILE" ;;
-"Screenshot | Full") grim "$SCREENSHOT_FILE" ;;
-"Screenshot | Section") grim -g "$(format_for_shot "$(select_region)")" "$SCREENSHOT_FILE" ;;
+"Screenshot | Full") grim - | tee "$SCREENSHOT_FILE" | wl-copy ;;
+"Screenshot | Section") grim -g "$(format_for_shot "$(select_region)")" - | tee "$SCREENSHOT_FILE" | wl-copy ;;
 "Screenshot | Window")
     current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
-    grim -g "$(format_for_shot "$(select_window)")" "$SCREENSHOT_FILE"
+    grim -g "$(format_for_shot "$(select_window)")" - | tee "$SCREENSHOT_FILE" | wl-copy
     hyprctl dispatch workspace "$current_workspace" >/dev/null
     ;;
 *) exit 1 ;;
