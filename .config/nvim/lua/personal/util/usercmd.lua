@@ -134,7 +134,7 @@ local typos = { "W", "Wq", "WQ", "Wqa", "WQa", "WQA", "WqA", "Q", "Qa", "QA", "W
 for _, cmd in ipairs(typos) do
     vim.api.nvim_create_user_command(
         cmd,
-        function(opts) vim.api.nvim_cmd({ cmd = cmd:lower(), bang = opts.bang, mods = { noautocmd = true } }, {}) end,
+        function(opts) vim.cmd(cmd:lower() .. (opts.bang and "!" or "")) end,
         { bang = true }
     )
 end
