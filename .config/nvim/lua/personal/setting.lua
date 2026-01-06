@@ -32,13 +32,7 @@ vim.o.iskeyword = vim.o.iskeyword .. ",-"
 vim.o.formatoptions = vim.o.formatoptions .. "q"
 
 vim.o.fillchars = "diff:╱"
-vim.o.diffopt = "internal,"
-    .. "filler,"
-    .. "closeoff,"
-    .. "context:12,"
-    .. "algorithm:histogram,"
-    .. "linematch:200,"
-    .. "indent-heuristic,"
+vim.o.diffopt = "internal,filler,closeoff,context:12,algorithm:histogram,linematch:200,indent-heuristic"
 
 vim.diagnostic.config({
     signs = {
