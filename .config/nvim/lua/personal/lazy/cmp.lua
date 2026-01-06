@@ -22,6 +22,14 @@ return {
         version = "1.*",
         opts_extend = { "sources.default" },
         dependencies = { "nvim-mini/mini.snippets" },
+        keys = {
+            {
+                "<C-r>",
+                function() require("blink.cmp").show({ providers = { "registers" } }) end,
+                desc = "Blink registers",
+                mode = "i",
+            },
+        },
         opts = {
             completion = {
                 documentation = { auto_show = false },
@@ -31,6 +39,7 @@ return {
                 default = { "lazydev", "lsp", "path", "snippets", "buffer" },
                 providers = {
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+                    registers = { name = "Registers", module = "personal.util.blink_registers" },
                 },
             },
             fuzzy = { sorts = { "exact", "score", "sort_text" } },
