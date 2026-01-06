@@ -1,5 +1,6 @@
 [Default Applications]
 application/pdf=org.gnome.Evince.desktop
+application/x-gnome-saved-search=nemo.desktop
 audio/*=io.github.celluloid_player.Celluloid.desktop
 image/*=org.gnome.Loupe.desktop
 inode/directory=nemo.desktop
