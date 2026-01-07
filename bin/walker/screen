@@ -3,28 +3,54 @@
 set -euxo pipefail
 
 DATE=$(date +%Y-%m-%d\ %H-%M-%S)
-SCREENSHOT_FILE="$HOME/Downloads/screenshot-$DATE.png"
-SCREENRECORD_FILE="$HOME/Downloads/screenrecord-$DATE.mp4"
+SCREEN_DIR="$HOME/Downloads/screen"
+mkdir -p "$SCREEN_DIR"
+SCREENSHOT_FILE="$SCREEN_DIR/screenshot-$DATE.png"
+SCREENRECORD_FILE="$SCREEN_DIR/screenrecord-$DATE.mp4"
 REGION_CACHE="/tmp/walker-screen-region"
 
-if pgrep -f "gpu-screen-recorder" >/dev/null; then
-    pkill -SIGINT -f "gpu-screen-recorder"
+if pgrep -f "wf-recorder" >/dev/null; then
+    pkill -SIGINT -f "wf-recorder"
     exit 0
 fi
 
+detect_encoder() {
+    set +o pipefail
+    if { lspci | grep -qi "vga.*nvidia\|3d.*nvidia"; } &&
+        { ffmpeg -hide_banner -encoders 2>&1 | grep -q "h264_nvenc"; }; then
+        ENCODER_FLAGS=(-c h264_nvenc -r 60 -p preset=p4 -p tune=ll -p cq=26)
+    elif { lspci | grep -qi "vga.*amd\|3d.*amd"; } &&
+        { ffmpeg -hide_banner -encoders 2>&1 | grep -q "h264_vaapi"; }; then
+        # Detect the correct render device for VAAPI
+        RENDER_DEVICE=""
+        for device in /dev/dri/renderD*; do
+            if [[ -e "$device" ]]; then
+                RENDER_DEVICE="$device"
+                break
+            fi
+        done
+        if [[ -n "$RENDER_DEVICE" ]]; then
+            ENCODER_FLAGS=(-c h264_vaapi -d "$RENDER_DEVICE" -r 60 -p qp=26)
+        else
+            ENCODER_FLAGS=(-c h264_vaapi -r 60 -p qp=26)
+        fi
+    else
+        ENCODER_FLAGS=(-c libx264 -r 60 -p crf=23)
+    fi
+    set -o pipefail
+}
+
 select_region() {
-    local region
     if [[ -f "$REGION_CACHE" ]]; then
         choice=$(printf '%s\n' "Use Last Region" "Select New Region" | walker --dmenu)
         case "$choice" in
-        "Use Last Region") region=$(cat "$REGION_CACHE") ;;
-        "Select New Region") region=$(slurp -f "%w %h %x %y" | tee $REGION_CACHE) ;;
+        "Use Last Region") cat "$REGION_CACHE" ;;
+        "Select New Region") slurp -f "%x,%y %wx%h" | tee "$REGION_CACHE" ;;
         *) exit 1 ;;
         esac
     else
-        region=$(slurp -f "%w %h %x %y" | tee $REGION_CACHE)
+        slurp -f "%x,%y %wx%h" | tee "$REGION_CACHE"
     fi
-    echo "$region"
 }
 
 select_window() {
@@ -35,19 +61,7 @@ select_window() {
     address=$(echo "$window_data" | cut -d$'\t' -f2)
 
     hyprctl dispatch focuswindow address:"$address" >/dev/null
-    hyprctl activewindow -j | jq -r '"\(.size[0]) \(.size[1]) \(.at[0]) \(.at[1])"'
-}
-
-format_for_shot() {
-    read -r w h x y <<<"$1"
-    echo "${x},${y} ${w}x${h}"
-}
-
-format_for_record() {
-    awk -v \
-        s="$(hyprctl monitors -j | jq -r '.[0].scale')" \
-        '{printf "%dx%d+%d+%d", int($1*s+0.5), int($2*s+0.5), int($3*s+0.5), int($4*s+0.5)}' \
-        <<<"$1"
+    hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
 if [[ -z "${1-}" ]]; then
@@ -65,14 +79,14 @@ else
 fi
 
 case "$OPTION" in
-"Screenrecord | Full") gpu-screen-recorder -w screen -f 60 -o "$SCREENRECORD_FILE" ;;
-"Screenrecord | Section") gpu-screen-recorder -w region -region "$(format_for_record "$(select_region)")" -f 60 -o "$SCREENRECORD_FILE" ;;
-"Screenrecord | Window") gpu-screen-recorder -w region -region "$(format_for_record "$(select_window)")" -f 60 -o "$SCREENRECORD_FILE" ;;
+"Screenrecord | Full") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -f "$SCREENRECORD_FILE" ;;
+"Screenrecord | Section") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -g "$(select_region)" -f "$SCREENRECORD_FILE" ;;
+"Screenrecord | Window") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -g "$(select_window)" -f "$SCREENRECORD_FILE" ;;
 "Screenshot | Full") grim - | tee "$SCREENSHOT_FILE" | wl-copy ;;
-"Screenshot | Section") grim -g "$(format_for_shot "$(select_region)")" - | tee "$SCREENSHOT_FILE" | wl-copy ;;
+"Screenshot | Section") grim -g "$(select_region)" - | tee "$SCREENSHOT_FILE" | wl-copy ;;
 "Screenshot | Window")
     current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
-    grim -g "$(format_for_shot "$(select_window)")" - | tee "$SCREENSHOT_FILE" | wl-copy
+    grim -g "$(select_window)" - | tee "$SCREENSHOT_FILE" | wl-copy
     hyprctl dispatch workspace "$current_workspace" >/dev/null
     ;;
 *) exit 1 ;;

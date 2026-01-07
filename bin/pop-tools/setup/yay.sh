@@ -24,7 +24,7 @@ PACKAGES=(
     walker-bin elephant elephant-desktopapplications elephant-clipboard elephant-calc
 
     # Screenshot
-    gpu-screen-recorder slurp grim
+    slurp grim wf-recorder
 
     # GUI
     librewolf-bin ghostty 1password nextcloud-client
