@@ -32,6 +32,7 @@ sync() {
 sync-large() {
     copy-path projects
     copy-path Downloads
+    copy-path .thunderbird
 }
 
 check-hostname() {
