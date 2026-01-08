@@ -11,33 +11,41 @@ REGION_CACHE="/tmp/walker-screen-region"
 
 if pgrep -f "wf-recorder" >/dev/null; then
     pkill -SIGINT -f "wf-recorder"
+    (
+        action=$(notify-send "Screen" "Saved screen recording" --action="default=Open Folder" --wait 2>/dev/null)
+        if [[ "$action" == "default" ]]; then
+            xdg-open "$SCREEN_DIR"
+        fi
+    ) &
     exit 0
 fi
 
-detect_encoder() {
-    set +o pipefail
-    if { lspci | grep -qi "vga.*nvidia\|3d.*nvidia"; } &&
-        { ffmpeg -hide_banner -encoders 2>&1 | grep -q "h264_nvenc"; }; then
-        ENCODER_FLAGS=(-c h264_nvenc -r 60 -p preset=p4 -p tune=ll -p cq=26)
-    elif { lspci | grep -qi "vga.*amd\|3d.*amd"; } &&
-        { ffmpeg -hide_banner -encoders 2>&1 | grep -q "h264_vaapi"; }; then
-        # Detect the correct render device for VAAPI
-        RENDER_DEVICE=""
-        for device in /dev/dri/renderD*; do
-            if [[ -e "$device" ]]; then
-                RENDER_DEVICE="$device"
-                break
-            fi
-        done
-        if [[ -n "$RENDER_DEVICE" ]]; then
-            ENCODER_FLAGS=(-c h264_vaapi -d "$RENDER_DEVICE" -r 60 -p qp=26)
-        else
-            ENCODER_FLAGS=(-c h264_vaapi -r 60 -p qp=26)
-        fi
+record_screen() {
+    devices=$(lspci)
+    encoders=$(ffmpeg -hide_banner -encoders 2>&1)
+
+    has_gpu() {
+        case "$1" in
+        nvidia) grep -Eiq 'vga|3d.*nvidia' <<<"$devices" ;;
+        intel) grep -Eiq 'vga|3d.*intel' <<<"$devices" ;;
+        amd) grep -Eiq 'vga|3d.*amd' <<<"$devices" ;;
+        esac
+    }
+
+    has_encoder() { grep -qF -- "$1" <<<"$encoders"; }
+
+    if has_gpu nvidia && has_encoder h264_nvenc; then
+        args=(-c h264_nvenc -r 60 -p preset=p4 -p tune=ll -p cq=26)
+    elif has_gpu amd && has_encoder h264_vaapi; then
+        render_device=$(find /dev/dri -maxdepth 1 -type c -name 'renderD*' -print -quit 2>/dev/null)
+        args=(-c h264_vaapi -r 60 -p qp=26 ${render_device:+-d "$render_device"})
+    elif has_gpu intel && has_encoder h264_qsv; then
+        args=(-c h264_qsv -r 60 -p global_quality=26)
     else
-        ENCODER_FLAGS=(-c libx264 -r 60 -p crf=23)
+        args=(-c libx264 -r 60 -p crf=23)
     fi
-    set -o pipefail
+
+    wf-recorder "${args[@]}" "$@" -f "$SCREENRECORD_FILE"
 }
 
 select_region() {
@@ -45,11 +53,11 @@ select_region() {
         choice=$(printf '%s\n' "Use Last Region" "Select New Region" | walker --dmenu)
         case "$choice" in
         "Use Last Region") cat "$REGION_CACHE" ;;
-        "Select New Region") slurp -f "%x,%y %wx%h" | tee "$REGION_CACHE" ;;
+        "Select New Region") slurp | tee "$REGION_CACHE" ;;
         *) exit 1 ;;
         esac
     else
-        slurp -f "%x,%y %wx%h" | tee "$REGION_CACHE"
+        slurp | tee "$REGION_CACHE"
     fi
 }
 
@@ -64,30 +72,34 @@ select_window() {
     hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
-if [[ -z "${1-}" ]]; then
-    OPTIONS=(
-        "Screenshot | Full"
-        "Screenshot | Section"
-        "Screenshot | Window"
-        "Screenrecord | Full"
-        "Screenrecord | Section"
-        "Screenrecord | Window"
-    )
-    OPTION=$(printf '%s\n' "${OPTIONS[@]}" | walker --dmenu)
-else
-    OPTION=$1
-fi
+main() {
+    if [[ -z "${1-}" ]]; then
+        OPTIONS=(
+            "Screenshot | Full"
+            "Screenshot | Section"
+            "Screenshot | Window"
+            "Screenrecord | Full"
+            "Screenrecord | Section"
+            "Screenrecord | Window"
+        )
+        OPTION=$(printf '%s\n' "${OPTIONS[@]}" | walker --dmenu)
+    else
+        OPTION=$1
+    fi
 
-case "$OPTION" in
-"Screenrecord | Full") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -f "$SCREENRECORD_FILE" ;;
-"Screenrecord | Section") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -g "$(select_region)" -f "$SCREENRECORD_FILE" ;;
-"Screenrecord | Window") detect_encoder && wf-recorder "${ENCODER_FLAGS[@]}" -g "$(select_window)" -f "$SCREENRECORD_FILE" ;;
-"Screenshot | Full") grim - | tee "$SCREENSHOT_FILE" | wl-copy ;;
-"Screenshot | Section") grim -g "$(select_region)" - | tee "$SCREENSHOT_FILE" | wl-copy ;;
-"Screenshot | Window")
-    current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
-    grim -g "$(select_window)" - | tee "$SCREENSHOT_FILE" | wl-copy
-    hyprctl dispatch workspace "$current_workspace" >/dev/null
-    ;;
-*) exit 1 ;;
-esac
+    case "$OPTION" in
+    "Screenrecord | Full") record_screen ;;
+    "Screenrecord | Section") record_screen -g "$(select_region)" ;;
+    "Screenrecord | Window") record_screen -g "$(select_window)" ;;
+    "Screenshot | Full") grim - | tee "$SCREENSHOT_FILE" | wl-copy ;;
+    "Screenshot | Section") grim -g "$(select_region)" - | tee "$SCREENSHOT_FILE" | wl-copy ;;
+    "Screenshot | Window")
+        current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
+        grim -g "$(select_window)" - | tee "$SCREENSHOT_FILE" | wl-copy
+        hyprctl dispatch workspace "$current_workspace" >/dev/null
+        ;;
+    *) notify-send "Screen" "Not a valid option '$OPTION'" ;;
+    esac
+}
+
+main "$@" || notify-send "Screen" "Failed to execute"

@@ -112,6 +112,6 @@
     "return-type": "json",
     "interval": 2,
     "tooltip": true,
-    "on-click": "pkill -SIGINT -f wf-recorder",
+    "on-click": "bash ~/bin/walker/screen.sh",
   },
 }
