@@ -5,27 +5,20 @@ set -euo pipefail
 base_branch=$(cat "$(git rev-parse --show-cdup).git/refs/remotes/origin/HEAD" | awk '{print $2}')
 branches=$(git reflog --format='%gD %gs' | awk '$2=="checkout:" && $3=="moving" && $4=="from"{print $5}' | awk '!seen[$0]++')
 
-commits_format='%C(bold yellow)%h %C(cyan)(%ar) %C(green)%an %C(dim white)%s %C(auto)%d'
-uniqcommits_cmd="git log --color=always --format='$commits_format' $base_branch..{1}"
-diffbranch_cmd="git diff --color=always $base_branch...{1} | diff-so-fancy"
-toggle_preview="
-  [[ \$FZF_PREVIEW_LABEL =~ 'Commits unique to branch' ]] &&
-    echo \"change-preview($diffbranch_cmd)+change-preview-label(Branch diff)\" ||
-    echo \"change-preview($uniqcommits_cmd)+change-preview-label(Commits unique to branch)\"
-"
+log_cmd="git log --color=always --format='%C(bold yellow)%h %C(cyan)(%ar) %C(green)%an %C(dim white)%s %C(auto)%d' $base_branch..{1}"
+diff_cmd="git diff --color=always $base_branch...{1} | diff-so-fancy"
+toggle_cmd="[[ \$FZF_PREVIEW_LABEL =~ 'diff' ]] && $diff_cmd || $log_cmd"
 
 branch=$(
   echo "$branches" | fzf --ansi -- --layout=reverse --multi --height=60% --min-height=20 \
-    --border-label-pos=2 --border-label 'Branches [C-O toggle commits/diff | C-Y copy to clipboard]' --border \
+    --border-label-pos=2 --border-label 'Branches [C-O diff | C-I log | C-Y clipboard]' --border \
     --no-hscroll --no-multi \
-    --preview-window='right,70%,border-left,border-rounded' \
-    --preview="$uniqcommits_cmd" --preview-label="Commits unique to branch" \
-    --bind 'preview-scroll-up:preview-up+preview-up+preview-up' \
-    --bind 'preview-scroll-down:preview-down+preview-down+preview-down' \
-    --bind "ctrl-o:transform:$toggle_preview" \
-    --bind "ctrl-y:execute(printf '%s' {} | copy)"
+    --preview-window='right,70%,border-left' \
+    --preview-label='log' \
+    --preview="$toggle_cmd" \
+    --bind 'ctrl-o:change-preview-label(diff)+refresh-preview' \
+    --bind 'ctrl-i:change-preview-label(log)+refresh-preview' \
+    --bind "ctrl-y:execute-silent(printf '%s' {} | copy)"
 )
 
-if [[ -n $branch ]]; then
-  git checkout "$branch"
-fi
+[[ -n $branch ]] && git checkout "$branch"
