@@ -90,7 +90,7 @@ function M.setup(opts)
     registry.refresh(function()
         M.setup_started = true
         local should_keep = vim.tbl_keys(lockfile)
-        for _, pkg_name in ipairs(opts.install or {}) do
+        for _, pkg_name in ipairs(Util.unique(opts.install or {})) do
             M.ensure_installed(pkg_name, lockfile[pkg_name])
             table.insert(should_keep, pkg_name)
         end

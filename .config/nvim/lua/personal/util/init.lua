@@ -100,6 +100,14 @@ Util.smart_trim_and_dedent = function(lines)
     return table.concat(lines, "\n")
 end
 
+Util.unique = function(tbl)
+    local set = {}
+    for _, v in ipairs(tbl) do
+        set[v] = true
+    end
+    return vim.tbl_keys(set)
+end
+
 local _platform = function()
     if vim.fn.has("win32") == 1 then
         return "Windows"
