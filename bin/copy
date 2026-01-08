@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1003
+printf '\033Ptmux;\033\033]52;c;%s\033\033\\\033\\' "$(base64 | tr -d '\n')"
