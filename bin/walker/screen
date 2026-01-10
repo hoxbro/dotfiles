@@ -26,9 +26,9 @@ record_screen() {
 
     has_gpu() {
         case "$1" in
-        nvidia) grep -Eiq 'vga|3d.*nvidia' <<<"$devices" ;;
-        intel) grep -Eiq 'vga|3d.*intel' <<<"$devices" ;;
-        amd) grep -Eiq 'vga|3d.*amd' <<<"$devices" ;;
+        nvidia) grep -Eiq '(vga|3d).*nvidia' <<<"$devices" ;;
+        intel) grep -Eiq '(vga|3d).*intel' <<<"$devices" ;;
+        amd) grep -Eiq '(vga|3d).*amd' <<<"$devices" ;;
         esac
     }
 
