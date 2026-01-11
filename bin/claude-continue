@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# You've hit your limit · resets 1pm (Europe/Copenhagen)
+
+claude_limit_hit() {
+    local output reset_hour hour
+    output=$(timeout 5 claude --print "t" 2>&1) || true
+
+    if echo "$output" | grep -qi "You've hit your limit"; then
+        # Extract the time string like "resets 1pm"
+        reset_hour=$(echo "$output" | grep -oP 'resets \K[0-9]{1,2}[ap]m' | tr '[:upper:]' '[:lower:]')
+        if [[ -n "$reset_hour" ]]; then
+            # Convert to 24h format
+            hour=$(date -d "$reset_hour today" +%H)
+            echo "$hour"
+            return 0
+        fi
+        return 1
+    fi
+
+    return 1
+}
+
+seconds_until() {
+    local target_hour now_ts target_ts
+    target_hour=$1
+    now_ts=$(date +%s)
+    target_ts=$(date -d "today ${target_hour}:00" +%s)
+
+    # If the hour has already passed today, schedule for tomorrow
+    if ((target_ts <= now_ts)); then
+        target_ts=$(date -d "tomorrow ${target_hour}:00" +%s)
+    fi
+
+    echo $((target_ts - now_ts + 5))
+}
+
+if reset_hour=$(claude_limit_hit); then
+    sleep_seconds=$(seconds_until "$reset_hour")
+    echo "Claude limit reached — sleeping until $reset_hour:00 ($sleep_seconds seconds)"
+    sleep "$sleep_seconds"
+fi
+
+echo "Launching Claude..."
+claude --permission-mode acceptEdits --continue "continue"
