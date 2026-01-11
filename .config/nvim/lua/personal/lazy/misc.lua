@@ -38,7 +38,6 @@ return {
         --  - yinq - [Y]ank [I]nside [N]ext [']quote
         --  - ci'  - [C]hange [I]nside [']quote
         "nvim-mini/mini.ai",
-        version = "*",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         opts = { n_lines = 500 },
     },
@@ -48,7 +47,6 @@ return {
         -- - sd'   - [S]urround [D]delete [']quotes
         -- - sr)'  - [S]urround [R]eplace [)] [']
         "nvim-mini/mini.surround",
-        version = "*",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         opts = { mappings = { highlight = "" } },
     },
