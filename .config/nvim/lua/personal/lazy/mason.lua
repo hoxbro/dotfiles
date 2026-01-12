@@ -48,6 +48,15 @@ function M.ensure_installed(pkg_name, locked_version)
     local ok, pkg = pcall(registry.get_package, pkg_name)
 
     if not ok then
+        local mappings = require("mason-lspconfig").get_mappings()
+        local lsp_pkg_name = mappings.lspconfig_to_package[pkg_name] or pkg_name
+        if lsp_pkg_name ~= pkg_name then
+            vim.notify(string.format("Used LSP mapping: %s -> %s", pkg_name, lsp_pkg_name))
+            ok, pkg = pcall(registry.get_package, lsp_pkg_name)
+        end
+    end
+
+    if not ok then
         vim.notify(string.format("Package '%s' not found in registry", pkg_name), vim.log.levels.WARN)
         return
     end
