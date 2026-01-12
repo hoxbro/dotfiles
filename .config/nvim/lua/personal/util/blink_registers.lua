@@ -2,6 +2,7 @@ local M = {}
 
 local REGISTERS = {
     '"',
+    "0",
     "1",
     "2",
     "3",
@@ -17,9 +18,11 @@ function M.new() return setmetatable({}, { __index = M }) end
 
 function M:get_completions(_, callback)
     local items = {}
+    local seen = {}
     for idx, reg in ipairs(REGISTERS) do
         local val = vim.fn.getreg(reg)
-        if val ~= "" and not val:match("^%s*$") then
+        if val ~= "" and not val:match("^%s*$") and not vim.tbl_contains(seen, val) then
+            table.insert(seen, val)
             table.insert(items, {
                 label = "  " .. val:gsub("^%s+", ""):gsub("\n", " "):sub(1, 20),
                 insertText = val,
