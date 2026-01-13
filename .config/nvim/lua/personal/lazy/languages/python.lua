@@ -15,7 +15,7 @@ return {
         opts = {
             ty = {
                 ty = {
-                    diagnosticMode = "off",
+                    diagnosticMode = (vim.env.TY_CHECK and "openFilesOnly") or "off",
                     configuration = {
                         environment = { python = python_exe },
                         rules = {
