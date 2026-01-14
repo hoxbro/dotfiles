@@ -31,14 +31,7 @@ return {
         "folke/sidekick.nvim",
         lazy = true,
         dependencies = { "zbirenbaum/copilot.lua" },
-        opts = {
-            cli = {
-                mux = { backend = "tmux", enabled = true },
-                win = {
-                    keys = { nav_left = { "<Esc>", "nav_left", expr = true, desc = "navigate to the left window" } },
-                },
-            },
-        },
+        opts = { cli = { mux = { backend = "tmux", enabled = true } } },
         keys = {
             {
                 "<leader>ai",

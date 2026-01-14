@@ -101,3 +101,17 @@ local ny = function() vim.notify("just use normal yank") end
 vim.keymap.set("v", "<leader>y", ny)
 vim.keymap.set("n", "<leader>Y", ny)
 vim.keymap.set("n", "<Leader>y", ny)
+
+-- Window navivgation for terminal
+local function t_wincmd(cmd)
+    return function()
+        vim.cmd("stopinsert")
+        vim.cmd("wincmd " .. cmd)
+        if vim.bo.buftype == "terminal" then vim.cmd("startinsert") end
+    end
+end
+
+vim.keymap.set("t", "<C-w>h", t_wincmd("h"), { desc = "Terminal window left" })
+vim.keymap.set("t", "<C-w>j", t_wincmd("j"), { desc = "Terminal window down" })
+vim.keymap.set("t", "<C-w>k", t_wincmd("k"), { desc = "Terminal window up" })
+vim.keymap.set("t", "<C-w>l", t_wincmd("l"), { desc = "Terminal window right" })
