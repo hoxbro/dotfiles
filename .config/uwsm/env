@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-export PATH="$HOME/bin:$HOME/.local/pixi/bin:$HOME/.local/bin:$PATH"
-
-# export QT_SCALE_FACTOR=2
-
 case "$(uname -n)" in
 "framework")
     export XCURSOR_SIZE=24

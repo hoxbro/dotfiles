@@ -98,7 +98,7 @@ main() {
         grim -g "$(select_window)" - | tee "$SCREENSHOT_FILE" | wl-copy
         hyprctl dispatch workspace "$current_workspace" >/dev/null
         ;;
-    *) notify-send "Screen" "Not a valid option '$OPTION'" ;;
+    *) notify-send "Screen" "Not a valid option: \"$OPTION\"" ;;
     esac
 }
 

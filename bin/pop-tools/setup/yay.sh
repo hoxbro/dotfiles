@@ -3,7 +3,7 @@
 PACKAGES=(
     # CLI / TUI
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
-    ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass
+    ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass jq
 
     # Desktop Environment
     hyprland hyprpaper hyprlock hypridle hyprpolkitagent

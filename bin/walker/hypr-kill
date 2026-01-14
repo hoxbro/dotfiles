@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -euxo pipefail
 
-__hypr_kill() {
+hypr_kill() {
     hyprctl clients -j -i 0 |
         jq -r ".[].address" |
         xargs -I{} hyprctl dispatch -i 0 closewindow address:{}
@@ -14,13 +14,17 @@ __hypr_kill() {
     hyprctl dispatch -i 0 workspace 1
 }
 
-selected="${1:-}"
-if [[ -z $selected ]]; then
-    selected=$(echo -e "Shutdown\nReboot" | walker --dmenu)
-fi
+main() {
+    selected="${1:-}"
+    if [[ -z $selected ]]; then
+        selected=$(echo -e "Shutdown\nReboot" | walker --dmenu)
+    fi
 
-case "${selected,,}" in
-shutdown) __hypr_kill && systemctl poweroff -i ;;
-reboot) __hypr_kill && systemctl reboot -i ;;
-*) exit 1 ;;
-esac
+    case "${selected,,}" in
+    shutdown) hypr_kill && systemctl poweroff -i ;;
+    reboot) hypr_kill && systemctl reboot -i ;;
+    *) notify-send "hypr-kill" "Not a valid option: \"$selected\"" ;;
+    esac
+}
+
+main "$@" || notify-send "hypr-kill" "Failed to execute"
