@@ -105,9 +105,8 @@ vim.keymap.set("n", "<Leader>y", ny)
 -- Window navivgation for terminal
 local function t_wincmd(cmd)
     return function()
-        vim.cmd("stopinsert")
-        vim.cmd("wincmd " .. cmd)
-        if vim.bo.buftype == "terminal" then vim.cmd("startinsert") end
+        vim.cmd.stopinsert()
+        vim.cmd.wincmd(cmd)
     end
 end
 

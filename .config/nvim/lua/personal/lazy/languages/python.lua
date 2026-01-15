@@ -85,25 +85,13 @@ return {
                     args = {
                         "serve",
                         "${file}",
-                        "--autoreload",
+                        "--dev",
                         "--unused-session-lifetime=100",
                         "--check-unused-sessions=500",
                     },
                 },
                 { name = "Launch: File", program = "${file}" },
                 { name = "Launch: Bokeh", module = "bokeh", args = { "serve", "${file}" } },
-                {
-                    name = "Launch: Lumen",
-                    module = "lumen",
-                    args = {
-                        "serve",
-                        "${file}",
-                        "--autoreload",
-                        "--unused-session-lifetime=100",
-                        "--check-unused-sessions=500",
-                        "--port=5007",
-                    },
-                },
             }
 
             local launch_default = {
