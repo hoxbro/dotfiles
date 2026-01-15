@@ -2,15 +2,21 @@
 set -euo pipefail
 
 # You've hit your limit · resets 1pm (Europe/Copenhagen)
+# You've hit your limit · resets Jan 17, 10am (Europe/Copenhagen)
 
 claude_limit_hit() {
     local output reset_hour hour
     output=$(timeout 5 claude --print "t" 2>&1) || true
 
     if echo "$output" | grep -qi "You've hit your limit"; then
-        # Extract the time string like "resets 1pm"
-        reset_hour=$(echo "$output" | grep -oP 'resets \K[0-9]{1,2}[ap]m' | tr '[:upper:]' '[:lower:]')
-        if [[ -n "$reset_hour" ]]; then
+        reset_hour=$(
+            echo "$output" | sed -n 's/.*resets \([^()]*[0-9]\{1,2\}[ap]m\).*/\1/ip'
+        )
+
+        if [[ "$reset_hour" =~ [A-Za-z]{3}[[:space:]][0-9]{1,2} ]]; then
+            echo "Claude limit reset is days away: $reset_hour"
+            exit 0
+        elif [[ -n "$reset_hour" ]]; then
             # Convert to 24h format
             hour=$(date -d "$reset_hour today" +%H)
             echo "$hour"

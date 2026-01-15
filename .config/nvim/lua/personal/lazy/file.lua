@@ -11,7 +11,6 @@ local always_hidden = {
     "node_modules",
     ".venv",
     ".hypothesis",
-    ".claude",
 }
 
 local function get_git_branch()
