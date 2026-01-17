@@ -24,18 +24,6 @@ vim.keymap.set("n", "<leader>c", [["_c]], { desc = "Change without yanking]" })
 vim.keymap.set("i", "<A-v>", "<C-r>0", { desc = "Paste in insertmode", noremap = true, silent = true })
 
 -- Diagnostic keymaps
-vim.keymap.set(
-    "n",
-    "[d",
-    function() vim.diagnostic.jump({ count = -1, float = true }) end,
-    { desc = "Go To Previous Diagnostic Message" }
-)
-vim.keymap.set(
-    "n",
-    "]d",
-    function() vim.diagnostic.jump({ count = 1, float = true }) end,
-    { desc = "Go To Next Diagnostic Message" }
-)
 vim.keymap.set("n", "<leader>m", vim.diagnostic.open_float, { desc = "Show Diagnostic Error Messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open Diagnostic Quickfix List" })
 
@@ -103,14 +91,7 @@ vim.keymap.set("n", "<leader>Y", ny)
 vim.keymap.set("n", "<Leader>y", ny)
 
 -- Window navivgation for terminal
-local function t_wincmd(cmd)
-    return function()
-        vim.cmd.stopinsert()
-        vim.cmd.wincmd(cmd)
-    end
-end
-
-vim.keymap.set("t", "<C-w>h", t_wincmd("h"), { desc = "Terminal window left" })
-vim.keymap.set("t", "<C-w>j", t_wincmd("j"), { desc = "Terminal window down" })
-vim.keymap.set("t", "<C-w>k", t_wincmd("k"), { desc = "Terminal window up" })
-vim.keymap.set("t", "<C-w>l", t_wincmd("l"), { desc = "Terminal window right" })
+vim.keymap.set("t", "<C-w>j", function() vim.cmd.wincmd("j") end, { desc = "Terminal window down" })
+vim.keymap.set("t", "<C-w>h", function() vim.cmd.wincmd("h") end, { desc = "Terminal window left" })
+vim.keymap.set("t", "<C-w>k", function() vim.cmd.wincmd("k") end, { desc = "Terminal window up" })
+vim.keymap.set("t", "<C-w>l", function() vim.cmd.wincmd("l") end, { desc = "Terminal window down" })

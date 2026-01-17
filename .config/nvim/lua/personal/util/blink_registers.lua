@@ -1,18 +1,6 @@
 local M = {}
 
-local REGISTERS = {
-    '"',
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-}
+local REGISTERS = { '"', "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
 function M.new() return setmetatable({}, { __index = M }) end
 
@@ -32,6 +20,12 @@ function M:get_completions(_, callback)
         end
     end
     callback({ items = items, is_incomplete = false })
+end
+
+function M:execute(_, item, callback, default_impl)
+    default_impl()
+    vim.fn.setreg('"', item.insertText)
+    callback()
 end
 
 return M

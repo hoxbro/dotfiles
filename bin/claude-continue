@@ -6,7 +6,7 @@ set -euo pipefail
 
 claude_limit_hit() {
     local output reset_hour hour
-    output=$(timeout 5 claude --print "t" 2>&1) || true
+    output=$(timeout 5 claude --print "t" --no-session-persistence 2>&1) || true
 
     if echo "$output" | grep -qi "You've hit your limit"; then
         reset_hour=$(
