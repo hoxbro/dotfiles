@@ -46,7 +46,7 @@
       "format": {
         "months": "<span color='#ffffff'><b>{}</b></span>",
         "days": "<span color='#999999'><b>{}</b></span>",
-        "weeks": "<span color='#bbbbbb'><b>{}</b></span>",
+        "weeks": "<span color='#bbbbbb'><b>{:%V}</b></span>",
         "weekdays": "<span color='#bbbbbb'><b>{}</b></span>",
         "today": "<span color='#e01b24'><b>{}</b></span>",
       },
