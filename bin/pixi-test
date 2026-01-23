@@ -14,4 +14,4 @@ else
     task="test-unit"
 fi
 
-(pixi run -e "$env" "$task" "$@" && notify-send "pixi test" "success") || notify-send "pixi test" "failed"
+(pixi run -e "$env" "$task" "$@" && notify-send "pixi $env" "success") || notify-send "pixi $env" "failed"

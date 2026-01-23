@@ -31,6 +31,7 @@ keybind = ctrl+q=close_window
 keybind = ctrl+shift+q=unbind
 keybind = ctrl+shift+right=unbind
 keybind = ctrl+shift+left=unbind
+keybind = shift+enter=text:\x1b\r
 
 confirm-close-surface = false
 resize-overlay = never

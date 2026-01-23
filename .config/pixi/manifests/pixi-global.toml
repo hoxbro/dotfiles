@@ -83,7 +83,7 @@ exposed = { clean-notebook = "clean-notebook" }
 [envs.starship]
 channels = ["conda-forge"]
 dependencies = { starship = "*" }
-exposed = { starship = "starship" }
+exposed = {}
 
 [envs.yazi]
 channels = ["conda-forge"]

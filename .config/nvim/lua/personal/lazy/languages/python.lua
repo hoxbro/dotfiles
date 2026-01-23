@@ -14,6 +14,10 @@ return {
         "neovim/nvim-lspconfig",
         opts = {
             ty = {
+                on_init = function(client)
+                    -- Avoid overwriting code injections
+                    vim.api.nvim_set_hl(0, "@lsp.type.string.python", {})
+                end,
                 ty = {
                     diagnosticMode = (vim.env.TY_CHECK and "openFilesOnly") or "off",
                     configuration = {
