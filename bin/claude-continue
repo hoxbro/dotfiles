@@ -5,7 +5,7 @@ set -euo pipefail
 # You've hit your limit · resets Jan 17, 10am (Europe/Copenhagen)
 
 claude_limit_hit() {
-    local output reset_hour hour
+    local output reset_hour target_ts
     output=$(timeout 5 claude --print "t" --no-session-persistence 2>&1) || true
 
     if echo "$output" | grep -qi "You've hit your limit"; then
@@ -17,9 +17,12 @@ claude_limit_hit() {
             echo "Claude limit reset is days away: $reset_hour"
             exit 0
         elif [[ -n "$reset_hour" ]]; then
-            # Convert to 24h format
-            hour=$(date -d "$reset_hour today" +%H)
-            echo "$hour"
+            now_ts=$(date +%s)
+            target_ts=$(date -d "$reset_hour" +%s)
+            if ((target_ts <= now_ts)); then
+                target_ts=$(date -d "tomorrow ${reset_hour}" +%s)
+            fi
+            echo "$target_ts"
             return 0
         fi
         return 1
@@ -28,24 +31,18 @@ claude_limit_hit() {
     return 1
 }
 
-seconds_until() {
-    local target_hour now_ts target_ts
-    target_hour=$1
-    now_ts=$(date +%s)
-    target_ts=$(date -d "today ${target_hour}:00" +%s)
+if target_ts=$(claude_limit_hit); then
+    printf 'Claude limit reached — sleeping until %s\n' "$(date -d "@$target_ts" +'%H:%M')"
+    while :; do
+        sleep_seconds=$((target_ts - $(date +%s) + 5))
+        if [ "$sleep_seconds" -le 0 ]; then
+            printf '\rDone.%-40s\n' ''
+            break
+        fi
 
-    # If the hour has already passed today, schedule for tomorrow
-    if ((target_ts <= now_ts)); then
-        target_ts=$(date -d "tomorrow ${target_hour}:00" +%s)
-    fi
-
-    echo $((target_ts - now_ts + 5))
-}
-
-if reset_hour=$(claude_limit_hit); then
-    sleep_seconds=$(seconds_until "$reset_hour")
-    echo "Claude limit reached — sleeping until $reset_hour:00 ($sleep_seconds seconds)"
-    sleep "$sleep_seconds"
+        printf '\rRemaining: %6ss ' "$sleep_seconds"
+        sleep 1
+    done
 fi
 
 echo "Launching Claude..."
