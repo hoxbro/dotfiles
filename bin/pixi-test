@@ -9,9 +9,22 @@ elif [[ "${1-}" == "gpu" ]]; then
     env="test-gpu"
     task="test-gpu"
     shift
+elif [[ "${1-}" == "ui" ]]; then
+    env="test-ui"
+    task="test-ui"
+    shift
 else
     env="test-313"
     task="test-unit"
 fi
 
-(pixi run -e "$env" "$task" "$@" && notify-send "pixi $env" "success") || notify-send "pixi $env" "failed"
+success() {
+    notify-send "pixi $env" "success"
+}
+
+failure() {
+    pixi run -e "$env" pytest --last-failed --collect-only -q | grep "::" | tee failing_tests.txt
+    notify-send "pixi $env" "failed"
+}
+
+(pixi run -e "$env" "$task" "$@" && success) || failure
