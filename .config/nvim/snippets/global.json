@@ -1,0 +1,7 @@
+{
+  "env": {
+    "prefix": "env",
+    "body": "#!/usr/bin/env $1",
+    "desc": "Shebang with env"
+  }
+}

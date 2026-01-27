@@ -1,6 +1,7 @@
 {
   "Panel Servable": {
     "prefix": "ps",
-    "body": "__import__(\"panel\").panel(${1:a}).servable()$0"
+    "body": "__import__(\"panel\").panel(${1:a}).servable()$0",
+    "desc": "Panel servable"
   }
 }

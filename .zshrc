@@ -26,7 +26,7 @@ alias vim='nvim'
 alias ls='eza'
 alias ll='eza -l --octal-permissions'
 alias la='eza -la --octal-permissions'
-alias tree='eza --tree'
+alias tree='eza --tree --git-ignore'
 
 export COLOR_LIGHT='#90a0bf'
 export COLOR_DARK='#21283b'
