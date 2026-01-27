@@ -11,7 +11,10 @@ return {
         "navarasu/onedark.nvim",
         priority = 1000,
         opts = { style = "deep", code_style = { comments = "none" } },
-        init = function() vim.cmd.colorscheme("onedark") end,
+        init = function()
+            vim.cmd.colorscheme("onedark")
+            vim.api.nvim_set_hl(0, "MatchParen", { fg = "#1a212e", bg = "#efbd5d", bold = true })
+        end,
     },
     {
         "nvim-lualine/lualine.nvim",
