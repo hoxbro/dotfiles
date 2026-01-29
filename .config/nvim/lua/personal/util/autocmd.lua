@@ -62,6 +62,7 @@ vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
 })
 
 -- Shebang linter
+local ns = vim.api.nvim_create_namespace("shebang-env")
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
     pattern = "*",
     group = vim.api.nvim_create_augroup("shebang-env", { clear = true }),
@@ -70,9 +71,11 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
         if filepath == "" then return end
 
         local stat = (vim.uv or vim.loop).fs_stat(filepath)
-        if not stat or bit.band(stat.mode, 64) == 0 then return end
+        if not stat or bit.band(stat.mode, 64) == 0 then
+            vim.diagnostic.set(ns, args.buf, {}, {})
+            return
+        end
 
-        local ns = vim.api.nvim_create_namespace("shebang-env")
         local lines = vim.api.nvim_buf_get_lines(args.buf, 0, 1, false)
         local first = lines[1] or ""
 
