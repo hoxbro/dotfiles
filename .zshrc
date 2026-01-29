@@ -1,6 +1,7 @@
 # General settings
 export EDITOR='nvim'
 export TERM='xterm-256color'
+export GPG_TTY=$TTY
 
 # Speed up zsh startup
 if [[ -z "$ZSH_EAGER" ]]; then
@@ -46,7 +47,6 @@ bootwindows() {
 }
 
 __env_vars() {
-    export GPG_TTY=$TTY
     export SUDO_EDITOR=$(command -v nvim)
     source ~/.env || true
 

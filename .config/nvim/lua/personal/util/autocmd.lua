@@ -48,8 +48,12 @@ vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
     group = group_clipboard,
     callback = function()
         local cur_clipboard = vim.fn.getreg("0")
-        if cur_clipboard ~= last_clipboard then
-            vim.fn.setreg("+", cur_clipboard)
+        if cur_clipboard ~= "" and cur_clipboard ~= last_clipboard then
+            if vim.env.SSH_TTY then
+                vim.fn.system("copy", cur_clipboard)
+            else
+                vim.fn.setreg("+", cur_clipboard)
+            end
             last_clipboard = cur_clipboard
             skip_reset = true
             vim.defer_fn(function() skip_reset = false end, 10)
