@@ -1,4 +1,4 @@
 [status]
-separator_open = ""
-separator_close = ""
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 separator_style = { fg = "#90a0bf", bg = "#21283b" }

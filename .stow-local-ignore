@@ -6,3 +6,4 @@ README.md
 .pre-commit-config.yaml
 .claude/settings.local.json
 claude
+.typos.toml
