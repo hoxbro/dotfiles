@@ -5,11 +5,14 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "marksman" } },
+        opts = { install = { "marksman", "harper-ls" } },
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { marksman = { root_markers = { ".marksman.toml", ".git" } } },
+        opts = {
+            marksman = { root_markers = { ".marksman.toml", ".git" } },
+            harper_ls = { filetypes = { "markdown" } },
+        },
     },
     {
         "MeanderingProgrammer/render-markdown.nvim",
