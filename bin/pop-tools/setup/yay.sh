@@ -35,7 +35,7 @@ PACKAGES=(
     libreoffice-still chromium gnome-text-editor loupe evince
 
     # Programming
-    rust rust-analyzer cargo-nextest cargo-insta gdb claude-code
+    rust rust-analyzer cargo-nextest cargo-insta gdb claude-code opencode-bin
 )
 
 # Computers
