@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1003
-printf '\033Ptmux;\033\033]52;c;%s\033\033\\\033\\' "$(base64 | tr -d '\n')"
+copy_to_clipboard() {
+  # shellcheck disable=SC1003
+  printf '\033Ptmux;\033\033]52;c;%s\033\033\\\033\\' "$(base64 | tr -d '\n')" >"$GPG_TTY"
+}
+
+if [ $# -gt 0 ]; then
+  printf '%s' "$*" | copy_to_clipboard
+else
+  copy_to_clipboard
+fi
