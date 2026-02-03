@@ -3,7 +3,7 @@
 PYTHON_VERSION="3.13"
 CONDA_APPS=(
     "python=$PYTHON_VERSION"
-    numpy pandas bs4 lxml nomkl
+    numpy pandas bs4 lxml nomkl python-gil
     jupyterlab jupyterlab_code_formatter
     conda-build rich rich-click httpx debugpy
 )
