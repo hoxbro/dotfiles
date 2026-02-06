@@ -13,6 +13,7 @@ fi
 
 IFS=':' read -r user branch <<<"$1"
 remote="${user%%[0-9]*}"
+remote="${remote,,}"
 repo=$(basename -s .git "$(git config --get remote.origin.url)")
 
 echo -e "${GREEN}[+] Adding remote:${RESET} $remote"

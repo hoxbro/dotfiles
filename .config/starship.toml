@@ -1,3 +1,5 @@
+scan_timeout = 100
+
 [conda]
 ignore_base = false
 

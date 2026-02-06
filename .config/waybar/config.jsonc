@@ -110,8 +110,8 @@
   "custom/recording": {
     "exec": "~/.config/waybar/scripts/recording-status.sh",
     "return-type": "json",
-    "interval": 2,
+    "interval": 1,
     "tooltip": true,
-    "on-click": "bash ~/bin/walker/screen.sh",
+    "on-click": "bash ~/bin/walker/screen",
   },
 }
