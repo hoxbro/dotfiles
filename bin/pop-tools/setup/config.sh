@@ -13,6 +13,7 @@ xdg-user-dirs-update
 
 sudo chsh "$(whoami)" -s "$(which zsh)"
 
+sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sudo sed -i 's/^#en_DK.UTF-8 UTF-8/en_DK.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen
 echo -e "LANG=en_US.UTF-8\nLC_TIME=en_DK.UTF-8\nLC_MEASUREMENT=en_DK.UTF-8" | sudo tee /etc/locale.conf
@@ -81,9 +82,11 @@ stow -d ~/dotfiles --no-folding -n . 2>&1 |
     sed "s|^|$HOME/|" |
     xargs -r rm -f || true
 stow -d ~/dotfiles --no-folding .
-hyprctl reload
 
 ln -sf ~/dotfiles ~/projects/
 ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
 
-systemctl --user enable --now hyprpolkitagent.service
+if has hyprctl; then
+    hyprctl reload
+    systemctl --user enable --now hyprpolkitagent.service
+fi

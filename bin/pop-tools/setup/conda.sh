@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PYTHON_VERSION="3.13"
+PYTHON_VERSION="3.14"
 CONDA_APPS=(
     "python=$PYTHON_VERSION"
     numpy pandas bs4 lxml nomkl python-gil

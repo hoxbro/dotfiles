@@ -10,7 +10,7 @@ repos:
       - id: check-json
       - id: detect-private-key
   - repo: https://github.com/crate-ci/typos
-    rev: 93cbdb2d23269548cf0db0f74d0bc6a09a3f0d5c # frozen: v1.43.0
+    rev: 57b11c6b7e54c402ccd9cda953f1072ec4f78e33 # frozen: v1.43.5
     hooks:
       - id: typos
   - repo: https://github.com/shellcheck-py/shellcheck-py
