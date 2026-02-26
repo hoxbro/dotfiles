@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export BROWSER=librewolf
+
 case "$(uname -n)" in
 "framework")
     export XCURSOR_SIZE=24

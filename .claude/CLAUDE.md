@@ -7,6 +7,7 @@
 - Use the `gh` cli instead of looking up webpage directly
 - You should cache web results.
 - Treat `AGENTS.md` or `.github/AGENTS.md` as `CLAUDE.md`
+- Don't start bash command with comment
 
 # Python
 
