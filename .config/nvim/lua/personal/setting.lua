@@ -29,7 +29,7 @@ vim.o.showmode = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.iskeyword = vim.o.iskeyword .. ",-"
-vim.o.formatoptions = vim.o.formatoptions .. "q"
+vim.o.formatoptions = vim.o.formatoptions .. "crq"
 
 vim.o.fillchars = "diff:╱"
 vim.o.diffopt = "internal,filler,closeoff,context:12,algorithm:histogram,linematch:200,indent-heuristic"

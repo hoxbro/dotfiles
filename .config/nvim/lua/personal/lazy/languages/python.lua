@@ -189,7 +189,7 @@ return {
                 args = function(_, position)
                     local Path = require("plenary.path")
                     local elems = vim.split(position.path, Path.path.sep)
-                    return (vim.tbl_contains(elems, "ui") and { "--ui" }) or {}
+                    return (vim.tbl_contains(elems, "ui") and { "--ui", "-vv" }) or { "-vv" }
                 end,
                 is_test_file = function(file_path)
                     local Path = require("plenary.path")
