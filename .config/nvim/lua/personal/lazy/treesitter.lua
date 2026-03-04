@@ -19,7 +19,7 @@ return {
             require("nvim-treesitter").update()
         end,
         opts_extend = { "install" },
-        opts = { install = { "json", "toml", "xml", "yaml" } },
+        opts = { install = { "json", "toml", "xml", "yaml", "sql" } },
         config = function(_, opts)
             require("nvim-treesitter").setup()
 
