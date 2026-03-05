@@ -118,6 +118,11 @@ return {
 
             local attach_config = {
                 {
+                    name = "Attach: Waiting",
+                    inject = false,
+                    pid = function() return vim.trim(vim.fn.system("lsof -i :5678 -sTCP:LISTEN -t")) end,
+                },
+                {
                     name = "Attach: Process",
                     inject = true,
                     pid = function()
@@ -161,11 +166,6 @@ return {
                         local action = actions[option]
                         return action and action() or vim.trim(option)
                     end,
-                },
-                {
-                    name = "Attach: Waiting",
-                    inject = false,
-                    pid = function() return vim.trim(vim.fn.system("lsof -i :5678 -sTCP:LISTEN -t")) end,
                 },
             }
             local attach_default = {
