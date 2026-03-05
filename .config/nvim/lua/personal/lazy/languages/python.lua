@@ -1,5 +1,11 @@
 local last_pid
 local python_exe = vim.fn.exepath("python")
+local has_debugpy = vim.fn.exepath("debugpy") ~= ""
+
+local debugpy_check = function()
+    if not has_debugpy then vim.notify("`debugpy` is not installed", vim.log.levels.ERROR) end
+    return has_debugpy
+end
 
 return {
     {
@@ -34,13 +40,17 @@ return {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)
             local adapters = {
-                python = {
-                    args = { "-m", "debugpy.adapter" },
-                    command = python_exe,
-                    options = { source_filetype = "python" },
-                    type = "executable",
-                },
+                python = function(callback)
+                    if not debugpy_check() then return end
+                    callback({
+                        args = { "-m", "debugpy.adapter" },
+                        command = python_exe,
+                        options = { source_filetype = "python" },
+                        type = "executable",
+                    })
+                end,
                 ["python-attach"] = function(callback, config)
+                    if not debugpy_check() then return end
                     if config.pid == "" then return end
                     last_pid = config.pid
                     local inject = config.inject
