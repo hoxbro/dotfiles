@@ -1,6 +1,6 @@
 local last_pid
 local python_exe = vim.fn.exepath("python")
-local has_debugpy = vim.fn.exepath("debugpy") ~= ""
+local has_debugpy = vim.fn.executable("debugpy") == 1
 
 local debugpy_check = function()
     if not has_debugpy then vim.notify("`debugpy` is not installed", vim.log.levels.ERROR) end
@@ -194,6 +194,7 @@ return {
         opts = {
             ["neotest-python"] = {
                 dap = { justMyCode = false, console = "integratedTerminal" },
+                runner = "pytest",
                 python = python_exe,
                 -- pytest_discover_instances = true,
                 args = function(_, position)
