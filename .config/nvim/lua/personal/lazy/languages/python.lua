@@ -2,11 +2,6 @@ local last_pid
 local python_exe = vim.fn.exepath("python")
 local has_debugpy = vim.fn.executable("debugpy") == 1
 
-local debugpy_check = function()
-    if not has_debugpy then vim.notify("`debugpy` is not installed", vim.log.levels.ERROR) end
-    return has_debugpy
-end
-
 return {
     {
         "nvim-treesitter/nvim-treesitter",
@@ -41,7 +36,10 @@ return {
         opts = function(_, opts)
             local adapters = {
                 python = function(callback)
-                    if not debugpy_check() then return end
+                    if not has_debugpy then
+                        vim.notify("`debugpy` is not installed", vim.log.levels.ERROR)
+                        return
+                    end
                     callback({
                         args = { "-m", "debugpy.adapter" },
                         command = python_exe,
@@ -50,7 +48,10 @@ return {
                     })
                 end,
                 ["python-attach"] = function(callback, config)
-                    if not debugpy_check() then return end
+                    if not has_debugpy then
+                        vim.notify("`debugpy` is not installed", vim.log.levels.ERROR)
+                        return
+                    end
                     if config.pid == "" then return end
                     last_pid = config.pid
                     local inject = config.inject
