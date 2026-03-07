@@ -14,7 +14,7 @@ local last_dap_config = nil
 return {
     {
         "mfussenegger/nvim-dap",
-        dependencies = { "rcarriga/nvim-dap-ui" },
+        dependencies = { "igorlfs/nvim-dap-view" },
         keys = {
             { "<F2>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
             { "<F3>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
@@ -48,12 +48,6 @@ return {
                     )
                 end,
                 desc = "Debug: Set Breakpoint Condition",
-            },
-            {
-                "<leader>i",
-                ---@diagnostic disable-next-line: missing-fields
-                function() require("dapui").eval(nil, { enter = true }) end,
-                desc = "Debug: Eval var under cursor",
             },
             {
                 "<F9>",
@@ -121,19 +115,9 @@ return {
         end,
     },
     {
-        "rcarriga/nvim-dap-ui",
+        "igorlfs/nvim-dap-view",
         lazy = true,
-        opts = {
-            controls = { enabled = false },
-            layouts = {
-                { elements = { "scopes", "breakpoints", "stacks", "watches" }, size = 40, position = "right" },
-                {
-                    elements = { { id = "console", size = 0.4 }, { id = "repl", size = 0.6 } },
-                    size = 0.25,
-                    position = "bottom",
-                },
-            },
-        },
+        opts = { winbar = { default_section = "repl" }, windows = { terminal = { position = "right" } } },
         dependencies = {
             "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio",
@@ -141,12 +125,12 @@ return {
         },
         config = function(_, opts)
             local dap = require("dap")
-            local dapui = require("dapui")
+            local dapview = require("dap-view")
             local dapvt = require("nvim-dap-virtual-text")
-            dapui.setup(opts)
+            dapview.setup(opts)
 
             local open = function()
-                dapui.open()
+                dapview.open()
                 dapvt.enable()
             end
             dap.listeners.after.event_initialized.dapui_config = open
@@ -158,7 +142,7 @@ return {
             -- Exit DAPUI
             vim.keymap.set("n", "<esc>", function()
                 dap.disconnect()
-                dapui.close()
+                dapview.close(true)
                 dapvt.disable()
             end, { desc = "Debug: Exit" })
         end,
