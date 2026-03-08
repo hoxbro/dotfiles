@@ -41,15 +41,21 @@ bindkey -M emacs '^[[3;5~' kill-word
 bindkey -M viins '^[[3;5~' kill-word
 bindkey -M vicmd '^[[3;5~' kill-word
 
-# [Ctrl-RightArrow] - move forward one word
+# [Ctrl-RightArrow / Ctrl-l] - move forward one word
 bindkey -M emacs '^[[1;5C' forward-word
 bindkey -M viins '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5C' forward-word
+bindkey -M emacs '^l' forward-word
+bindkey -M viins '^l' forward-word
+bindkey -M vicmd '^l' forward-word
 
-# [Ctrl-LeftArrow] - move backward one word
+# [Ctrl-LeftArrow / Ctrl-h] - move backward one word
 bindkey -M emacs '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M vicmd '^[[1;5D' backward-word
+bindkey -M emacs '^h' backward-word
+bindkey -M viins '^h' backward-word
+bindkey -M vicmd '^h' backward-word
 
 # [Shift-Tab] - move through the completion menu backwards
 if [[ -n "${terminfo[kcbt]}" ]]; then

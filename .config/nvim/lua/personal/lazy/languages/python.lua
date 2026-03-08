@@ -1,6 +1,5 @@
 local last_pid
 local python_exe = vim.fn.exepath("python")
-local has_debugpy = vim.fn.executable("debugpy") == 1
 
 return {
     {
@@ -36,7 +35,7 @@ return {
         opts = function(_, opts)
             local adapters = {
                 python = function(callback)
-                    if not has_debugpy then
+                    if vim.fn.executable("debugpy") == 0 then
                         vim.notify("`debugpy` is not installed", vim.log.levels.ERROR)
                         return
                     end
@@ -48,7 +47,7 @@ return {
                     })
                 end,
                 ["python-attach"] = function(callback, config)
-                    if not has_debugpy then
+                    if vim.fn.executable("debugpy") == 0 then
                         vim.notify("`debugpy` is not installed", vim.log.levels.ERROR)
                         return
                     end
