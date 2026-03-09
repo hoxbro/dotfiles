@@ -14,7 +14,11 @@ local last_dap_config = nil
 return {
     {
         "mfussenegger/nvim-dap",
-        dependencies = { "igorlfs/nvim-dap-view" },
+        dependencies = {
+            "igorlfs/nvim-dap-view",
+            "nvim-neotest/nvim-nio",
+            { "theHamsta/nvim-dap-virtual-text", opts = {} },
+        },
         keys = {
             { "<F2>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
             { "<F3>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
@@ -118,11 +122,6 @@ return {
         "igorlfs/nvim-dap-view",
         lazy = true,
         opts = { winbar = { default_section = "repl" }, windows = { terminal = { position = "right" } } },
-        dependencies = {
-            "mfussenegger/nvim-dap",
-            "nvim-neotest/nvim-nio",
-            { "theHamsta/nvim-dap-virtual-text", opts = {} },
-        },
         config = function(_, opts)
             local dap = require("dap")
             local dapview = require("dap-view")
