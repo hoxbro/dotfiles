@@ -6,6 +6,7 @@ has() {
     for cmd in "$@"; do command -v "$cmd" >/dev/null 2>&1 || return 1; done
     return 0
 }
+name="$(uname -n)"
 
 mkdir -p ~/.local/bin
 mkdir -p ~/projects
@@ -66,15 +67,17 @@ if has keyd; then
     sudo systemctl enable --now keyd
 fi
 
-if [[ $(uname -n) == "meshify" ]]; then
+if [[ $name == "meshify" ]]; then
     sudo systemctl enable --now sshd
     if has ufw; then
         sudo ufw allow ssh
     fi
 fi
 
-git -C ~/dotfiles remote remove origin || true
-git -C ~/dotfiles remote add origin git@github.com:hoxbro/dotfiles.git
+if [[ $name == "meshify" || $name == "framework" ]]; then
+    git -C ~/dotfiles remote remove origin || true
+    git -C ~/dotfiles remote add origin git@github.com:hoxbro/dotfiles.git
+fi
 
 git -C ~/dotfiles submodule update --init
 stow -d ~/dotfiles --no-folding -n . 2>&1 |
