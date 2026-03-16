@@ -50,7 +50,7 @@ record_screen() {
 
 select_region() {
     if [[ -f "$REGION_CACHE" ]]; then
-        choice=$(printf '%s\n' "Use Last Region" "Select New Region" | walker --dmenu)
+        choice=$(printf '%s\n' "Select New Region" "Use Last Region" | walker --dmenu)
         case "$choice" in
         "Use Last Region") cat "$REGION_CACHE" ;;
         "Select New Region") slurp | tee "$REGION_CACHE" ;;

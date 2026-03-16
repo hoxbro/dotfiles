@@ -95,11 +95,6 @@ channels = ["conda-forge"]
 dependencies = { uv = "*" }
 exposed = { uv = "uv", uvx = "uvx" }
 
-[envs.awscli]
-channels = ["conda-forge"]
-dependencies = { awscli = "*" }
-exposed = { aws = "aws" }
-
 [envs.prettier]
 channels = ["conda-forge"]
 dependencies = { prettier = "*" }
