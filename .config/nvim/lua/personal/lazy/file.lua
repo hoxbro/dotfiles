@@ -6,7 +6,7 @@ local always_hidden = {
     ".pytest_cache",
     ".ruff_cache",
     ".mypy_cache",
-    "CVS",
+    ".ty_cache",
     "__pycache__",
     "node_modules",
     ".venv",
