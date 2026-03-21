@@ -46,8 +46,8 @@ if has librewolf; then
 fi
 
 if has 1password librewolf; then
-    mkdir -p ~/.librewolf
-    ln -sf ~/.mozilla/native-messaging-hosts ~/.librewolf
+    mkdir -p ~/.config/librewolf/librewolf
+    ln -sf ~/.mozilla/native-messaging-hosts ~/.config/librewolf/librewolf
     sudo mkdir -p /etc/1password
     echo "librewolf" | sudo tee /etc/1password/custom_allowed_browsers
 fi
