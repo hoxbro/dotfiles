@@ -6,6 +6,7 @@ update_dotfiles() {
     git -C ~/dotfiles stash
     git -C ~/dotfiles checkout main
     git -C ~/dotfiles pull
+    git -C ~/dotfiles submodule status | grep -q '^[+-]' && git -C ~/dotfiles submodule update --init --recursive
     if (("$DIRTY" > 0)); then
         git -C ~/dotfiles stash pop
     fi
