@@ -111,7 +111,7 @@ return {
                 grep = { hidden = true, follow = true },
             },
             previewers = {
-                diff = { style = "terminal", cmd = { "diff-so-fancy" } },
+                diff = { style = "terminal", cmd = { "__dsf" } },
             },
         },
         input = { win = { row = 10 } },
