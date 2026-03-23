@@ -67,7 +67,7 @@ zsh-defer source ~/.config/zsh/python.zsh
 export HOLOVIZ_REP=~/projects/holoviz/repos/
 export HOLOVIZ_DEV=~/projects/holoviz/
 alias panel-kill='kill $(lsof -i :5006 -sTCP:LISTEN -t)'
-zsh-defer source ~/projects/holoviz-tools/holoviz.zsh
+zsh-defer source $HOLOVIZ_REP/holoviz-tools/holoviz.zsh
 
 # Apps
 __zoxide() { eval "$(zoxide init zsh)" && unset -f __zoxide }; zsh-defer __zoxide
