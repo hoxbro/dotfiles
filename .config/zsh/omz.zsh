@@ -76,5 +76,9 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey '^X' edit-command-line
 
+_load-gh-token() { export GITHUB_TOKEN=$(pass show gh-token); zle reset-prompt }
+zle -N _load-gh-token
+bindkey '^G' _load-gh-token
+
 setopt autocd
 setopt NO_GLOB

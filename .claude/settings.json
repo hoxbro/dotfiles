@@ -3,7 +3,12 @@
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0"
   },
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Write(/tmp/**)",
+      "Write(/private/tmp/**)",
+      "Edit(/tmp/**)",
+      "Edit(/private/tmp/**)"
+    ],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
