@@ -1,3 +1,5 @@
+local current_cli = "opencode"
+
 return {
     {
         "zbirenbaum/copilot.lua",
@@ -34,13 +36,20 @@ return {
         opts = { cli = { mux = { backend = "tmux", enabled = true } } },
         keys = {
             {
-                "<leader>ai",
-                function() print("🤖") end,
-                desc = "Start AI",
+                "<leader>as",
+                function()
+                    vim.ui.select({ "opencode", "claude" }, {
+                        prompt = "Select AI CLI",
+                        format_item = function(item) return item == current_cli and item .. " (current)" or item end,
+                    }, function(choice)
+                        if choice then current_cli = choice end
+                    end)
+                end,
+                desc = "Select AI CLI",
             },
             {
                 "<leader>aa",
-                function() require("sidekick.cli").toggle({ name = "claude", focus = true }) end,
+                function() require("sidekick.cli").toggle({ name = current_cli, focus = true }) end,
                 desc = "Sidekick Toggle CLI",
             },
             {
@@ -50,24 +59,24 @@ return {
             },
             {
                 "<leader>at",
-                function() require("sidekick.cli").send({ name = "claude", msg = "{this}" }) end,
+                function() require("sidekick.cli").send({ name = current_cli, msg = "{this}" }) end,
                 mode = { "x", "n" },
                 desc = "Send This",
             },
             {
                 "<leader>af",
-                function() require("sidekick.cli").send({ name = "claude", msg = "{file}" }) end,
+                function() require("sidekick.cli").send({ name = current_cli, msg = "{file}" }) end,
                 desc = "Send File",
             },
             {
                 "<leader>av",
-                function() require("sidekick.cli").send({ name = "claude", msg = "{selection}" }) end,
+                function() require("sidekick.cli").send({ name = current_cli, msg = "{selection}" }) end,
                 mode = { "x" },
                 desc = "Send Visual Selection",
             },
             {
                 "<leader>ap",
-                function() require("sidekick.cli").prompt({ name = "claude" }) end,
+                function() require("sidekick.cli").prompt({ name = current_cli }) end,
                 mode = { "n", "x" },
                 desc = "Sidekick Select Prompt",
             },
