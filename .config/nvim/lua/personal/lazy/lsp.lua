@@ -5,7 +5,6 @@ local on_attach = function(client, bufnr)
 
     map("n", "<leader>cr", vim.lsp.buf.rename, "Rename Variable")
     map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
-    map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
     map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature Help")
 
     local sp = require("snacks").picker

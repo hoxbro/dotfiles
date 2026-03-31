@@ -129,6 +129,11 @@ end
 
 vim.api.nvim_create_user_command("PytestQuickfix", pytest_quicklist, {})
 
+vim.api.nvim_create_user_command(
+    "TermHl",
+    function() vim.api.nvim_open_term(0, {}) end,
+    { desc = "Highlights ANSI termcodes in curbuf" }
+)
 -- Because I'm stupid
 local typos = { "W", "Wq", "WQ", "Wqa", "WQa", "WQA", "WqA", "Q", "Qa", "QA", "Wa", "WA" }
 for _, cmd in ipairs(typos) do

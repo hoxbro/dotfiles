@@ -22,7 +22,6 @@ vim.o.signcolumn = "yes"
 vim.o.isfname = vim.o.isfname .. ",@-@"
 
 vim.o.incsearch = true
-vim.o.termguicolors = true
 vim.o.updatetime = 50
 
 vim.o.showmode = false
@@ -32,7 +31,7 @@ vim.o.iskeyword = vim.o.iskeyword .. ",-"
 vim.o.formatoptions = vim.o.formatoptions .. "crq"
 
 vim.o.fillchars = "diff:╱"
-vim.o.diffopt = "internal,filler,closeoff,context:12,algorithm:histogram,linematch:200,indent-heuristic"
+vim.o.diffopt = "internal,filler,closeoff,context:12,algorithm:histogram,linematch:200,indent-heuristic,inline:char"
 
 vim.diagnostic.config({
     signs = {
@@ -47,3 +46,4 @@ vim.diagnostic.config({
     virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 vim.treesitter.language.register("python", "pyodide")
+vim.lsp.document_color.enable(true, nil, { style = "virtual" })

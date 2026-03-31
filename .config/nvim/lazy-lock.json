@@ -45,7 +45,6 @@
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "types-busted": { "branch": "main", "commit": "5ed85d0e016a5eb5eca097aa52905eedf1b180f1" },
   "types-luassert": { "branch": "main", "commit": "d3528bb679302cbfdedefabb37064515ab95f7b9" },
-  "undotree": { "branch": "master", "commit": "6fa6b57cda8459e1e4b2ca34df702f55242f4e4d" },
   "vim-fugitive": { "branch": "master", "commit": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0" },
   "vim-sleuth": { "branch": "master", "commit": "be69bff86754b1aa5adcbb527d7fcd1635a84080" }
 }

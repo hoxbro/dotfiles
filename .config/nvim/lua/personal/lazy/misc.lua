@@ -50,11 +50,6 @@ return {
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         opts = { mappings = { highlight = "" } },
     },
-    {
-        "mbbill/undotree",
-        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-        keys = { { "<leader>u", function() vim.cmd.UndotreeToggle() end, desc = "Undotree" } },
-    },
     { "laytan/cloak.nvim", event = { "BufReadPre" }, opts = {} },
     "lewis6991/fileline.nvim",
 }

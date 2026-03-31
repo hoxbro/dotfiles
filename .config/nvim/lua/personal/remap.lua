@@ -74,6 +74,13 @@ vim.keymap.set(
 )
 vim.keymap.set("n", "<leader>ci", require("personal.util.virtual_text").virtual_to_inline_text)
 
+-- Built-ins
+vim.keymap.set("n", "<leader>cp", vim.lsp.document_color.color_presentation, { desc = "Color Presentation" })
+vim.keymap.set("n", "<leader>u", function()
+    vim.cmd.packadd("nvim.undotree")
+    vim.cmd.Undotree()
+end, { desc = "Undotree" })
+
 -- Advanced keymaps
 vim.keymap.set(
     "n",
