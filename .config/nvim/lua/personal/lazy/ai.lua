@@ -36,6 +36,11 @@ return {
         opts = { cli = { mux = { backend = "tmux", enabled = true } } },
         keys = {
             {
+                "<leader>ai",
+                function() print("🤖") end,
+                desc = "Start AI",
+            },
+            {
                 "<leader>as",
                 function()
                     vim.ui.select({ "opencode", "claude" }, {

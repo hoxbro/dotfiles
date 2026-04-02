@@ -78,7 +78,9 @@ vim.keymap.set("n", "<leader>ci", require("personal.util.virtual_text").virtual_
 vim.keymap.set("n", "<leader>cp", vim.lsp.document_color.color_presentation, { desc = "Color Presentation" })
 vim.keymap.set("n", "<leader>u", function()
     vim.cmd.packadd("nvim.undotree")
-    vim.cmd.Undotree()
+    require("undotree").open({
+        command = math.floor(vim.api.nvim_win_get_width(0) / 6) .. "vnew",
+    })
 end, { desc = "Undotree" })
 
 -- Advanced keymaps
