@@ -8,6 +8,10 @@ PATH="$PIXI_HOME/bin:$PATH"
 
 if [ ! -d "$PIXI_HOME" ]; then
     curl -fsSL https://pixi.sh/install.sh | zsh
+    if [[ $(uname) == "Darwin" ]]; then
+        rm -rf $PIXI_HOME/manifests
+        ln -sf ~/.config/pixi/manifests $PIXI_HOME/manifests
+    fi
 fi
 
 pixi global sync

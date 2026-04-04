@@ -35,7 +35,7 @@ local astral_quicklist = function(command, opts)
     })
 
     if vim.fn.match(output[1] or "", "All checks passed!") ~= -1 then
-        -- Just print the output if all checks passed
+        if vim.fn.getqflist({ title = 0 }).title == command then vim.cmd("cclose") end
         print(table.concat(output, "\n"))
     else
         -- Load output into quickfix list
@@ -51,7 +51,7 @@ local astral_quicklist = function(command, opts)
                 })
             end
         end
-        vim.fn.setqflist({}, " ", { title = "Ruff", items = qf_entries })
+        vim.fn.setqflist({}, " ", { title = command, items = qf_entries })
         vim.cmd("copen")
         vim.cmd("cfirst")
     end
