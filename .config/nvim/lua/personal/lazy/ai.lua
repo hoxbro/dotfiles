@@ -1,4 +1,4 @@
-local current_cli = "opencode"
+local current_cli = vim.env.AI_CLI or "opencode"
 
 return {
     {

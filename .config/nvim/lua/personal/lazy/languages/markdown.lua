@@ -11,7 +11,7 @@ return {
         "neovim/nvim-lspconfig",
         opts = {
             marksman = { root_markers = { ".marksman.toml", ".git" } },
-            harper_ls = { filetypes = { "markdown" } },
+            harper_ls = { filetypes = { "markdown", "gitcommit" } },
         },
     },
     {
