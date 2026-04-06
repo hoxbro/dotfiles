@@ -1,0 +1,201 @@
+#!/usr/bin/env python3
+
+import os
+import sqlite3
+import sys
+
+HOME = os.path.expanduser("~")
+DB = os.path.join(
+    os.environ.get("XDG_DATA_HOME", os.path.join(HOME, ".local", "share")), "ep", "profiles.db"
+)
+
+
+def get_db():
+    db = sqlite3.connect(DB)
+    db.row_factory = sqlite3.Row
+    return db
+
+
+def init():
+    if os.path.exists(DB):
+        return
+    os.makedirs(os.path.dirname(DB), exist_ok=True)
+    with get_db() as db:
+        db.executescript("""
+            CREATE TABLE paths (
+                id   INTEGER PRIMARY KEY,
+                path TEXT NOT NULL UNIQUE
+            );
+            CREATE TABLE env_vars (
+                path  TEXT NOT NULL,
+                key   TEXT NOT NULL,
+                value TEXT NOT NULL,
+                PRIMARY KEY (path, key)
+            );
+        """)
+
+
+def next_id(db):
+    return db.execute(
+        "SELECT MIN(id) FROM ( SELECT 1 AS id UNION ALL SELECT id+1 FROM paths) WHERE id NOT IN (SELECT id FROM paths)"
+    ).fetchone()[0]
+
+
+def register(db, path):
+    db.execute("INSERT OR IGNORE INTO paths(id, path) VALUES(?, ?)", (next_id(db), path))
+
+
+def put(db, path, key, value):
+    db.execute("INSERT OR REPLACE INTO env_vars VALUES(?, ?, ?)", (path, key, value))
+
+
+def resolve_path(db, arg):
+    if arg and arg.isdigit():
+        row = db.execute("SELECT path FROM paths WHERE id=?", (int(arg),)).fetchone()
+        if not row:
+            print(f"ep: no path with id {arg}", file=sys.stderr)
+            sys.exit(1)
+        return row["path"]
+    return os.path.abspath(arg) if arg else os.getcwd()
+
+
+def traverse(db, path, fmt):
+    seen = {}
+    while True:
+        rows = db.execute(
+            "SELECT key, value FROM env_vars WHERE path=? ORDER BY key", (path,)
+        ).fetchall()
+        for row in rows:
+            if row["key"] not in seen:
+                seen[row["key"]] = row["value"]
+        if path == HOME or path == "/":
+            break
+        path = os.path.dirname(path)
+    for key, value in sorted(seen.items()):
+        print(f"{key}={value}")
+
+
+def cmd_get(db, args):
+    arg = args[0] if args else None
+    path = resolve_path(db, arg)
+    if arg and arg.isdigit():
+        for row in db.execute(
+            "SELECT key, value FROM env_vars WHERE path=? ORDER BY key", (path,)
+        ):
+            print(f"{row['key']}={row['value']}")
+    else:
+        traverse(db, path, "raw")
+
+
+def cmd_set(db, args):
+    if len(args) < 2:
+        print("Usage: epp set <KEY> <value>", file=sys.stderr)
+        sys.exit(1)
+    cwd = os.getcwd()
+    register(db, cwd)
+    put(db, cwd, args[0], args[1])
+
+
+def cmd_conda(db, args):
+    if not args:
+        print("Usage: epp conda <env_name>", file=sys.stderr)
+        sys.exit(1)
+    cwd = os.getcwd()
+    register(db, cwd)
+    put(db, cwd, "CONDA_DEFAULT_ENV", args[0])
+    put(db, cwd, "VIRTUAL_ENV", "")
+
+
+def cmd_venv(db, args):
+    cwd = os.getcwd()
+    venv = os.path.abspath(args[0]) if args else os.path.join(cwd, ".venv")
+    register(db, cwd)
+    put(db, cwd, "VIRTUAL_ENV", venv)
+    put(db, cwd, "CONDA_DEFAULT_ENV", "")
+
+
+def cmd_unset(db, args):
+    if not args:
+        print("Usage: epp unset <KEY>", file=sys.stderr)
+        sys.exit(1)
+    db.execute("DELETE FROM env_vars WHERE path=? AND key=?", (os.getcwd(), args[0]))
+
+
+def cmd_rm(db, args):
+    path = resolve_path(db, args[0] if args else None)
+    db.execute("DELETE FROM env_vars WHERE path=?", (path,))
+    db.execute("DELETE FROM paths WHERE path=?", (path,))
+
+
+def cmd_paths(db, _):
+    rows = db.execute("SELECT id, path FROM paths ORDER BY id").fetchall()
+    if not rows:
+        return
+    w_id = max(max(len(str(r["id"])) for r in rows), 2)
+    w_path = max(max(len(r["path"]) for r in rows), 4)
+    print(f"┌{'─' * (w_id + 2)}┬{'─' * (w_path + 2)}┐")
+    print(f"│ {'ID':<{w_id}} │ {'PATH':<{w_path}} │")
+    print(f"├{'─' * (w_id + 2)}┼{'─' * (w_path + 2)}┤")
+    for row in rows:
+        print(f"│ {row['id']:<{w_id}} │ {row['path']:<{w_path}} │")
+    print(f"└{'─' * (w_id + 2)}┴{'─' * (w_path + 2)}┘")
+
+
+def cmd_export(db, args):
+    envfile = os.path.join(os.getcwd(), ".env")
+    if os.path.exists(envfile):
+        print(f"ep: {envfile} already exists", file=sys.stderr)
+        sys.exit(1)
+    arg = args[0] if args else None
+    path = resolve_path(db, arg)
+    seen = {}
+    while True:
+        for row in db.execute(
+            "SELECT key, value FROM env_vars WHERE path=? ORDER BY key", (path,)
+        ):
+            if row["key"] not in seen:
+                seen[row["key"]] = row["value"]
+        if path == HOME or path == "/":
+            break
+        path = os.path.dirname(path)
+    if not seen:
+        print("ep: no vars found", file=sys.stderr)
+        sys.exit(1)
+    with open(envfile, "w") as f:
+        f.write("\n".join(f"{k}={v}" for k, v in sorted(seen.items())) + "\n")
+    print(f"ep: wrote {envfile}")
+
+
+COMMANDS = {
+    "get": cmd_get,
+    "export": cmd_export,
+    "conda": cmd_conda,
+    "venv": cmd_venv,
+    "set": cmd_set,
+    "unset": cmd_unset,
+    "rm": cmd_rm,
+    "paths": cmd_paths,
+}
+
+USAGE = """\
+Usage: e <command> [args]
+
+Commands:
+  get [path|id]         print export lines, traverses up to $HOME
+  export [path|id]      write KEY=VALUE to .env in CWD (fails if exists)
+  conda <name>          set CONDA_DEFAULT_ENV for CWD (clears VIRTUAL_ENV)
+  venv [path]           set VIRTUAL_ENV for CWD (clears CONDA_DEFAULT_ENV)
+  set <KEY> <value>     set arbitrary env var for CWD
+  unset <KEY>           remove a key for CWD
+  rm [path|id]          remove all vars for a path (default CWD)
+  paths                 list all paths with their ids
+"""
+
+if __name__ == "__main__":
+    init()
+    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    if cmd not in COMMANDS:
+        print(USAGE, end="", file=sys.stderr)
+        sys.exit(1)
+    with get_db() as db:
+        COMMANDS[cmd](db, sys.argv[2:])

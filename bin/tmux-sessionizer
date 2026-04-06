@@ -16,23 +16,12 @@ fi
 
 selected_name=$(basename "$selected" | tr . _)
 
+# [[ -z "$TMUX" ]] &&
 unset CONDA_DEFAULT_ENV VIRTUAL_ENV
 args=(-c "$selected")
-if [ -f "$selected/.cenv" ]; then
-    env="$(head -n 1 "$selected/.cenv")"
-    if [[ $env == "venv" ]]; then
-        args+=(-e "VIRTUAL_ENV=$selected/.venv")
-    else
-        args+=(-e "CONDA_DEFAULT_ENV=$env")
-    fi
-    while IFS= read -r line; do
-        [[ -n "$line" && ! "$line" =~ ^# ]] && args+=(-e "$line")
-    done < <(tail -n +2 "$selected/.cenv")
-elif [[ "$selected" == *holoviz* ]]; then
-    args+=(-e "CONDA_DEFAULT_ENV=holoviz")
-else
-    args+=(-e "CONDA_DEFAULT_ENV=base")
-fi
+while IFS='=' read -r key value; do
+    args+=(-e "$key=$value")
+done < <(command e get "$selected" 2>/dev/null)
 
 if [[ ! $(pgrep tmux) ]]; then
     tmux new-session -s "$selected_name" "${args[@]}"
