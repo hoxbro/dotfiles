@@ -64,8 +64,8 @@ va() {
   else
     local root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     if [ ! -f "$root/.venv/pyvenv.cfg" ]; then
-        echo "Virtual environment not found"
-        return 1
+      echo "Virtual environment not found"
+      return 1
     fi
     cad
     export VIRTUAL_ENV="$root/.venv"
@@ -81,7 +81,6 @@ vad() {
   unset VIRTUAL_ENV
   zsh-defer tmux setenv -u VIRTUAL_ENV
 }
-
 
 if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
   ca "$CONDA_DEFAULT_ENV"
@@ -134,7 +133,7 @@ cer() {
   set -m
 }
 
-cel() { mamba env list }
+cel() { mamba env list; }
 
 __toggle_pdb() {
   [[ -z "$BUFFER" ]] && return

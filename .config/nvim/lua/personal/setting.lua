@@ -46,4 +46,5 @@ vim.diagnostic.config({
     virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 vim.treesitter.language.register("python", "pyodide")
+vim.treesitter.language.register("lua", "nvim-undotree")
 vim.lsp.document_color.enable(true, nil, { style = "virtual" })

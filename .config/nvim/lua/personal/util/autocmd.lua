@@ -11,13 +11,6 @@ local function run_cmd(pattern, command)
     })
 end
 
--- Disable folding
-vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("nofold", { clear = true }),
-    pattern = "nvim-undotree",
-    callback = function() vim.opt_local.foldenable = false end,
-})
-
 run_cmd("python", "!python")
 run_cmd("sh", "!bash")
 run_cmd("javascript", "!node")
