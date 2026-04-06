@@ -129,6 +129,66 @@ end
 
 vim.api.nvim_create_user_command("PytestQuickfix", pytest_quicklist, {})
 
+-- Explain diagnostic rule in a hover float (ruff / ty)
+local explain_open_float = function(cmd, subcmd, rule)
+    local args = vim.list_extend({ vim.fn.exepath(cmd) }, subcmd)
+    table.insert(args, rule)
+    local output = vim.fn.systemlist(args)
+    if vim.v.shell_error ~= 0 or #output == 0 then
+        vim.notify(cmd .. " " .. subcmd .. " " .. rule .. " failed", vim.log.levels.ERROR)
+        return
+    end
+    local _, winid = vim.lsp.util.open_floating_preview(output, "markdown", {
+        border = "rounded",
+        title = " " .. cmd .. " " .. rule .. " ",
+        title_pos = "center",
+        max_width = 80,
+        max_height = 30,
+        focus = true,
+    })
+    vim.api.nvim_set_current_win(winid)
+end
+
+local explain_cmd = function(tool, subcmd)
+    return function()
+        local lnum = vim.fn.line(".") - 1
+        local diagnostics = vim.diagnostic.get(0, { lnum = lnum })
+
+        local rules = {}
+        local seen = {}
+        for _, d in ipairs(diagnostics) do
+            if d.source and d.source:lower() == tool and d.code and not seen[d.code] then
+                seen[d.code] = true
+                table.insert(rules, { code = d.code, message = d.message })
+            end
+        end
+
+        if #rules == 0 then
+            vim.notify("No " .. tool .. " diagnostic found on current line", vim.log.levels.WARN)
+        elseif #rules == 1 then
+            explain_open_float(tool, subcmd, rules[1].code)
+        else
+            vim.ui.select(rules, {
+                prompt = tool .. " rule:",
+                format_item = function(item) return item.code .. ": " .. item.message end,
+            }, function(choice)
+                if choice then explain_open_float(tool, subcmd, choice.code) end
+            end)
+        end
+    end
+end
+
+vim.api.nvim_create_user_command(
+    "RuffExplain",
+    explain_cmd("ruff", { "rule" }),
+    { desc = "Show ruff rule explanation for diagnostic on current line" }
+)
+vim.api.nvim_create_user_command(
+    "TyExplain",
+    explain_cmd("ty", { "explain", "rule" }),
+    { desc = "Show ty rule explanation for diagnostic on current line" }
+)
+
 vim.api.nvim_create_user_command(
     "TermHl",
     function() vim.api.nvim_open_term(0, {}) end,
