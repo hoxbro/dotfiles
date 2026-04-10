@@ -143,3 +143,5 @@ for _, cmd in ipairs(typos) do
         { bang = true }
     )
 end
+
+vim.api.nvim_create_user_command("LspInfo", function() vim.cmd("checkhealth vim.lsp") end, {})

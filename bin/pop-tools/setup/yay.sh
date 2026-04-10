@@ -21,7 +21,7 @@ PACKAGES=(
     hunspell hunspell-en_US hunspell-da
 
     # Launcher
-    walker-bin elephant elephant-desktopapplications elephant-clipboard elephant-calc
+    walker-bin elephant-bin elephant-desktopapplications-bin elephant-clipboard-bin elephant-calc-bin
 
     # Screenshot
     slurp grim wf-recorder
