@@ -65,7 +65,7 @@ vim.keymap.set("v", "<leader>r", function()
     vim.api.nvim_input("<Esc>:" .. cmd .. pattern .. "/" .. pattern .. flags .. string.rep("<Left>", #flags))
 end, { desc = "Find And Replace Highlighted Text" })
 
--- Inlay Hints
+-- Language Server
 vim.keymap.set(
     "n",
     "<leader>ch",
@@ -73,6 +73,12 @@ vim.keymap.set(
     { desc = "Inlay Hints" }
 )
 vim.keymap.set("n", "<leader>ci", require("personal.util.virtual_text").virtual_to_inline_text)
+vim.keymap.set(
+    "n",
+    "<leader>cl",
+    function() vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled()) end,
+    { desc = "CodeLens" }
+)
 
 -- Built-ins
 vim.keymap.set("n", "<leader>cp", vim.lsp.document_color.color_presentation, { desc = "Color Presentation" })

@@ -47,7 +47,7 @@
 ; Language based on variables endings
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(js|JS|esm|ESM)$")
+    left: (identifier) @_left (#match? @_left "_(js|JS|esm|ESM)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "javascript")
@@ -57,7 +57,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(css|CSS|stylesheet|STYLESHEET)$")
+    left: (identifier) @_left (#match? @_left "_(css|CSS|stylesheet|STYLESHEET)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "css")
@@ -67,7 +67,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(sql|SQL)$")
+    left: (identifier) @_left (#match? @_left "_(sql|SQL)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "sql")
@@ -77,7 +77,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(json|JSON)$")
+    left: (identifier) @_left (#match? @_left "_(json|JSON)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "json")
@@ -87,7 +87,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(html|HTML)$")
+    left: (identifier) @_left (#match? @_left "_(html|HTML)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "html")
@@ -107,7 +107,7 @@
 
 (expression_statement
   (assignment
-    left: (identifier) @_left (#match? @_left "(py|PY)$")
+    left: (identifier) @_left (#match? @_left "_(py|PY)$")
     right: (string
       (string_content) @injection.content
       (#set! injection.language "python")
