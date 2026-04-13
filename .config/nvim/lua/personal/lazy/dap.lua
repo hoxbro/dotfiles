@@ -17,7 +17,6 @@ return {
         dependencies = {
             "igorlfs/nvim-dap-view",
             "nvim-neotest/nvim-nio",
-            { "theHamsta/nvim-dap-virtual-text", opts = {} },
         },
         keys = {
             { "<F2>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
@@ -52,6 +51,11 @@ return {
                     )
                 end,
                 desc = "Debug: Set Breakpoint Condition",
+            },
+            {
+                "<leader>i",
+                function() require("dap.ui.widgets").hover() end,
+                desc = "Debug: Eval var under cursor",
             },
             {
                 "<F9>",
@@ -121,20 +125,19 @@ return {
     {
         "igorlfs/nvim-dap-view",
         lazy = true,
-        opts = { winbar = { default_section = "repl" }, windows = { terminal = { position = "right" } } },
+        opts = {
+            winbar = { default_section = "repl" },
+            windows = { terminal = { position = "right" } },
+            virtual_text = { enabled = true },
+        },
         config = function(_, opts)
             local dap = require("dap")
             local dapview = require("dap-view")
-            local dapvt = require("nvim-dap-virtual-text")
             dapview.setup(opts)
 
-            local open = function()
-                dapview.open()
-                dapvt.enable()
-            end
-            dap.listeners.after.event_initialized.dapui_config = open
-            dap.listeners.before.attach.dapui_config = open
-            dap.listeners.before.launch.dapui_config = open
+            dap.listeners.after.event_initialized.dapui_config = dapview.open
+            dap.listeners.before.attach.dapui_config = dapview.open
+            dap.listeners.before.launch.dapui_config = dapview.open
             dap.listeners.before.event_terminated.dapui_config = function() vim.notify("DAP Terminated") end
             dap.listeners.before.event_exited.dapui_config = function() vim.notify("DAP Exited") end
 
@@ -142,7 +145,6 @@ return {
             vim.keymap.set("n", "<esc>", function()
                 dap.disconnect()
                 dapview.close(true)
-                dapvt.disable()
             end, { desc = "Debug: Exit" })
         end,
     },
