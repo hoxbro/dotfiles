@@ -16,6 +16,10 @@ disabled = true
 untracked = ''
 ignore_submodules = true
 
+[git_commit]
+tag_disabled = false
+tag_symbol = " | "
+
 [aws]
 disabled = true
 

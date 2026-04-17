@@ -16,6 +16,12 @@ local on_attach = function(client, bufnr)
     map("n", "<leader>ws", sp.lsp_workspace_symbols, "Workspace Symbols")
 end
 
+-- Not entirely sure why this is needed for lsp restart v0.12
+vim.api.nvim_create_autocmd("LspDetach", {
+    group = vim.api.nvim_create_augroup("lsp-diagnostic", { clear = true }),
+    callback = function(args) vim.diagnostic.reset(nil, args.buf) end,
+})
+
 return {
     {
         "neovim/nvim-lspconfig",

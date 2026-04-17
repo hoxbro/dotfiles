@@ -15,6 +15,19 @@
   )
 )
 
+; typing.cast first
+(call
+  function: (identifier) @_function (#match? @_function "^cast$")
+  arguments: (argument_list
+    .
+    (string
+      (string_content) @injection.content
+      (#set! injection.language "python")
+    )
+  )
+)
+
+
 ; CustomJS(code=...) from Bokeh
 (call
   function: (identifier) @_function (#match? @_function "^CustomJS[a-zA-Z]*$")
