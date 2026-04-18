@@ -10,7 +10,7 @@ repos:
       - id: check-json
       - id: detect-private-key
   - repo: https://github.com/crate-ci/typos
-    rev: 02ea592e44b3a53c302f697cddca7641cd051c3d # frozen: v1.45.0
+    rev: cf5f1c29a8ac336af8568821ec41919923b05a83 # frozen: v1.45.1
     hooks:
       - id: typos
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -20,7 +20,7 @@ repos:
         args: ["--exclude=SC1091,SC2181"]
         exclude: (zshrc|zsh)$
   - repo: https://github.com/hoxbro/prettier-pre-commit
-    rev: 86ff8f664c20f581d71c90a6ea0073c1bcafe1e5 # frozen: v3.8.1
+    rev: fb4fd26ea947350ec231580772317ec7261c8e21 # frozen: v3.8.3
     hooks:
       - id: prettier
         types_or:
