@@ -1,22 +1,11 @@
 local current_cli = vim.env.AI_CLI or "opencode"
 
+vim.lsp.config("copilot", { settings = { telemetry = { telemetryLevel = "off" } } })
+
 return {
     {
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        -- event = "InsertEnter",
-        dependencies = { "fang2hou/blink-copilot" },
-        opts = {
-            panel = { enabled = false },
-            suggestion = { enabled = false },
-            filetypes = {
-                yaml = true,
-                toml = true,
-                markdown = true,
-                gitcommit = true,
-                gitrebase = true,
-            },
-        },
+        "williamboman/mason.nvim",
+        opts = { install = { "copilot-language-server" } },
     },
     {
         "saghen/blink.cmp",
@@ -32,7 +21,7 @@ return {
     {
         "folke/sidekick.nvim",
         lazy = true,
-        dependencies = { "zbirenbaum/copilot.lua" },
+        dependencies = { "fang2hou/blink-copilot" },
         opts = { cli = { mux = { backend = "tmux", enabled = true } } },
         keys = {
             {
@@ -97,6 +86,7 @@ return {
             },
         },
         config = function(_, opts)
+            vim.lsp.enable("copilot")
             local sidekick = require("sidekick")
             sidekick.setup(opts)
 
