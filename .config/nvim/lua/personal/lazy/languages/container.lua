@@ -16,4 +16,8 @@ return {
             install = { "docker-compose-language-service", "dockerfile-language-server" },
         },
     },
+    {
+        "neovim/nvim-lspconfig",
+        opts = { docker_compose_language_service = {}, dockerls = {} },
+    },
 }

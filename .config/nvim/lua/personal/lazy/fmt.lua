@@ -13,7 +13,11 @@ return {
     dependencies = {
         {
             "williamboman/mason.nvim",
-            opts = { install = { "stylua", "ruff", "prettierd", "shfmt", "eslint_d", "taplo" } },
+            opts = { install = { "eslint_d", "prettierd", "ruff", "shfmt", "stylua", "taplo" } },
+        },
+        {
+            "neovim/nvim-lspconfig",
+            opts = { ruff = {}, stylua = {}, taplo = {} },
         },
     },
     opts = {

@@ -5,6 +5,10 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "html-lsp", "css-lsp" } },
+        opts = { install = { "css-lsp", "html-lsp" } },
+    },
+    {
+        "neovim/nvim-lspconfig",
+        opts = { cssls = {}, html = {} },
     },
 }

@@ -1,7 +1,5 @@
 local current_cli = vim.env.AI_CLI or "opencode"
 
-vim.lsp.config("copilot", { settings = { telemetry = { telemetryLevel = "off" } } })
-
 return {
     {
         "williamboman/mason.nvim",
@@ -86,7 +84,9 @@ return {
             },
         },
         config = function(_, opts)
+            vim.lsp.config("copilot", { settings = { telemetry = { telemetryLevel = "off" } } })
             vim.lsp.enable("copilot")
+
             local sidekick = require("sidekick")
             sidekick.setup(opts)
 
