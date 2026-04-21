@@ -28,6 +28,21 @@ local function harpoon_list()
     end
 end
 
+vim.api.nvim_create_user_command("HarpoonTransfer", function(opts)
+    require("harpoon")
+    local source = _G.__harpoon:list(opts.args)
+    local target = harpoon_list()
+    for _, item in ipairs(source.items) do
+        target:add(item)
+    end
+end, {
+    nargs = 1,
+    complete = function(arglead)
+        local branches = vim.fn.systemlist("git branch --format='%(refname:short)'")
+        return vim.tbl_filter(function(b) return b:find(arglead, 1, true) end, branches)
+    end,
+})
+
 return {
     {
         "theprimeagen/harpoon",
