@@ -77,3 +77,9 @@
     workers = 0
 [log]
     follow = true
+[merge]
+    tool = codediff
+[mergetool]
+    keepBackup = false
+[mergetool "codediff"]
+    cmd = nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""
