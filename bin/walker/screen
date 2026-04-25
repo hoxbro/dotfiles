@@ -9,7 +9,7 @@ SCREENSHOT_FILE="$SCREEN_DIR/screenshot-$DATE.png"
 SCREENRECORD_FILE="$SCREEN_DIR/screenrecord-$DATE.mp4"
 REGION_CACHE="/tmp/walker-screen-region"
 
-if pgrep -f "wf-recorder" >/dev/null; then
+if pgrep -x wf-recorder >/dev/null; then
     pkill -SIGINT -f "wf-recorder"
     (
         action=$(notify-send "Screen" "Saved screen recording" --action="default=Open Folder" --wait 2>/dev/null)
