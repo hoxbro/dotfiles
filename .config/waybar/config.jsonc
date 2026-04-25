@@ -3,7 +3,7 @@
   "position": "top",
   "height": 26,
   "spacing": 5,
-  "modules-left": ["hyprland/workspaces"],
+  "modules-left": ["hyprland/workspaces", "custom/uptime"],
   "modules-center": [],
   "modules-right": [
     "custom/recording",
@@ -105,6 +105,14 @@
       "activated": "\udb80\udd76",
       "deactivated": "\udb81\udeca",
     },
+  },
+
+  "custom/uptime": {
+    "exec": "~/.config/waybar/scripts/uptime-status.sh",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true,
+    "format": "| {}",
   },
 
   "custom/recording": {

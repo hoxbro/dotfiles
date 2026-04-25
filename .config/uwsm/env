@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+date "+%H:%M" >/tmp/last-unlock
 export BROWSER=librewolf
 
 case "$(uname -n)" in
