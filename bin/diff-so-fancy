@@ -812,6 +812,14 @@ sub do_dsf_stuff {
 			# Remove the correct number of leading " " or "+" or "-"
 			if ($strip_leading_indicators) {
 				$line = strip_leading_indicators($line,$columns_to_remove);
+			# START PATCH
+			} elsif ($line =~ /^\+/) {
+				my $add_line_color = get_config_color("add_line");
+				$line = $add_line_color . insert_reset_at_line_end($line);
+			} elsif ($line =~ /^-/) {
+				my $remove_line_color = get_config_color("remove_line");
+				$line = $remove_line_color . insert_reset_at_line_end($line);
+			# END PATCH
 			}
 			print $line;
 		}
