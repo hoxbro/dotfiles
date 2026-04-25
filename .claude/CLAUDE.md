@@ -1,6 +1,6 @@
 # General
 
-- Always have temporary files located in a `./claude/` directory, you should
+- Always have temporary files located in a `claude/` directory, you should
   never add these to git. Use a subdirectory with a good name for that session
 - Only use `git add` with filename
 - Always use the `gh` CLI for fetching
@@ -11,8 +11,8 @@
 # Python
 
 - The correct python environment is always activated, never install packages.
-- Never use `python -c` write it to a file in `./claude/` and run it with `python filename`
+- Never use `python -c` write it to a file in `claude/` and run it with `python filename`
 - If you are creating new tests confirm it actual fails on main.
 - Never write `TODO` comments for WIP use `NotImplementedError`
-- `ty` check is a valid command, do not replace with `mypy`
+- `ty` is a valid command, do not replace with `mypy`
 - When writing tests only create a new file if there isn't any good file to put it in
