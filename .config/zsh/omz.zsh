@@ -82,3 +82,4 @@ bindkey '^G' _load-gh-token
 
 setopt autocd
 setopt NO_GLOB
+rm() { emulate -L zsh; command rm ${(e)~@} }
