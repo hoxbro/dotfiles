@@ -17,7 +17,7 @@ return {
         },
         {
             "neovim/nvim-lspconfig",
-            opts = { ruff = {}, stylua = {}, taplo = {} },
+            opts = { enable = { "ruff", "stylua", "taplo" } },
         },
     },
     opts = {

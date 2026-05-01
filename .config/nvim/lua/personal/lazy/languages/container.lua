@@ -18,6 +18,6 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { docker_compose_language_service = {}, dockerls = {} },
+        opts = { enable = { "docker_compose_language_service", "dockerls" } },
     },
 }

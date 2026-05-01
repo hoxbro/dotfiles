@@ -27,25 +27,14 @@ return {
         "neovim/nvim-lspconfig",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         dependencies = { { "j-hui/fidget.nvim", opts = {} } },
-        -- `opts` are a table where:
-        --
-        --  - Keys (`String`) are the server name.
-        --  - Values (`Table`) are the settings for the lspconfig.
+        opts_extend = { "enable" },
         config = function(_, opts)
-            for server_name, config in pairs(opts) do
-                local on_init = (config or {}).on_init
-                config.on_init = nil
-
-                vim.lsp.config(server_name, {
-                    on_attach = on_attach,
-                    on_init = on_init,
-                    settings = config,
-                    filetypes = (config or {}).filetypes,
-                    cmd = (config or {}).cmd,
-                })
+            local enable = opts.enable or {}
+            for _, server_name in pairs(enable) do
+                vim.lsp.config(server_name, { on_attach = on_attach })
             end
             -- https://www.reddit.com/r/neovim/comments/1l7pz1l/starting_from_0112_i_have_a_weird_issue/
-            vim.schedule(function() vim.lsp.enable(vim.tbl_keys(opts)) end)
+            vim.schedule(function() vim.lsp.enable(enable) end)
         end,
     },
     {

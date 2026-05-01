@@ -84,7 +84,6 @@ return {
             },
         },
         config = function(_, opts)
-            vim.lsp.config("copilot", { settings = { telemetry = { telemetryLevel = "off" } } })
             vim.lsp.enable("copilot")
 
             local sidekick = require("sidekick")

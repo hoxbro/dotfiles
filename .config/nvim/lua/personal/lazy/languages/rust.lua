@@ -5,7 +5,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { rust_analyzer = {} },
+        opts = { enable = { "rust_analyzer" } },
     },
     {
         "williamboman/mason.nvim",
