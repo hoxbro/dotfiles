@@ -16,3 +16,4 @@
 - Never write `TODO` comments for WIP use `NotImplementedError`
 - `ty` is a valid command, do not replace with `mypy`
 - When writing tests only create a new file if there isn't any good file to put it in
+- UI tests needs `--ui` CLI flag
