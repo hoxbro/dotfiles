@@ -29,6 +29,13 @@ update_pixi() {
     pixi completion --shell zsh >~/.local/bin/_pixi
 }
 
+update_brew() {
+    brew update
+    brew upgrade
+    brew upgrade --cask
+    brew cleanup
+}
+
 run() {
     LOGNAME="$HOME/.cache/pop/${DATE}_${FUNCTION}.log"
     (set -euxo pipefail && $FUNCTION) &>"$LOGNAME"
@@ -42,9 +49,11 @@ run() {
 
 main() {
     sudo -v || exit 1 # Set sudo
-    FUNCTIONS=(
-        update_dotfiles update_yay update_conda update_pixi
-    )
+    FUNCTIONS=(update_dotfiles update_conda update_pixi)
+    case "$(uname)" in
+    Linux) FUNCTIONS+=(update_yay) ;;
+    Darwin) FUNCTIONS+=(update_brew) ;;
+    esac
 
     TOTAL=${#FUNCTIONS[@]}
     COUNT=1
