@@ -12,7 +12,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { enable = { "ty" } },
+        opts = { enable = { "ty" }, attach = { "basedpyright" } },
     },
     {
         "mfussenegger/nvim-dap",
