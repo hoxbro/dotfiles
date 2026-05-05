@@ -14,6 +14,7 @@ local exclude = {
     "lazy-lock.json",
     "pixi.lock",
     "uv.lock",
+    "diff-so-fancy",
 
     "*.ipynb",
     "*.png",
@@ -30,7 +31,6 @@ local exclude = {
     -- Config submodules
     "zsh-autosuggestions/",
     "zsh-syntax-highlighting/",
-    "diff-so-fancy/",
     "zsh-defer/",
 }
 
