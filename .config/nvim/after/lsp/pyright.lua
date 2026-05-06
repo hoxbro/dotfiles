@@ -2,7 +2,7 @@
 return {
     settings = {
         python = { pythonPath = vim.fn.exepath("python") },
-        basedpyright = {
+        pyright = {
             analysis = {
                 autoSearchPaths = true,
                 diagnosticMode = "openFilesOnly",
