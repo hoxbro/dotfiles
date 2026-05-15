@@ -10,5 +10,10 @@
       ""
     ],
     "desc": "Zizmor Global"
+  },
+  "zizmor-checkout": {
+    "prefix": "zizmor-checkout",
+    "body": "persist-credentials: false",
+    "desc": "Zizmor Checkout"
   }
 }
