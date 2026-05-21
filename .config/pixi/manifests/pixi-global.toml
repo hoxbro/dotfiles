@@ -104,3 +104,8 @@ exposed = { prettier = "prettier" }
 channels = ["conda-forge"]
 dependencies = { prek = "*" }
 exposed = { prek = "prek" }
+
+[envs.zizmor]
+channels = ["conda-forge"]
+dependencies = { zizmor = "*" }
+exposed = { zizmor = "zizmor" }
