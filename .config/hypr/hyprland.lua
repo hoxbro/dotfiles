@@ -1,4 +1,4 @@
-local HYPR_SCALE = tonumber(os.getenv("HYPR_SCALE")) or 1
+local HYPR_SCALE = tonumber(os.getenv("HYPR_SCALE"))
 
 -- Layout
 hl.config({
@@ -6,8 +6,7 @@ hl.config({
         gaps_in = 0,
         gaps_out = 0,
         border_size = 1,
-        ["col.active_border"] = "rgba(90a0bfee)",
-        ["col.inactive_border"] = "rgba(595959aa)",
+        col = { active_border = "rgba(90a0bfee)", inactive_border = "rgba(595959aa)" },
         resize_on_border = true,
         allow_tearing = false,
         layout = "dwindle",
@@ -76,7 +75,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("clockify")
     hl.exec_cmd("spotify")
 
-    hl.exec_cmd("sleep 5 && hyprctl keyword misc:focus_on_activate true")
+    hl.timer(function() hl.config({ misc = { focus_on_activate = true } }) end, { timeout = 5000, type = "oneshot" })
 end)
 
 -- Keybindings
@@ -114,31 +113,29 @@ hl.bind("SUPER + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-local rl = { repeating = true, locked = true }
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), rl)
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), rl)
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), rl)
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), rl)
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl s 10%+"), rl)
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"), rl)
+local bind_cmd = function(keys, cmd, opts) hl.bind(keys, hl.dsp.exec_cmd(cmd), opts or nil) end
+local opts = { repeating = true, locked = true }
+bind_cmd("XF86AudioRaiseVolume", "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+", opts)
+bind_cmd("XF86AudioLowerVolume", "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-", opts)
+bind_cmd("XF86AudioMute", "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", opts)
+bind_cmd("XF86AudioMicMute", "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", opts)
+bind_cmd("XF86MonBrightnessUp", "brightnessctl s 10%+", opts)
+bind_cmd("XF86MonBrightnessDown", "brightnessctl s 10%-", opts)
 
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+bind_cmd("XF86AudioNext", "playerctl next", { locked = true })
+bind_cmd("XF86AudioPause", "playerctl play-pause", { locked = true })
+bind_cmd("XF86AudioPlay", "playerctl play-pause", { locked = true })
+bind_cmd("XF86AudioPrev", "playerctl previous", { locked = true })
 
-hl.bind("SUPER + p", hl.dsp.exec_cmd("playerctl play-pause"))
-hl.bind("SUPER + SHIFT + p", hl.dsp.exec_cmd("~/bin/headphone-reconnect"))
-hl.bind("SUPER + SHIFT + e", hl.dsp.exec_cmd("curl 10.0.1.2:8000/elgato/switch -X POST"))
-hl.bind("SUPER + SEMICOLON", hl.dsp.exec_cmd("walker -m clipboard"))
-hl.bind("Print", hl.dsp.exec_cmd('~/bin/walker/screen "Screenshot | Full"'))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("~/bin/walker/screen"))
+bind_cmd("SUPER + p", "playerctl play-pause")
+bind_cmd("SUPER + SHIFT + p", "~/bin/headphone-reconnect")
+bind_cmd("SUPER + SHIFT + e", "curl 10.0.1.2:8000/elgato/switch -X POST")
+bind_cmd("SUPER + SEMICOLON", "walker -m clipboard")
+bind_cmd("Print", '~/bin/walker/screen "Screenshot | Full"')
+bind_cmd("SHIFT + Print", "~/bin/walker/screen")
 
 -- Window rules
-local work_width = "monitor_w*0.15*" .. HYPR_SCALE
-
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
-
 hl.window_rule({
     match = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
     no_initial_focus = true,
@@ -150,23 +147,28 @@ hl.window_rule({ match = { class = "^(?i)(ferdium)$" }, workspace = "3" })
 hl.window_rule({ match = { class = "^(?i)(virt-manager)$" }, workspace = "4" })
 hl.window_rule({ match = { class = "^(?i)(parsecd)$" }, workspace = "5" })
 
-hl.window_rule({
-    match = { class = "^(?i)(clockify|eu.betterbird.Betterbird)$" },
-    workspace = "special:work silent",
-})
-hl.window_rule({
-    match = { class = "^(?i)(clockify)$" },
-    float = true,
-    size = { work_width, "monitor_h-28" },
-    move = { "2", "28" },
-})
-hl.window_rule({
-    match = { class = "^(?i)(eu.betterbird.Betterbird)$" },
-    float = true,
-    size = { "monitor_w-" .. work_width .. "-4", "monitor_h-28" },
-    move = { work_width .. "+4", "28" },
-})
-
+hl.window_rule({ match = { class = "^(?i)(clockify|eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
 hl.window_rule({ match = { class = "^(?i)(1password)$" }, workspace = "special:password silent" })
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
+
+hl.on("hyprland.start", function()
+    local monitor = hl.get_monitors()[1]
+    local monitor_w = math.floor(monitor.width / monitor.scale)
+    local monitor_h = math.floor(monitor.height / monitor.scale)
+    local work_width = math.floor(monitor_w * 0.15)
+    hl.window_rule({
+        match = { class = "^(?i)(clockify)$" },
+        float = true,
+        size = { work_width, monitor_h - 28 },
+        move = { 2, 28 },
+    })
+    hl.window_rule({
+        match = { class = "^(?i)(eu.betterbird.Betterbird)$" },
+        float = true,
+        size = { monitor_w - work_width - 4, monitor_h - 28 },
+        move = { work_width + 4, 28 },
+    })
+    hl.exec_cmd("betterbird")
+    hl.exec_cmd("clockify")
+end)

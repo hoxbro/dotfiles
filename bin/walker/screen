@@ -68,7 +68,7 @@ select_window() {
     window_data=$(echo "$windows" | grep -F "$selected" | head -n1)
     address=$(echo "$window_data" | cut -d$'\t' -f2)
 
-    hyprctl dispatch focuswindow address:"$address" >/dev/null
+    hyprctl dispatch "hl.dsp.focus({ window = 'address:$address' })" >/dev/null
     hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
@@ -96,7 +96,7 @@ main() {
     "Screenshot | Window")
         current_workspace=$(hyprctl activeworkspace -j | jq -r '.id')
         grim -g "$(select_window)" - | tee "$SCREENSHOT_FILE" | wl-copy
-        hyprctl dispatch workspace "$current_workspace" >/dev/null
+        hyprctl dispatch "hl.dsp.focus({ workspace = $current_workspace })" >/dev/null
         ;;
     *) notify-send "Screen" "Not a valid option: \"$OPTION\"" ;;
     esac

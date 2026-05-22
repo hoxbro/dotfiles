@@ -44,4 +44,4 @@ repos:
     hooks:
       - id: stylua-github
         name: stylua
-        args: ["--config-path", ".config/nvim/stylua.toml"]
+        args: ["--config-path", ".config/stylua/stylua.toml"]
