@@ -153,22 +153,36 @@ hl.window_rule({ match = { class = "^(?i)(1password)$" }, workspace = "special:p
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
 
 hl.on("hyprland.start", function()
-    local monitor = hl.get_monitors()[1]
-    local monitor_w = math.floor(monitor.width / monitor.scale)
-    local monitor_h = math.floor(monitor.height / monitor.scale)
-    local work_width = math.floor(monitor_w * 0.15)
+    local work_width = "monitor_w*0.15*" .. HYPR_SCALE
     hl.window_rule({
         match = { class = "^(?i)(clockify)$" },
         float = true,
-        size = { work_width, monitor_h - 28 },
+        size = { work_width, "monitor_h-28" },
         move = { 2, 28 },
     })
     hl.window_rule({
         match = { class = "^(?i)(eu.betterbird.Betterbird)$" },
         float = true,
-        size = { monitor_w - work_width - 4, monitor_h - 28 },
-        move = { work_width + 4, 28 },
+        size = { "monitor_w-" .. work_width .. "-4", "monitor_h-28" },
+        move = { work_width .. "+4", 28 },
     })
+
+    -- local monitor = hl.get_monitors()[1]
+    -- local monitor_w = math.floor(monitor.width / monitor.scale)
+    -- local monitor_h = math.floor(monitor.height / monitor.scale)
+    -- local work_width = math.floor(monitor_w * 0.15)
+    -- hl.window_rule({
+    --     match = { class = "^(?i)(clockify)$" },
+    --     float = true,
+    --     size = { work_width, monitor_h - 28 },
+    --     move = { 2, 28 },
+    -- })
+    -- hl.window_rule({
+    --     match = { class = "^(?i)(eu.betterbird.Betterbird)$" },
+    --     float = true,
+    --     size = { monitor_w - work_width - 4, monitor_h - 28 },
+    --     move = { work_width + 4, 28 },
+    -- })
     hl.exec_cmd("betterbird")
     hl.exec_cmd("clockify")
 end)
