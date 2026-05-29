@@ -129,7 +129,7 @@ bind_cmd("XF86AudioPrev", "playerctl previous", { locked = true })
 
 bind_cmd("SUPER + p", "playerctl play-pause")
 bind_cmd("SUPER + SHIFT + p", "~/bin/headphone-reconnect")
-bind_cmd("SUPER + SHIFT + e", "curl 10.0.1.2:8000/elgato/switch -X POST")
+bind_cmd("SUPER + SHIFT + e", "curl 10.0.1.2:8000/elgato/toggle -X POST")
 bind_cmd("SUPER + SEMICOLON", "walker -m clipboard")
 bind_cmd("Print", '~/bin/walker/screen "Screenshot | Full"')
 bind_cmd("SHIFT + Print", "~/bin/walker/screen")
