@@ -80,6 +80,5 @@ _load-gh-token() { export GITHUB_TOKEN=$(pass show gh-token); zle reset-prompt }
 zle -N _load-gh-token
 bindkey '^G' _load-gh-token
 
-setopt autocd
-setopt NO_GLOB
+setopt autocd nobeep numeric_glob_sort no_glob
 rm() { emulate -L zsh; command rm ${^~@} }

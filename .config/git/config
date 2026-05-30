@@ -28,7 +28,6 @@
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
     freedom = "!git config hook.ban-main.enabled false && rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
     remove-remotes = "!git remote | grep -v '^origin$' | xargs -r -I {} sh -c 'echo Removing remote: {} && git remote remove {}'"
-    add-fix = "!git diff --name-only -z | xargs -0 -n1 sh -c 'git add -p -- \"$1\" < /dev/tty' sh"
 [color]
     ui = true
 [color "diff-highlight"]
