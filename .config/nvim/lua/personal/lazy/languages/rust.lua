@@ -15,15 +15,17 @@ return {
         "mfussenegger/nvim-dap",
         opts = function(_, opts)
             local cmds = {
-                BIN = "cargo build -q --message-format=json",
-                TEST = "cargo build --tests -q --message-format=json",
+                BIN = { "cargo", "build", "-q", "--message-format=json" },
+                TEST = { "cargo", "build", "--tests", "-q", "--message-format=json" },
             }
             local function run_build(cmd)
                 local function inner_build()
-                    local output = vim.fn.system("cd " .. vim.fs.root(0, { "Cargo.toml" }) .. " && " .. cmd)
-                    local filename = output:match('"executable":"(.-)".-"success":true}')
-                    if not filename then return error("failed to build cargo project") end
-                    return filename
+                    local result = vim.system(cmd, { cwd = vim.fs.root(0, { "Cargo.toml" }), text = true }):wait()
+                    if result.code ~= 0 then return error("failed to build cargo project") end
+                    for line in vim.gsplit(result.stdout or "", "\n") do
+                        local data = vim.json.decode(line)
+                        if data.executable then return data.executable end
+                    end
                 end
                 return inner_build
             end
