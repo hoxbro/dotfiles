@@ -5,11 +5,11 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { enable = { "rust_analyzer" } },
+        opts = { enable = { "rust_analyzer", "bacon_ls" } },
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "codelldb", "rust-analyzer" } },
+        opts = { install = { "codelldb", "rust-analyzer", "bacon", "bacon-ls" } },
     },
     {
         "mfussenegger/nvim-dap",

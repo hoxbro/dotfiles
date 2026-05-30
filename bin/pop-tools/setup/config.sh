@@ -67,6 +67,10 @@ if has keyd; then
     sudo systemctl enable --now keyd
 fi
 
+if has rustup; then
+    rustup default stable
+fi
+
 if [[ $name == "meshify" ]]; then
     sudo systemctl enable --now sshd
     if has ufw; then
