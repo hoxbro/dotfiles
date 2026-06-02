@@ -93,7 +93,7 @@ exposed = { yazi = "yazi" }
 [envs.uv]
 channels = ["conda-forge"]
 dependencies = { uv = "*" }
-exposed = { uv = "uv", uvx = "uvx" }
+exposed = {}
 
 [envs.prettier]
 channels = ["conda-forge"]

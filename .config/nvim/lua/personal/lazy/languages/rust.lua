@@ -22,10 +22,7 @@ return {
                 local function inner_build()
                     local result = vim.system(cmd, { cwd = vim.fs.root(0, { "Cargo.toml" }), text = true }):wait()
                     if result.code ~= 0 then return error("failed to build cargo project") end
-                    for line in vim.gsplit(result.stdout or "", "\n") do
-                        local data = vim.json.decode(line)
-                        if data.executable then return data.executable end
-                    end
+                    return result.stdout:match('"executable":"(.-)".-"success":true}')
                 end
                 return inner_build
             end

@@ -39,7 +39,10 @@ alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
 alias zsh-reload="exec zsh"
 alias ansi-remove='sed "s/\x1B\[[0-9;]*[a-zA-Z]//g"'
 alias mergetool='nvim -c DiffviewOpen'
-alias prek-update="prek autoupdate --freeze --include-tag='v*' && prek run --all-files"
+alias prek-update="prek autoupdate --freeze \
+    --include-tag='v*' --include-tag='[0-9]*' \
+    --exclude-tag='*a*' --exclude-tag='*b*' --exclude-tag='*rc*' && \
+    prek run --all-files"
 
 bootwindows() {
     sudo efibootmgr -n $(efibootmgr | grep "Windows" | grep -oE '[0-9]+') >/dev/null
