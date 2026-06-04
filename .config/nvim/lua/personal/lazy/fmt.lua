@@ -45,6 +45,7 @@ return {
             formatters = { "trim_whitespace", "trim_newlines" },
         },
         formatters = {
+            rustfmt = { options = { nightly = true, default_edition = "2024" } },
             shfmt = { prepend_args = { "-i", "4" } },
             prettierd = { prepend_args = { "--single-quote=false" } },
             taplo = {
