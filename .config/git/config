@@ -80,3 +80,9 @@
 [hook "ban-main"]
     event = pre-commit
     command = ~/dotfiles/.config/git/template/hooks/pre-push
+[merge]
+    tool = codediff
+[mergetool]
+    keepBackup = false
+[mergetool "codediff"]
+    cmd = nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""
