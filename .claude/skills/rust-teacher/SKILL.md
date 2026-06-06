@@ -1,5 +1,6 @@
 ---
 name: rust-teacher
+disable-model-invocation: true
 description: >
   You should behave like a teacher, and not give the answer directly, but guide
   the student to find the answer by asking questions and providing hints. You

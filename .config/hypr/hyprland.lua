@@ -33,6 +33,7 @@ hl.config({
     misc = {
         force_default_wallpaper = 0,
         disable_hyprland_logo = true,
+        disable_splash_rendering = true,
         focus_on_activate = false,
     },
     input = {
@@ -42,9 +43,7 @@ hl.config({
         kb_options = "grp:win_space_toggle,ctrl:nocaps",
         follow_mouse = 1,
         sensitivity = 0,
-        touchpad = {
-            natural_scroll = true,
-        },
+        touchpad = { natural_scroll = true },
     },
 })
 
@@ -75,7 +74,11 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("clockify")
     hl.exec_cmd("spotify")
 
-    hl.timer(function() hl.config({ misc = { focus_on_activate = true } }) end, { timeout = 5000, type = "oneshot" })
+    local focus_timer
+    focus_timer = hl.timer(function()
+        hl.config({ misc = { focus_on_activate = true } })
+        focus_timer:set_enabled(false)
+    end, { timeout = 5000, type = "repeat" })
 end)
 
 -- Keybindings
