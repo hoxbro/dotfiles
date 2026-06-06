@@ -32,6 +32,7 @@ claude_limit_hit() {
 }
 
 if target_ts=$(claude_limit_hit); then
+    tput civis && trap 'tput cnorm' EXIT
     printf 'Claude limit reached — sleeping until %s\n' "$(date -d "@$target_ts" +'%H:%M')"
     while :; do
         sleep_seconds=$((target_ts - $(date +%s) + 5))

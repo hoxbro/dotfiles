@@ -67,6 +67,10 @@ if has keyd; then
     sudo systemctl enable --now keyd
 fi
 
+if has rustup; then
+    rustup default stable
+fi
+
 if [[ $name == "meshify" ]]; then
     sudo systemctl enable --now sshd
     if has ufw; then
@@ -87,7 +91,6 @@ stow -d ~/dotfiles --no-folding -n . 2>&1 |
 stow -d ~/dotfiles --no-folding .
 
 ln -sf ~/dotfiles ~/projects/
-ln -sf ~/.config/diff-so-fancy/diff-so-fancy ~/.local/bin
 
 if has hyprctl; then
     hyprctl reload

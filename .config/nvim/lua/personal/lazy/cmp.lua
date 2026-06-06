@@ -56,8 +56,8 @@ return {
         opts = function(_, opts)
             local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
             opts.snippets = {
-                snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
-                snippets.gen_loader.from_lang(),
+                snippets.gen_loader.from_file(config_path .. "/after/snippets/global.json"),
+                snippets.gen_loader.from_lang({ lang_patterns = { markdown_inline = { "markdown.json" } } }),
             }
         end,
     },

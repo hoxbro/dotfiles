@@ -5,13 +5,13 @@ set -euxo pipefail
 hypr_kill() {
     hyprctl clients -j -i 0 |
         jq -r ".[].address" |
-        xargs -I{} hyprctl dispatch -i 0 closewindow address:{}
+        xargs -I{} hyprctl dispatch -i 0 "hl.dsp.window.close({ window = 'address:{}' })"
 
     local timeout=50
     while ((timeout-- > 0)) && [[ $(hyprctl clients -j -i 0 | jq 'length') -gt 0 ]]; do
         sleep 0.1
     done
-    hyprctl dispatch -i 0 workspace 1
+    hyprctl dispatch -i 0 "hl.dsp.focus({ workspace = 1 })"
 }
 
 main() {

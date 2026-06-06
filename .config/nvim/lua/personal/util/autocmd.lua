@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     callback = function() last_clipboard = vim.fn.getreg("0") end,
 })
 
-vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre" }, {
+vim.api.nvim_create_autocmd({ "FocusLost", "VimLeavePre", "TermEnter", "CmdlineEnter" }, {
     desc = "Copy to clipboard on FocusLost",
     group = group_clipboard,
     callback = function()

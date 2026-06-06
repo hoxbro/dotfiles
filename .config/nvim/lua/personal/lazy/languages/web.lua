@@ -9,6 +9,6 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { cssls = {}, html = {} },
+        opts = { enable = { "cssls", "html" } },
     },
 }

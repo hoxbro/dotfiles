@@ -29,6 +29,9 @@ keybind = clear
 keybind = ctrl+v=paste_from_clipboard
 keybind = ctrl+q=close_window
 keybind = shift+enter=text:\x1b\r
+keybind = ctrl+equal=increase_font_size:1.5
+keybind = ctrl+minus=decrease_font_size:1.5
+keybind = ctrl+0=reset_font_size
 
 confirm-close-surface = false
 resize-overlay = never

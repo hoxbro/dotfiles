@@ -14,6 +14,7 @@ local exclude = {
     "lazy-lock.json",
     "pixi.lock",
     "uv.lock",
+    "diff-so-fancy",
 
     "*.ipynb",
     "*.png",
@@ -30,7 +31,6 @@ local exclude = {
     -- Config submodules
     "zsh-autosuggestions/",
     "zsh-syntax-highlighting/",
-    "diff-so-fancy/",
     "zsh-defer/",
 }
 
@@ -111,7 +111,7 @@ return {
                 grep = { hidden = true, follow = true },
             },
             previewers = {
-                diff = { style = "terminal", cmd = { "__dsf" } },
+                diff = { style = "terminal", cmd = { "diff-so-fancy" } },
             },
         },
         input = { win = { row = 10 } },

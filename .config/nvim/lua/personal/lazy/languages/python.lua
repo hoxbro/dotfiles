@@ -1,5 +1,27 @@
 local last_pid
 local python_exe = vim.fn.exepath("python")
+local lsps = { "ty", "basedpyright", "pyright", "pyrefly" }
+local lsp = "ty"
+
+vim.api.nvim_create_user_command("PythonLsp", function()
+    vim.ui.select(lsps, { prompt = "Select LSP" }, function(selected)
+        if not selected or selected == lsp then
+            vim.notify(string.format("Already using LSP `%s`", lsp), vim.log.levels.INFO)
+            return
+        end
+        if vim.fn.executable(selected) == 0 then
+            vim.notify(string.format("LSP `%s` is not installed", selected), vim.log.levels.ERROR)
+            return
+        end
+        vim.lsp.enable(lsp, false)
+        for _, client in ipairs(vim.lsp.get_clients({ name = lsp })) do
+            client:stop()
+        end
+        lsp = selected
+        vim.lsp.enable(lsp)
+        vim.notify(string.format("Enabled LSP `%s`", lsp), vim.log.levels.INFO)
+    end)
+end, { desc = "Switch Python LSP" })
 
 return {
     {
@@ -12,23 +34,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = {
-            ty = {
-                on_init = function(client)
-                    -- Avoid overwriting code injections
-                    vim.api.nvim_set_hl(0, "@lsp.type.string.python", {})
-                end,
-                ty = {
-                    diagnosticMode = (vim.env.TY_CHECK and "openFilesOnly") or "off",
-                    configuration = {
-                        environment = { python = python_exe },
-                        rules = {
-                            ["unresolved-import"] = "ignore",
-                        },
-                    },
-                },
-            },
-        },
+        opts = { enable = { "ty" }, attach = { "basedpyright", "pyright", "pyrefly" } },
     },
     {
         "mfussenegger/nvim-dap",

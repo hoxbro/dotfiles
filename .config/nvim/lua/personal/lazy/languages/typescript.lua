@@ -1,15 +1,3 @@
-local tsls = {
-    preferGoToSourceDefinition = true,
-    inlayHints = {
-        parameterNames = { enabled = "literals" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-    },
-}
-
 if DAP_typescript_commands == nil then DAP_typescript_commands = {
     "make test:unit",
 } end
@@ -25,10 +13,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = {
-            tsgo = { typescript = tsls, javascript = tsls, typescriptreact = tsls, javascriptreact = tsls },
-            eslint = {},
-        },
+        opts = { enable = { "tsgo", "eslint" } },
     },
     {
         "mfussenegger/nvim-dap",

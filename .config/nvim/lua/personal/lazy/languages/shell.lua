@@ -5,9 +5,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        opts = {
-            bashls = { bashIde = { shellcheckArguments = "--exclude=SC1091,SC2181" } },
-        },
+        opts = { enable = { "bashls" } },
     },
     {
         "williamboman/mason.nvim",

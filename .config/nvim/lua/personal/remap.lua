@@ -24,7 +24,7 @@ vim.keymap.set("n", "<leader>c", [["_c]], { desc = "Change without yanking]" })
 vim.keymap.set("i", "<A-v>", "<C-r>0", { desc = "Paste in insertmode", noremap = true, silent = true })
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "<leader>m", vim.diagnostic.open_float, { desc = "Show Diagnostic Error Messages" })
+vim.keymap.set("n", "M", vim.diagnostic.open_float, { desc = "Show Diagnostic Error Messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open Diagnostic Quickfix List" })
 
 -- Replace keymaps

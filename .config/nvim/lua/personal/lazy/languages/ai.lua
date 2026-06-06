@@ -24,7 +24,11 @@ return {
         keys = {
             {
                 "<leader>ai",
-                function() print("🤖") end,
+                function()
+                    require("sidekick.nes").enable()
+                    vim.lsp.enable("copilot")
+                    print("🤖")
+                end,
                 desc = "Start AI",
             },
             {
@@ -82,9 +86,21 @@ return {
                 mode = "n",
                 desc = "Sidekick NES toggle",
             },
+            {
+                "<leader>aq",
+                function()
+                    require("sidekick.nes").disable()
+                    vim.lsp.enable("copilot", false)
+                    for _, client in ipairs(vim.lsp.get_clients({ name = "copilot" })) do
+                        client:stop()
+                    end
+                    print("🧠")
+                end,
+                mode = "n",
+                desc = "Quit AI in editor",
+            },
         },
         config = function(_, opts)
-            vim.lsp.config("copilot", { settings = { telemetry = { telemetryLevel = "off" } } })
             vim.lsp.enable("copilot")
 
             local sidekick = require("sidekick")

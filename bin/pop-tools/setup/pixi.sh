@@ -22,3 +22,5 @@ pixi completion --shell zsh >~/.local/bin/_pixi
 ln -sf "$PIXI_HOME/envs/tmux/bin/tmux" ~/.local/bin/tmux
 ln -sf "$PIXI_HOME/envs/nvim/bin/nvim" ~/.local/bin/nvim
 ln -sf "$PIXI_HOME/envs/starship/bin/starship" ~/.local/bin/starship
+ln -sf "$PIXI_HOME/envs/uv/bin/uv" ~/.local/bin/uv
+ln -sf "$PIXI_HOME/envs/uv/bin/uvx" ~/.local/bin/uvx

@@ -13,11 +13,11 @@ return {
     dependencies = {
         {
             "williamboman/mason.nvim",
-            opts = { install = { "eslint_d", "prettierd", "ruff", "shfmt", "stylua", "taplo" } },
+            opts = { install = { "eslint_d", "prettierd", "ruff", "shfmt", "stylua", "taplo", "zizmor" } },
         },
         {
             "neovim/nvim-lspconfig",
-            opts = { ruff = {}, stylua = {}, taplo = {} },
+            opts = { enable = { "ruff", "stylua", "taplo", "zizmor" } },
         },
     },
     opts = {
@@ -45,6 +45,7 @@ return {
             formatters = { "trim_whitespace", "trim_newlines" },
         },
         formatters = {
+            rustfmt = { options = { nightly = true, default_edition = "2024" } },
             shfmt = { prepend_args = { "-i", "4" } },
             prettierd = { prepend_args = { "--single-quote=false" } },
             taplo = {

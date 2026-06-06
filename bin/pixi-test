@@ -27,4 +27,6 @@ failure() {
     notify-send "pixi $env" "failed"
 }
 
-(pixi run -e "$env" "$task" "$@" && success) || failure
+exit_code=0
+pixi run -e "$env" "$task" "$@" && success || exit_code=$?
+[[ $exit_code -eq 0 || $exit_code -eq 130 ]] || failure

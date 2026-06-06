@@ -44,7 +44,10 @@ vim.diagnostic.config({
             [vim.diagnostic.severity.HINT] = "󰌶 ",
         },
     },
-    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+    virtual_text = {
+        format = function(d) return vim.split(d.message, "\n")[1] end,
+        severity = { min = vim.diagnostic.severity.WARN },
+    },
 })
 vim.treesitter.language.register("python", "pyodide")
 vim.treesitter.language.register("lua", "nvim-undotree")

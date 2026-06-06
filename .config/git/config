@@ -16,7 +16,7 @@
     s = status
     can = commit --amend --no-edit --date now
     redo = reset @{'10 minutes ago'}
-    mom = clean -fxd -e ".cenv" -e "pixi.lock" -e ".lazy.lua" -e "example*.py"  -e "perf*.py" -e "mre*.py" -e "plan*.md"
+    mom = clean -fxd -e ".cenv" -e "pixi.lock" -e ".lazy.lua" -e "example*.py"  -e "perf*.py" -e "mre*.py" -e "plan*.md" -e "*claude/"
     pr = push --force-with-lease
     co = checkout
     cob = checkout -b
@@ -26,7 +26,7 @@
     cim = commit -m
     skipci  = "!git commit --amend -m \"$(git log --format=%B -n1)\" -m \"[skip ci]\""
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
-    freedom = "!rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
+    freedom = "!git config hook.ban-main.enabled false && rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
     remove-remotes = "!git remote | grep -v '^origin$' | xargs -r -I {} sh -c 'echo Removing remote: {} && git remote remove {}'"
 [color]
     ui = true
@@ -61,7 +61,7 @@
     autoSetupRemote = true
 [init]
     defaultBranch = main
-    templateDir = ~/dotfiles/.config/git/template/
+    templateDir = ~/dotfiles/.config/git/template/  # Remove when 2.54 is available
 [help]
     autocorrect = 10
 [commit]
@@ -77,6 +77,9 @@
     workers = 0
 [log]
     follow = true
+[hook "ban-main"]
+    event = pre-commit
+    command = ~/dotfiles/.config/git/template/hooks/pre-push
 [merge]
     tool = codediff
 [mergetool]

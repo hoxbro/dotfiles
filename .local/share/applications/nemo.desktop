@@ -1,5 +1,2 @@
 [Desktop Entry]
-Name=Files
-Comment=Access and organize files
-Exec=nemo ~/Downloads
-Icon=system-file-manager
+Hidden=true
