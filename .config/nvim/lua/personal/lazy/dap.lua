@@ -54,7 +54,7 @@ return {
             },
             {
                 "<leader>i",
-                function() require("dap.ui.widgets").hover() end,
+                function() require("dap-view").hover() end,
                 desc = "Debug: Eval var under cursor",
             },
             {
