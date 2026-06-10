@@ -26,9 +26,7 @@ function M.write_lockfile(data)
     for i, key in ipairs(sorted_keys) do
         local value = data[key]
         local comma = i < #sorted_keys and "," or ""
-        local line =
-            string.format('  "%s": {"version": "%s", "optional": %s}%s', key, value.version, value.optional, comma)
-        table.insert(lines, line)
+        table.insert(lines, string.format('  "%s": "%s"%s', key, value, comma))
     end
     table.insert(lines, "}")
 
@@ -36,17 +34,11 @@ function M.write_lockfile(data)
     file:close()
 end
 
-function M.get_installed_packages(existing_lockfile)
+function M.get_installed_packages()
     local registry = require("mason-registry")
     local packages = {}
     for _, pkg in ipairs(registry.get_installed_packages()) do
-        if pkg:is_installed() then
-            local existing = existing_lockfile and existing_lockfile[pkg.name] or {}
-            packages[pkg.name] = {
-                version = pkg:get_installed_version(),
-                optional = existing.optional or false,
-            }
-        end
+        if pkg:is_installed() then packages[pkg.name] = pkg:get_installed_version() end
     end
     return packages
 end
@@ -86,27 +78,20 @@ function M.setup(opts)
 
     registry:on("package:install:success", function()
         M.pending_installs = M.pending_installs - 1
-        local current_lockfile = M.read_lockfile()
-        local packages = M.get_installed_packages(current_lockfile)
+        local packages = M.get_installed_packages()
         M.write_lockfile(packages)
     end)
 
     registry:on("package:uninstall:success", function()
-        local current_lockfile = M.read_lockfile()
-        local packages = M.get_installed_packages(current_lockfile)
+        local packages = M.get_installed_packages()
         M.write_lockfile(packages)
     end)
 
     registry.refresh(function()
         M.setup_started = true
-        local should_keep = {}
-        for pkg_name, pkg_info in pairs(lockfile) do
-            if pkg_info.optional then table.insert(should_keep, pkg_name) end
-        end
+        local should_keep = vim.tbl_keys(lockfile)
         for _, pkg_name in ipairs(vim.list.unique(opts.install or {})) do
-            local pkg_info = lockfile[pkg_name]
-            local locked_version = pkg_info and pkg_info.version or nil
-            M.ensure_installed(pkg_name, locked_version)
+            M.ensure_installed(pkg_name, lockfile[pkg_name])
             table.insert(should_keep, pkg_name)
         end
 
