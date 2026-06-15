@@ -6,3 +6,4 @@ mre*.py
 **/.claude/settings.local.json
 failing_tests.txt
 claude/
+.DS_Store
