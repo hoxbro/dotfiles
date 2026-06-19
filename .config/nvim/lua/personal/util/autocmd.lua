@@ -6,15 +6,16 @@ local function run_cmd(pattern, command)
         pattern = pattern,
         group = group,
         callback = function()
-            vim.keymap.set("n", "<F1>", ":w<CR>:" .. command .. " %<CR>", { noremap = true, silent = true })
+            vim.keymap.set("n", "<F1>", ":w<CR>:" .. command .. "<CR>", { noremap = true, silent = true })
         end,
     })
 end
 
-run_cmd("python", "!python")
-run_cmd("sh", "!bash")
-run_cmd("javascript", "!node")
-run_cmd("lua", "source")
+run_cmd("python", "!python %")
+run_cmd("sh", "!bash %")
+run_cmd("javascript", "!node %")
+run_cmd("lua", "source %")
+run_cmd("rust", "!cargo run")
 
 -- Change directory to the file's directory
 local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })
