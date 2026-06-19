@@ -93,9 +93,13 @@ def main():
             page = browser.new_page()
             page.goto(f"http://localhost:{port}")
 
-            # Wait for app to render
-            page.wait_for_selector(".bk-events", timeout=10000)
-            time.sleep(1)
+            # Wait for app to render.
+            # Bokeh renders everything inside Shadow DOM — use .bk-Canvas (capitalized).
+            # Playwright auto-pierces open Shadow DOM for CSS selectors, so locator() works.
+            # Do NOT use .bk-canvas (lowercase) or .bk-events — they live inside Shadow DOM
+            # but won't be found by wait_for_selector (use locator().wait_for() instead).
+            page.locator(".bk-Canvas").wait_for(state="visible", timeout=15000)
+            time.sleep(2)
 
             # === STEP 1: Initial State ===
             print("\n--- Step 1: Initial state ---")
@@ -224,7 +228,9 @@ GET_RENDERERS_JS = """() => {
 
 result = page.evaluate(JS_GET_RENDERERS)
 # Check renderer visibility states
-patches_hidden = any(r["glyph_type"] == "Patches" and not r["visible"] for r in result["renderers"])
+patches_hidden = any(
+    r["glyph_type"] == "Patches" and not r["visible"] for r in result["renderers"]
+)
 ```
 
 **DOM-based checks:**
@@ -237,10 +243,55 @@ bug_detected = element.is_visible()  # Bug if visible when shouldn't be
 **Screenshot comparison (visual bugs):**
 
 ```python
-# Take screenshot and note for manual verification
-page.screenshot(path="bug_state.png")
-print("Check bug_state.png - element X should not appear")
+import numpy as np
+from PIL import Image
+
+
+# Pixel-diff two screenshots — large diff means rendering changed (e.g. initial vs reset)
+def screenshot_diff(path_a, path_b, threshold=10):
+    a = np.array(Image.open(path_a).convert("RGB"))
+    b = np.array(Image.open(path_b).convert("RGB"))
+    diff = np.abs(a.astype(int) - b.astype(int)).max(axis=2)
+    return int((diff > threshold).sum())
+
+
+page.screenshot(path="before.png")
+# ... trigger action ...
+page.screenshot(path="after.png")
+diff = screenshot_diff("before.png", "after.png")
+bug_detected = diff > 5000  # tune threshold to the expected change size
 ```
+
+**DOM queries inside Bokeh Shadow DOM:**
+
+Bokeh renders inside a Shadow DOM.
+`page.locator()` CSS selectors auto-pierce Shadow DOM; `page.evaluate()` JS
+does not. To query the DOM from JS you must walk `shadowRoot` manually:
+
+```python
+# Works — locator() pierces Shadow DOM automatically
+page.locator(".bk-tool-icon-reset").click()
+canvas_bb = page.locator(".bk-Canvas").bounding_box()
+
+# Fails — querySelectorAll does not pierce Shadow DOM
+# page.evaluate("() => document.querySelectorAll('.bk-Canvas').length")  # returns 0
+
+# Works — walk shadowRoot in JS
+all_text = page.evaluate("""() => {
+    function collect(root) {
+        const texts = [];
+        root.querySelectorAll('text').forEach(t => texts.push(t.textContent.trim()));
+        root.querySelectorAll('*').forEach(el => {
+            if (el.shadowRoot) texts.push(...collect(el.shadowRoot));
+        });
+        return texts;
+    }
+    return collect(document);
+}""")
+```
+
+Bokeh model data is on `window.Bokeh.documents[0]._all_models` (not in the DOM), so
+`page.evaluate()` works fine for inspecting model state without touching the Shadow DOM.
 
 ### 6. Principles for Good MREs
 

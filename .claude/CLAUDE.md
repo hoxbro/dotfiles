@@ -2,6 +2,7 @@
 
 - Always have temporary files located in a `claude/{SESSION_NAME}` directory, you should
   never add these to git.
+- Never use shell commands to write files, use built-in functions.
 - Only use `git add` with filename
 - Always use the `gh` CLI for fetching
 - Always cache fetched web results, and use them for future reference
