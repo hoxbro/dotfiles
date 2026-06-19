@@ -10,7 +10,7 @@ repos:
       - id: check-json
       - id: detect-private-key
   - repo: https://github.com/crate-ci/typos
-    rev: 5374cbf686e897b15713110e233094e2874de7ef # frozen: v1.46.1
+    rev: 37bb98842b0d8c4ffebdb75301a13db0267cef89 # frozen: v1.47.2
     hooks:
       - id: typos
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -20,7 +20,7 @@ repos:
         args: ["--exclude=SC1091,SC2181"]
         exclude: (zshrc|zsh)$
   - repo: https://github.com/hoxbro/prettier-pre-commit
-    rev: fb4fd26ea947350ec231580772317ec7261c8e21 # frozen: v3.8.3
+    rev: df80de29d357cd4f5a116d1226eae3b8352271bd # frozen: v3.8.4
     hooks:
       - id: prettier
         types_or:
@@ -40,7 +40,7 @@ repos:
             "indent_string=    ",
           ]
   - repo: https://github.com/johnnymorganz/stylua
-    rev: 080c3aa843e9ae6541d9c167ac4f913c5e34730a # frozen: v2.4.1
+    rev: 5ae6e7a55748414b4be30a832afd895014c65352 # frozen: v2.5.2
     hooks:
       - id: stylua-github
         name: stylua
