@@ -110,3 +110,33 @@ vim.keymap.set("t", "<C-w>j", function() vim.cmd.wincmd("j") end, { desc = "Term
 vim.keymap.set("t", "<C-w>h", function() vim.cmd.wincmd("h") end, { desc = "Terminal window left" })
 vim.keymap.set("t", "<C-w>k", function() vim.cmd.wincmd("k") end, { desc = "Terminal window up" })
 vim.keymap.set("t", "<C-w>l", function() vim.cmd.wincmd("l") end, { desc = "Terminal window down" })
+
+-- Changed files to quickfix
+vim.keymap.set("n", "<leader>gl", function()
+    local base = vim.fn.system("git rev-parse --abbrev-ref origin/HEAD"):gsub("^origin/", ""):gsub("%s+$", "")
+    local diff = vim.fn.systemlist("git diff --unified=0 " .. base .. "...HEAD")
+    if vim.v.shell_error ~= 0 then
+        vim.notify("Failed to get changed files", vim.log.levels.ERROR)
+        return
+    end
+    local items = {}
+    local current_file = nil
+    local current_hunk = nil
+    for _, line in ipairs(diff) do
+        local file = line:match("^%+%+%+ b/(.+)")
+        if file then
+            current_file = file
+        elseif current_file then
+            local lnum = line:match("^@@ %S+ %+(%d+)")
+            if lnum then
+                current_hunk = { filename = current_file, lnum = tonumber(lnum) }
+                table.insert(items, current_hunk)
+            elseif current_hunk and not current_hunk.text then
+                local added = line:match("^%+(.+)")
+                if added then current_hunk.text = added end
+            end
+        end
+    end
+    vim.fn.setqflist({}, " ", { title = "Changed from " .. base, items = items })
+    vim.cmd.copen()
+end, { desc = "Git changed files to quickfix" })

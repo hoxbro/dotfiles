@@ -15,5 +15,6 @@
       "Read(./secrets/**)",
       "Bash(pass:*)"
     ]
-  }
+  },
+  "tui": "fullscreen"
 }
