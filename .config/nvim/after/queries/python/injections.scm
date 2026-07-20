@@ -1,3 +1,4 @@
+; extends
 ; From: https://github.com/magnuslarsen/dotfiles/blob/master/dot_config/nvim/queries/python/injections.scm
 ; Function calls from common SQL libraries
 (expression_statement

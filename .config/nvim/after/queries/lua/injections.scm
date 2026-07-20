@@ -1,3 +1,4 @@
+; extends
 (assignment_statement
   (variable_list
     name: (identifier) @_left (#match? @_left "query$"))
