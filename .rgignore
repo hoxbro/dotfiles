@@ -6,7 +6,4 @@
 __pycache__/
 node_modules/
 .claude/
-
-cargo.lock
-pixi.lock
-uv.lock
+*.lock
