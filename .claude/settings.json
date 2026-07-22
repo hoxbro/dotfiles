@@ -4,8 +4,6 @@
   },
   "permissions": {
     "allow": [
-      "Write(/tmp/**)",
-      "Write(/private/tmp/**)",
       "Edit(/tmp/**)",
       "Edit(/private/tmp/**)"
     ],
@@ -16,5 +14,6 @@
       "Bash(pass:*)"
     ]
   },
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "disableClaudeAiConnectors": true
 }
