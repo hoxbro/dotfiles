@@ -11,8 +11,8 @@
     lr = !git la | grep '(.*origin.*)'
     lt = !git la | grep '(.*tag:.*)'
     sl = stash list --pretty=format:'%C(bold yellow)%h %C(cyan)(%ar) %C(green)%gd %C(dim white)%s' --color=always
-    d = diff
-    ds = diff --staged
+    d = diff ':!*.ipynb' ':!*.lock'
+    ds = diff --staged ':!*.ipynb' ':!*.lock'
     s = status
     can = commit --amend --no-edit --date now
     redo = reset @{'10 minutes ago'}
