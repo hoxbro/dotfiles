@@ -21,6 +21,7 @@
     co = checkout
     cob = checkout -b
     cof = checkout -B
+    ap = add -p ':!*.ipynb' ':!*.lock'
     po = "!git pull --set-upstream origin \"$(git branch --show-current)\""
     ci = commit
     cim = commit -m
