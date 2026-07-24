@@ -11,8 +11,8 @@
     lr = !git la | grep '(.*origin.*)'
     lt = !git la | grep '(.*tag:.*)'
     sl = stash list --pretty=format:'%C(bold yellow)%h %C(cyan)(%ar) %C(green)%gd %C(dim white)%s' --color=always
-    d = diff ':!*.ipynb' ':!*.lock'
-    ds = diff --staged ':!*.ipynb' ':!*.lock'
+    d = diff ':(exclude,top)*.ipynb' ':(exclude,top)*.lock'
+    ds = diff --staged ':(exclude,top)*.ipynb' ':(exclude,top)*.lock'
     s = status
     can = commit --amend --no-edit --date now
     redo = reset @{'10 minutes ago'}
@@ -21,7 +21,7 @@
     co = checkout
     cob = checkout -b
     cof = checkout -B
-    ap = add -p ':!*.ipynb' ':!*.lock'
+    ap = add -p ':(exclude,top)*.ipynb' ':(exclude,top)*.lock'
     po = "!git pull --set-upstream origin \"$(git branch --show-current)\""
     ci = commit
     cim = commit -m
