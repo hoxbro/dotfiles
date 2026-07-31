@@ -109,3 +109,8 @@ exposed = { prek = "prek" }
 channels = ["conda-forge"]
 dependencies = { zizmor = "*" }
 exposed = { zizmor = "zizmor" }
+
+[envs.awscli]
+channels = ["conda-forge"]
+dependencies = { awscli = "*" }
+exposed = { aws = "aws" }

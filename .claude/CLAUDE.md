@@ -1,3 +1,5 @@
+YOU NEED TO RESPECT THIS FILE!!!
+
 # General
 
 - Always have temporary files located in a `claude/{SESSION_NAME}` directory, you should
