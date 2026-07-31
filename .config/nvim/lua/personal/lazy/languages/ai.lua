@@ -1,4 +1,6 @@
-local current_cli = vim.env.AI_CLI or "opencode"
+local current_cli = vim.env.AI_CLI or "claude"
+local nopilot = vim.env.NOPILOT
+local env = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } }
 
 return {
     {
@@ -20,13 +22,21 @@ return {
         "folke/sidekick.nvim",
         lazy = true,
         dependencies = { "fang2hou/blink-copilot" },
-        opts = { cli = { mux = { backend = "tmux", enabled = true } } },
+        opts = {
+            nes = { enabled = not nopilot },
+            cli = {
+                mux = { backend = "tmux", enabled = true },
+                tools = { claude = env, opencode = env },
+            },
+        },
         keys = {
             {
                 "<leader>ai",
                 function()
-                    require("sidekick.nes").enable()
-                    vim.lsp.enable("copilot")
+                    if not nopilot then
+                        vim.lsp.enable("copilot")
+                        require("sidekick.nes").enable()
+                    end
                     print("🤖")
                 end,
                 desc = "Start AI",
@@ -101,7 +111,7 @@ return {
             },
         },
         config = function(_, opts)
-            vim.lsp.enable("copilot")
+            if not nopilot then vim.lsp.enable("copilot") end
 
             local sidekick = require("sidekick")
             sidekick.setup(opts)
