@@ -1,6 +1,5 @@
 local current_cli = vim.env.AI_CLI or "claude"
 local nopilot = vim.env.NOPILOT
-local env = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } }
 
 return {
     {
@@ -26,7 +25,7 @@ return {
             nes = { enabled = not nopilot },
             cli = {
                 mux = { backend = "tmux", enabled = true },
-                tools = { claude = env, opencode = env },
+                tools = { opencode = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } } },
             },
         },
         keys = {
