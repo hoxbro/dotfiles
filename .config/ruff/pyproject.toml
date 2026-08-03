@@ -16,9 +16,14 @@ extend-unsafe-fixes = [
     "F841", # Unused variables
 ]
 
-
 [tool.ruff.lint.isort]
 combine-as-imports = true
 
 [tool.ruff.lint.pyflakes]
 allowed-unused-imports = ["hvplot.pandas", "hvplot.dask", "hvplot.xarray", "hvplot.polars"]
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"re.match".msg = "Use re.search with '^' instead of re.match"
