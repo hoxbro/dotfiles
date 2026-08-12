@@ -15,5 +15,6 @@
     ]
   },
   "disableClaudeAiConnectors": true,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "effortLevel": "high"
 }

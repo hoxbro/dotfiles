@@ -1,5 +1,3 @@
-YOU NEED TO RESPECT THIS FILE!!!
-
 # General
 
 - Always have temporary files located in a `claude/{SESSION_NAME}` directory, you should
@@ -11,6 +9,7 @@ YOU NEED TO RESPECT THIS FILE!!!
 - Treat `AGENTS.md` or `.github/AGENTS.md` as `CLAUDE.md`
 - Don't start bash command with comment
 - Attribution must follow this format: `Assisted-by: AGENT_NAME:MODEL_VERSION`
+- Do not run linter, formatter, and type checking, before asked for commit
 
 # Python
 

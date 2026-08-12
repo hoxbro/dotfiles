@@ -74,7 +74,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
         local lines = vim.api.nvim_buf_get_lines(args.buf, 0, 1, false)
         local first = lines[1] or ""
 
-        if not first:match("^#!/usr/bin/env%s+%S+$") then
+        if not (first:match("^#!/usr/bin/env%s+%S+$") or first:match("^#!/usr/bin/env%s+%-S%s+%S+")) then
             vim.diagnostic.set(ns, args.buf, {
                 {
                     lnum = 0,
