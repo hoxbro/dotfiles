@@ -9,11 +9,11 @@ return {
     },
     {
         "williamboman/mason.nvim",
-        opts = { install = { "tsgo", "js-debug-adapter", "eslint-lsp" } },
+        opts = { install = { "tsc", "js-debug-adapter", "eslint-lsp" } },
     },
     {
         "neovim/nvim-lspconfig",
-        opts = { enable = { "tsgo", "eslint" } },
+        opts = { enable = { "tsc", "eslint" } },
     },
     {
         "mfussenegger/nvim-dap",
