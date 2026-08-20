@@ -36,7 +36,7 @@ PACKAGES=(
 
     # Programming
     rustup rust-analyzer cargo-nextest cargo-insta cargo-edit
-    gdb claude-code opencode-bin
+    gdb claude-code opencode-bin kilo-bin
 )
 
 # Computers

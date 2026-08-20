@@ -25,7 +25,10 @@ return {
             nes = { enabled = not nopilot },
             cli = {
                 mux = { backend = "tmux", enabled = true },
-                tools = { opencode = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } } },
+                tools = {
+                    opencode = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } },
+                    kilo = { cmd = { "kilo" } },
+                },
             },
         },
         keys = {
@@ -43,7 +46,7 @@ return {
             {
                 "<leader>as",
                 function()
-                    vim.ui.select({ "opencode", "claude" }, {
+                    vim.ui.select({ "opencode", "claude", "kilo" }, {
                         prompt = "Select AI CLI",
                         format_item = function(item) return item == current_cli and item .. " (current)" or item end,
                     }, function(choice)

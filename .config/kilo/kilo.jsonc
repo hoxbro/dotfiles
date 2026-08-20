@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
+  "formatter": false,
+  "lsp": {
+    "pyright": {
+      "disabled": true,
+    },
+  },
+  "permission": {
+    "bash": "allow"
+  },
+}
