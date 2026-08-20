@@ -371,7 +371,7 @@ unshift @INC, bless \%fatpacked, $class;
   } # END OF FATPACK CODE
 
 
-my $VERSION = "1.4.10";
+my $VERSION = "1.4.12";
 
 #################################################################################
 
@@ -383,12 +383,20 @@ use File::Spec;                                             # For catdir
 use File::Basename;                                         # For dirname
 use Cwd qw(abs_path);                                       # For realpath()
 use lib dirname(abs_path(File::Spec->catdir($0))) . "/lib"; # Add the local lib/ to @INC
+use open ':encoding(UTF-8)';                                # Use UTF-8 when opening files
 use DiffHighlight;
+use Time::Local;
+
+# Everything UTF-8 everywhere
+binmode(STDIN , ":encoding(UTF-8)");
+binmode(STDOUT, ":encoding(UTF-8)");
+binmode(STDERR, ":encoding(UTF-8)");
 
 my $remove_file_add_header     = 1;
 my $remove_file_delete_header  = 1;
 my $clean_permission_changes   = 1;
 my $patch_mode                 = 0;
+my $input_has_ansi             = 0;
 my $manually_color_lines       = 0; # Usually git/hg colorizes the lines, but for raw patches we use this
 my $short_headers              = git_config_boolean("diff-so-fancy.shortHeaders","false");
 my $change_hunk_indicators     = git_config_boolean("diff-so-fancy.changeHunkIndicators","true");
@@ -397,13 +405,16 @@ my $mark_empty_lines           = git_config_boolean("diff-so-fancy.markEmptyLine
 my $use_unicode_dash_for_ruler = git_config_boolean("diff-so-fancy.useUnicodeRuler","true");
 my $ruler_width                = git_config("diff-so-fancy.rulerWidth", undef);
 my $git_strip_prefix           = git_config_boolean("diff.noprefix","false");
+my $do_sem_stuff               = git_config_boolean("diff-so-fancy.semIntegration","false");
 my $has_stdin                  = has_stdin();
 
-my $ansi_regex       = qr/\e\[([0-9]{0,3}(;[0-9]{1,3}){0,10})[mK]/;
-my $ansi_color_regex = qr/(${ansi_regex})?/;
-my $reset_color      = color("reset");
-my $bold             = color("bold");
-my $meta_color       = "";
+my $ansi_regex        = qr/\e\[([0-9]{0,3}(;[0-9]{1,3}){0,10})[mK]/;
+my $ansi_color_regex  = qr/(${ansi_regex})?/;
+my $reset_color       = color("reset");
+my $bold              = color("bold");
+my $meta_color        = "";
+my $add_line_color    = ""; # Placeholder for later
+my $remove_line_color = ""; # Placeholder for later
 
 # Set the diff highlight colors from the config
 init_diff_highlight_colors();
@@ -417,7 +428,6 @@ my $i                 = 0;
 my $in_hunk           = 0;
 my $columns_to_remove = 0;
 my $is_mercurial      = 0;
-my $color_forced      = 0; # Has the color been forced on/off
 
 if ($args->{rulerWidth}) {
 	$ruler_width = int($args->{rulerWidth});
@@ -432,14 +442,12 @@ if (defined($args->{shortHeaders})) {
 # this is an option to force it on/off
 if ($args->{color_on}) {
 	$manually_color_lines = 1;
-	$color_forced         = 1;
 } elsif ($args->{color_off}) {
 	$manually_color_lines = 0;
-	$color_forced         = 1;
 }
 
 if ($args->{debug}) {
-	show_debug_info();
+	log_debug_info();
 }
 
 # We only process ARGV if we don't have STDIN
@@ -468,6 +476,15 @@ if (!$has_stdin) {
 # to do_dsf_stuff() to convert the diff to human readable d-s-f output and add
 # appropriate fanciness
 
+# If we're in debug mode we want to log the chunks we see
+if ($args->{debug}) {
+	debug_log("-------------- Config -------------");
+	debug_log("Manually color : $manually_color_lines");
+	debug_log("Strip leading  : $strip_leading_indicators");
+	debug_log("Mark empty     : $mark_empty_lines");
+	debug_log("Ruler width    : $ruler_width");
+}
+
 my @lines;
 local $DiffHighlight::line_cb = sub {
 	push(@lines,@_);
@@ -475,6 +492,7 @@ local $DiffHighlight::line_cb = sub {
 	# Wait until we have enough lines to process, then divide up into safe
 	# parseable chunks and have d-s-f do it's magic
 	if (@lines > 100) {
+
 		my @chunks = get_diff_chunks(\@lines);
 
 		# Leave the last chunk in @lines so we do not miss lines on a split.
@@ -484,15 +502,21 @@ local $DiffHighlight::line_cb = sub {
 		foreach my $chunk (@chunks) {
 			do_dsf_stuff($chunk);
 		}
+
+		# If after processing chunks there are still a lot of lines left
+		# we process immediately. This may happen in a big `git log` or
+		# `git show` where there are NOT small defined chunks
+		if (@lines > 100) {
+			do_dsf_stuff(\@lines);
+			@lines = ();
+		}
 	}
 };
 
 my $line_count = 0;
 while (my $line = <STDIN>) {
-	# If the very first line of the diff doesn't start with ANSI color we're assuming
-	# it's a raw patch file, and we have to color the added/removed lines ourself
-	if (!$color_forced && $line_count == 0 && !starts_with_ansi($line)) {
-		$manually_color_lines = 1;
+	if (!$input_has_ansi && $line =~ /$ansi_regex/) {
+		$input_has_ansi = 1;
 	}
 
 	my $ok = DiffHighlight::handle_line($line);
@@ -516,25 +540,36 @@ sub do_dsf_stuff {
 	my $input     = shift();
 	my $chunk_str = join("", @$input); # Store the full chunk text for lookbacks
 
-	# If we're in debug mode we want to log the chunks we see
-	if ($args->{debug}) { log_chunks($input); }
-
-	# FIXME: There is a scenario where there are FIVE diff header lines
-	# I'm not sure if we need to account for that or not. Unit tests pass so... bees?
+	# git requires interactive.diffFilter output to stay 1:1 with input. Add/delete
+	# with content have 3 header lines (not 4) but still need balancing; empty ones (no @@) don't.
 	my $cnt = count_git_header_lines(@$input);
-	# HACK: Patch start
-	# 4 header lines for a modified file, 3 for a new/deleted file. A non-zero
-	# count means we're genuinely in --patch mode (count_git_header_lines bails
-	# to 0 otherwise), so any header needs the 1:1 line compensation enabled.
-	if ($cnt == 3 || $cnt == 4) {
-	# HACK: Patch end
+	if ($cnt == 4 || ($cnt == 3 && grep { /^${ansi_color_regex}@@/ } @$input)) {
 		$patch_mode    = 1;
 		$short_headers = 0; # shortHeaders has to be off in --patch mode
+	} else {
+		$patch_mode    = 0;
+	}
+
+	# If we don't see ANY ANSI in the input we enable manual coloring mode
+	if (!$args->{color_off} && !$input_has_ansi) {
+		$manually_color_lines = 1;
+
+		# If we're manually coloring, we load the colors here so they're
+		# available globally
+		$add_line_color    = get_config_color("add_line");
+		$remove_line_color = get_config_color("remove_line");
+	} else {
+		$manually_color_lines = 0;
 	}
 
 	# Calculate the context lines for this chunk
 	my $context_lines = calculate_context_lines(@$input);
 	my $git_show_mode = 0;
+
+	# If we're in debug mode we want to log the chunks we see
+	if ($args->{debug}) {
+		log_chunks($input);
+	}
 
 	#print STDERR "START -------------------------------------------------\n";
 	#print STDERR join("",@$input);
@@ -598,7 +633,7 @@ sub do_dsf_stuff {
 				$is_mercurial = 1;
 				$meta_color   = get_config_color("meta");
 
-				$last_file_seen = basename($3 || "");
+				$last_file_seen = sanitize_display(basename($3 || ""));
 			# Git looks like: diff --git a/diff-so-fancy b/diff-so-fancy
 			} elsif ($extra =~ m/--git/) {
 				# Note file may contains spaces
@@ -606,7 +641,7 @@ sub do_dsf_stuff {
 				$a_file ||= "";
 				$b_file ||= "";
 
-				$last_file_seen = $a_file;
+				$last_file_seen = sanitize_display($a_file);
 			}
 
 			$last_file_seen =~ s|^\w/||; # Remove a/ (and handle diff.mnemonicPrefix).
@@ -627,8 +662,21 @@ sub do_dsf_stuff {
 			$ruler_shape = 'box';
 
 			draw_ruler($line, "ruler", $meta_color);
+		################################################
+		# Add a human readable string to "Date:" lines #
+		################################################
+		} elsif ($line =~ /^Date:.*?(\w.+)/) {
+			my $unixtime = git_datestr_unixtime($1);
+			my $diff     = time() - $unixtime;
+			my $human    = human_time_diff($diff, 1);
+
+			# Append the human string to the line
+			$line =~ s/$/ ($human)/;
+
+			print $line;
 		########################################
 		# Find the first file: --- a/README.md #
+		# This is a standard line change       #
 		########################################
 		} elsif (!$in_hunk && $line =~ /^$ansi_color_regex--- (\w\/)?(.+?)(\e|\t|$)/) {
 			$meta_color = get_config_color("meta");
@@ -652,7 +700,7 @@ sub do_dsf_stuff {
 			}
 
 			if ($file_2 ne "/dev/null") {
-				$last_file_seen = $file_2;
+				$last_file_seen = sanitize_display($file_2);
 			}
 
 			# Check if the last 'diff' line specified recursive
@@ -682,6 +730,11 @@ sub do_dsf_stuff {
 				$str = file_change_string($file_1,$file_2) . " ${reset_color}${meta_color}\@ $start_line${reset_color}\n";
 			} else {
 				$str = file_change_string($file_1,$file_2) . "\n";
+
+				if ($do_sem_stuff && !$patch_mode) {
+					my $sem_str  = get_sem_info($file_2, $chunk_str);
+					$str        .= "\n" . $sem_str;
+				}
 			}
 
 			draw_ruler($str, $ruler_shape, $meta_color);
@@ -697,7 +750,7 @@ sub do_dsf_stuff {
 
 			my $frag_color  = $1;
 			my $hunk_header = $4;
-			my $remain      = bleach_text($5);
+			my $remain      = sanitize_display(bleach_text($5));
 
 			# The number of columns to remove (1 or 2) is based on how many commas in the hunk header
 			$columns_to_remove   = (char_count(",",$hunk_header)) - 1;
@@ -724,8 +777,9 @@ sub do_dsf_stuff {
 			}
 
 			if (!$short_headers) {
-				print $frag_color;
-				print "@ $last_file_seen:$start_line \@${reset_color}${last_function_color}${remain}${reset_color}\n";
+				my $str = "$frag_color@ $last_file_seen:$start_line \@${reset_color}${last_function_color}${remain}${reset_color}\n";
+
+				print $str;
 			}
 		###################################
 		# Remove any new file permissions #
@@ -784,10 +838,10 @@ sub do_dsf_stuff {
 				next;
 			}
 
-			my $next    = shift(@$input);
+			my $next    = shift(@$input) || "";
 			my ($action1, $file1) = $next =~ /(copy|rename) from (.+?)(\e|\t|$)/;
 
-			$next       = shift(@$input);
+			$next       = shift(@$input) || "";
 			my ($action2, $file2) = $next =~ /(copy|rename) to (.+?)(\e|\t|$)/;
 
 			if ($file1 && $file2) {
@@ -820,16 +874,20 @@ sub do_dsf_stuff {
 			# Remove the correct number of leading " " or "+" or "-"
 			if ($strip_leading_indicators) {
 				$line = strip_leading_indicators($line,$columns_to_remove);
-			# HACK: START PATCH
-			} elsif ($line =~ /^\+/) {
-				my $add_line_color = get_config_color("add_line");
-				$line = $add_line_color . insert_reset_at_line_end($line);
-			} elsif ($line =~ /^-/) {
-				my $remove_line_color = get_config_color("remove_line");
-				$line = $remove_line_color . insert_reset_at_line_end($line);
-			# HACK: END PATCH
 			}
-			print $line;
+
+			# Raw diffs we color manually
+			if ($manually_color_lines) {
+				my $first_char = substr($line, 0, 1);
+
+				if ($first_char eq "+") {
+					$line = $add_line_color . insert_reset_at_line_end($line);
+				} elsif ($first_char eq "-") {
+					$line = $remove_line_color . insert_reset_at_line_end($line);
+				}
+			}
+
+			print sanitize_display($line);
 		}
 
 		$i++;
@@ -1039,6 +1097,22 @@ sub bleach_text {
 	return $str;
 }
 
+
+sub sanitize_display {
+	my $s = shift();
+
+	# Remove line feeds
+	$s =~ s/\r//g;
+	# Strip OSC (Operating System Command) sequences.
+	$s =~ s/\e\].*?(?:\x07|\e\\)//gs;
+	# Strip DCS / PM / APC / SOS sequences
+	$s =~ s/\e[P\^X_].*?\e\\//gs;
+	# Strips other escape sequences like: cursor movement, mode changes, etc
+	$s =~ s/\e(?!\[[0-9;]*m).//g;
+
+	return $s;
+}
+
 # Remove all trailing and leading spaces
 sub trim {
 	my $s = shift();
@@ -1053,6 +1127,9 @@ sub trim {
 sub file_change_string {
 	my $file_1 = shift();
 	my $file_2 = shift();
+
+	$file_1 = sanitize_display($file_1);
+	$file_2 = sanitize_display($file_2);
 
 	my $ret = "";
 
@@ -1203,38 +1280,6 @@ sub set_defaults {
 	}
 
 	return 1;
-}
-
-# Borrowed from: https://www.perturb.org/display/1167_Perl_ANSI_colors.html
-# String format: '115', '165_bold', '10_on_140', 'reset', 'on_173', 'red', 'white_on_blue'
-sub color {
-	my ($str, $txt) = @_;
-
-	# If we're NOT connected to a an interactive terminal don't do color
-	#if (-t STDOUT == 0) { return ''; }
-
-	# No string sent in, so we just reset
-	if (!length($str) || $str eq 'reset') { return "\e[0m"; }
-
-	# Some predefined colors
-	my %color_map = qw(red 160 blue 27 green 34 yellow 226 orange 214 purple 93 white 15 black 0);
-	$str =~ s|([A-Za-z]+)|$color_map{$1} // $1|eg;
-
-	# Get foreground/background and any commands
-	my ($fc,$cmd) = $str =~ /^(\d{1,3})?_?(\w+)?$/g;
-	my ($bc)      = $str =~ /on_(\d{1,3})$/g;
-
-	# Some predefined commands
-	my %cmd_map = qw(bold 1 italic 3 underline 4 blink 5 inverse 7);
-	my $cmd_num = $cmd_map{$cmd // 0};
-
-	my $ret = '';
-	if ($cmd_num)     { $ret .= "\e[${cmd_num}m"; }
-	if (defined($fc)) { $ret .= "\e[38;5;${fc}m"; }
-	if (defined($bc)) { $ret .= "\e[48;5;${bc}m"; }
-	if ($txt)         { $ret .= $txt . "\e[0m";   }
-
-	return $ret;
 }
 
 # Get colors used for various output sections (memoized)
@@ -1414,12 +1459,14 @@ sub get_terminal_width {
 	return $width;
 }
 
-sub show_debug_info {
+sub log_debug_info {
 	my @less    = get_less_charset();
-	my $git_ver = trim(`git --version 2>&1`);
-	$git_ver    =~ s/[^\d.]//g;
+	my $git_str = trim(`git --version 2>&1`);
 
-	if ($git_ver !~ /git/) {
+	# `git version 2.47.3`
+	my ($git_ver) = $git_str =~ m/([\d\.]+)/;
+
+	if (!$git_ver || $git_ver !~ /\d/) {
 		$git_ver = "Unknown";
 	} else {
 		$git_ver = "v" . $git_ver;
@@ -1440,8 +1487,6 @@ sub show_debug_info {
 	$out    .= "\n";
 	$out    .= "Is Windows      : " . yes_no(is_windows()) . "\n";
 	$out    .= "Operating System: $^O\n";
-
-	print $out;
 
 	my @lines = split(/\n/, $out);
 	debug_log(@lines);
@@ -1507,13 +1552,18 @@ sub debug_log {
 
 	state $fh;
 	if (!$fh) {
-		printf("%sDebug log enabled:%s $file\n", color('orange'), color());
+		printf(STDERR "%sDebug log enabled:%s $file\n", color('orange'), color());
 		open ($fh, ">", $file) or die("Cannot write to $file");
 	}
 
 	foreach my $log_line (@lines) {
 		$log_line = trim($log_line);
-		print $fh "$date_str: $log_line\n";
+
+		if ($log_line) {
+			print $fh "$date_str: $log_line\n";
+		} else {
+			print $fh "$date_str:\n";
+		}
 	}
 
 	return 1;
@@ -1570,7 +1620,7 @@ sub get_diff_chunks {
 	# Loop through all the lines and build end line numbers for each "chunk"
 	for (my $i = 0; $i < $total_lines; $i++) {
 		my $line           = $lines[$i];
-		my $is_header_line = $line =~ m/^${ansi_color_regex}(diff|index|Submodule|---|\+\+\+|@@?|new|deleted|old)\s/;
+		my $is_header_line = $line =~ m/^${ansi_color_regex}(diff|index|Submodule|---|\+\+\+|@@?|new|deleted|old|commit)\s/;
 		$is_header_line    = int($is_header_line);
 
 		#if ($is_header_line) {
@@ -1694,12 +1744,106 @@ sub extract_start_line {
 	return $start_line;
 }
 
+sub get_sem_info {
+	my ($file, $diff_str) = @_;
+	$diff_str             = bleach_text($diff_str);
+
+	# Make sure we have the real sem and not the GNU parallels version
+    state $sem_help = `sem --help`;
+    state $sem_exit = ($? >> 8);
+    if (($sem_exit > 0) || !$sem_help || ($sem_help =~ m/GNU Parallel/)) {
+        return '';
+    }
+
+	#################################################
+
+	require JSON::PP;
+	require IPC::Open3;
+	require Symbol;
+
+	# Open a handle to sem
+	my $stderr = Symbol::gensym();
+	my $pid    = IPC::Open3::open3(my $stdin, my $stdout, $stderr, "sem diff --patch --format json");
+
+	binmode($stdin, ":encoding(UTF-8)");
+
+	# Send this diff chunk as STDIN to sem
+	print $stdin $diff_str;
+	close $stdin;
+
+	# Read the output from sem
+	my $out = do { local $/; <$stdout> };
+	waitpid($pid, 0);
+
+	#################################################
+
+	# If it's not JSON
+	if ($out !~ /^{/) { return ''; }
+
+	my $x       = JSON::PP::decode_json($out);
+	my @changes = @{$x->{changes}};
+
+	# Pull out the data we need from the JSON
+	my $data = [];
+	foreach my $x (@changes) {
+		my $obj = {
+			file   => $x->{filePath}   || "",
+			change => $x->{changeType} || "",
+			entity => $x->{entityType} || "",
+			name   => $x->{entityName} || "",
+		};
+
+		push(@$data, $obj);
+	}
+
+	# Build the output string
+	my $ret = '';
+	foreach my $x (@$data) {
+		my $glyph  = "~";
+		my $color  = '';
+		my $reset  = color('reset');
+
+		my $change = $x->{change}              || "";
+		my $entity = $reset . $x->{entity}     || "";
+		my $name   = color('white', $x->{name} || "");
+
+		if ($change eq 'added') {
+			$glyph = "+";
+			$color = 'green';
+		} elsif ($change eq 'deleted') {
+			$glyph = "-";
+			$color = 'red';
+		} else {
+			$glyph = "~";
+			$color = 'yellow';
+		}
+
+		# Colorize the glyph
+		$glyph = color($color, $glyph);
+
+		$ret .= sprintf("%s %-18s %-50s %s%s%s\n", $glyph, $entity, $name, color($color), $change, color('reset'));
+	}
+
+	return $ret;
+}
+
 sub draw_ruler {
 	my ($str, $type, $color) = @_;
 
 	$str     = trim($str);
 	$type  ||= 'ruler';
 	$color ||= "";
+
+	my @lines = split(/\n/, $str);
+	my $max   = 0;
+	foreach my $line (@lines) {
+		my $raw = bleach_text($line);
+		my $len = length($raw);
+
+		if ($len > $max) { $max = $len; }
+	}
+
+	$max++; # Give us a little padding on the right
 
 	# Default to ASCII chars
 	my $dash  = "-";
@@ -1709,11 +1853,11 @@ sub draw_ruler {
 
 	# If we're in unicode mode we use unicode chars instead
 	if ($use_unicode_dash_for_ruler && should_print_unicode()) {
-		# perl -E 'use Dump::Krumo; use Encode; kx(Encode::encode("UTF-8", "\x{2503}"));'
-		$dash  = "\x{E2}\x{94}\x{80}";
-		$top_r = "\x{E2}\x{94}\x{90}";
-		$bot_r = "\x{E2}\x{94}\x{98}";
-		$right = "\x{E2}\x{94}\x{82}";
+		# https://unicodeplus.com/block/2500
+		$dash  = "\x{2500}";
+		$top_r = "\x{2510}";
+		$bot_r = "\x{2518}";
+		$right = "\x{2502}";
 	}
 
 	if ($type eq 'ruler') {
@@ -1724,11 +1868,130 @@ sub draw_ruler {
 		print $color . $str . $reset_color . "\n";
 		print $line  . "\n";
 	} elsif ($type eq 'box') {
-		my $len = length(bleach_text($str));
+		my $len = $max;
 
 		print $color . ($dash x $len) . $top_r . $reset_color . "\n";
-		print $color . $str . $right           . $reset_color . "\n";
+		foreach my $line (@lines) {
+			my $padding  = $len - length(bleach_text($line));
+			$line       .= " " x $padding;
+
+			print $color . $line . $color . $right . $reset_color . "\n";
+		}
 		print $color . ($dash x $len) . $bot_r . $reset_color . "\n";
+	}
+}
+
+sub git_datestr_unixtime {
+	my $str = shift();
+
+	my @p = split(' ', $str);
+
+	my %month = (
+		Jan => 0, Feb => 1, Mar => 2, Apr => 3,
+		May => 4, Jun => 5, Jul => 6, Aug => 7,
+		Sep => 8, Oct => 9, Nov => 10, Dec => 11,
+	);
+
+	my ($wday, $mon_str, $mday, $time, $year, $tz) = @p;
+	my ($hour, $min, $sec) = split /:/, $time;
+
+	my $mon = $month{$mon_str} || "";
+
+	# Convert local time to UTC using timezone offset like -700
+	my $offset_hours   = int($tz / 100);
+	my $offset_minutes = abs($tz % 100);
+	my $offset_seconds = ($offset_hours * 3600) + ($offset_minutes * 60);
+
+	my $epoch = Time::Local::timegm($sec, $min, $hour, $mday, $mon, $year - 1900);
+	my $ret   = $epoch - $offset_seconds;
+
+	return $ret;
+}
+
+sub human_time_diff {
+	my ($raw, $add_extra) = @_;
+
+	my $seconds = abs(int($raw));
+	my $num     = 0;
+	my $unit    = "";
+
+	my $extra  = " ago";
+	if ($raw < 0) {
+		$extra = " in the future";
+	}
+
+	my $ret = "";
+	if ($seconds < 120) {
+		$ret = "just now";
+		return $ret;
+	} elsif ($seconds < 3600) {
+		$num  = int($seconds / 60);
+		$unit = "minute";
+	} elsif ($seconds < 86400) {
+		$num  = int($seconds / 3600);
+		$unit = "hour";
+	} elsif ($seconds < 86400 * 30) {
+		$num  = int($seconds / 86400);
+		$unit = "day";
+	} elsif ($seconds < (86400 * 365)) {
+		$num  = int($seconds / (86400 * 30));
+		$unit = "month";
+	} else {
+		$num  = int($seconds / (86400 * 365));
+		$unit = "year";
+	}
+
+	if ($num > 1) { $unit .= "s"; }
+	if ($unit) { $ret = "$num $unit"; }
+
+	if ($add_extra) {
+		$ret .= $extra;
+	}
+
+	return $ret;
+}
+
+# Borrowed from: https://www.perturb.org/display/1167_Perl_ANSI_colors.html
+# String format: '115', '165_bold', '10_on_140', 'reset', 'on_173', 'red', 'white_on_blue'
+sub color {
+	my ($str, $txt) = @_;
+
+	# For d-s-f purposes we ALWAYS colorize
+	#if (-t STDOUT == 0) { return $txt // ""; } # No interactive terminal
+	if (!length($str) || $str eq 'reset') { return "\e[0m";    } # No string = RESET
+
+	# Some predefined colors/commands
+	my %color_map = qw(red 160 blue 27 green 34 yellow 226 orange 214 purple 93 white 15 black 0);
+	my %cmd_map   = qw(bold 1 italic 3 underline 4 blink 5 inverse 7);
+
+	# Pre-process the string.
+	$str =~ s/on_/-/;                              # "on_" becomes a negative number
+	$str =~ s|([A-Za-z]+)|$color_map{$1} // $1|eg; # command number
+
+	my @parts = split("_", $str);
+	foreach my $p (@parts) {
+		my $cmd_num = $cmd_map{$p // 0};
+
+		if    ($cmd_num)                      { $p = $cmd_num;               }
+		elsif (defined($p) && $p =~ /^-(.+)/) { $p = get_ansi_color($1, 48); }
+		elsif (defined($p))                   { $p = get_ansi_color($p, 38); }
+	}
+
+	my $ret = "\e[" . join(";", @parts) . "m";
+
+	if (defined($txt)) { $ret .= $txt . "\e[0m";   }
+
+	return $ret;
+}
+
+sub get_ansi_color {
+	my ($str, $mode) = @_;
+
+	if ($str =~ m/#(\w{6})/) {
+		my ($r,$g,$b) = unpack('C3', (pack 'H6', $1));
+		return "$mode;2;$r;$g;$b";
+	} else {
+		return "$mode;5;$str";
 	}
 }
 
@@ -1748,7 +2011,10 @@ BEGIN {
 
 	# If you're me you load a debug library
 	if ($ENV{USER} && ($ENV{USER} eq "bakers")) {
+		no warnings 'once';
+
 		require Dump::Krumo;
+		$Dump::Krumo::use_color = 2;
 		Dump::Krumo->import(qw(k kd));
 	}
 }
@@ -1793,20 +2059,25 @@ B<changeHunkIndicators:> Simplify Git header chunks to a human readable format. 
 
     git config --bool --global diff-so-fancy.changeHunkIndicators false
 
-B<stripLeadingSymbols:> Should the + or - symbols at line-start be removed. (Default: true)
+B<stripLeadingSymbols:> Remove the C<+> or C<-> symbols at start of each diff line. (Default: true)
 
     git config --bool --global diff-so-fancy.stripLeadingSymbols false
 
-B<useUnicodeRuler:> By default, the separator for the file header uses Unicode line-drawing
-characters. If this is causing output errors on your terminal, set this to false to use ASCII
-characters instead. (Default: true)
+B<useUnicodeRuler:> Use Unicode to draw the ruler lines. Setting this to false will use ASCII instead. (Default: true)
 
     git config --bool --global diff-so-fancy.useUnicodeRuler false
 
-B<rulerWidth:> By default, the separator for the file header spans the full width of the
-terminal. Use rulerWidth to set the width of the file header manually.
+B<rulerWidth:> rulerWidth sets the width of the ruler lines. (Default: screen width)
 
     git config --global diff-so-fancy.rulerWidth 80
+
+B<rulerWidth:> Simplify the header information to a single line for filename and line number. (Default false)
+
+    git config --global diff-so-fancy.shortHeaders true
+
+B<semIntegration> Include the summary from sem in the header for each changed file. (Default false)
+
+    git config --global diff-so-fancy.semIntegration true
 
 =head1 HOMEPAGE
 
@@ -1822,4 +2093,4 @@ terminal. Use rulerWidth to set the width of the file header manually.
 
 - https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md#diff-so-fancy
 
-# vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4
+# vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4 filetype=perl
