@@ -27,7 +27,7 @@ PACKAGES=(
     slurp grim wf-recorder
 
     # GUI
-    librewolf-bin ghostty 1password nextcloud-client
+    librewolf ghostty 1password nextcloud-client
     celluloid betterbird timeshift pavucontrol clockify-desktop
     seahorse gnome-keyring
     nemo nemo-fileroller

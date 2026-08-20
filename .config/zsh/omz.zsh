@@ -82,3 +82,6 @@ bindkey '^G' _load-gh-token
 
 setopt autocd nobeep numeric_glob_sort no_glob
 rm() { emulate -L zsh; command rm ${^~@} }
+cp() { emulate -L zsh; command cp ${^~@} }
+mv() { emulate -L zsh; command mv ${^~@} }
+trash() { emulate -L zsh; command trash ${^~@} }
