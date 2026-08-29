@@ -61,21 +61,24 @@ return {
     {
         "esmuellert/codediff.nvim",
         cmd = "CodeDiff",
-        opts = { conflict_result_position = "center", conflict_result_width_ratio = { 1, 1, 1 } },
+        opts = {
+            diff = { conflict_result_position = "center", conflict_result_width_ratio = { 1, 1, 1 } },
+            explorer = { hidden = true },
+        },
     },
     {
         "folke/snacks.nvim",
         keys = {
             { "<leader>gw", function() Snacks.gitbrowse() end, desc = "Open Git Browser", mode = { "n", "v" } },
-            { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
-            { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
-            { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
-            {
-                "<leader>gP",
-                function() Snacks.picker.gh_pr({ state = "all" }) end,
-                desc = "GitHub Pull Requests (all)",
-            },
+            -- { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
+            -- { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+            -- { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
+            -- {
+            --     "<leader>gP",
+            --     function() Snacks.picker.gh_pr({ state = "all" }) end,
+            --     desc = "GitHub Pull Requests (all)",
+            -- },
         },
-        opts = { gitbrowse = {}, gh = {} },
+        opts = { gitbrowse = {} }, -- gh = {}
     },
 }
