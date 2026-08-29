@@ -127,11 +127,26 @@ if [[ -z $panes ]]; then
     exit 0
 fi
 
-# shellcheck disable=SC2016 # fzf expands FZF_PREVIEW_LINES in the preview shell
+# Cut each row to what the preview shows
+# shellcheck disable=SC2016
+CROP='{
+    out = ""; n = 0; s = $0
+    while (n < w && length(s)) {
+        if (match(s, /^\033\[[0-9;]*m/)) {
+            out = out substr(s, 1, RLENGTH); s = substr(s, RLENGTH + 1); continue
+        }
+        out = out substr(s, 1, 1); s = substr(s, 2); n++
+    }
+    bare = out; gsub(/\033\[[0-9;]*m/, "", bare)
+    if (bare !~ /[^ ]/) { print ""; next }
+    # Cutting mid-line can leave an attribute open, which bleeds into the next
+    print (out ~ /\033\[/) ? out "\033[0m" : out
+}'
+
 pick=$(fzf --ansi --delimiter=$'\t' --with-nth=1 \
     --tmux "center,$POPUP%,60%" --info=hidden \
     --bind "load:refresh-preview+reload(sleep 2; '$self' --list)" \
-    --preview='tmux capture-pane -p -e -t {2} | cat -s | tail -n ${FZF_PREVIEW_LINES:-40}' \
+    --preview="tmux capture-pane -p -e -t {2} | awk -v w=\${FZF_PREVIEW_COLUMNS:-200} '$CROP' | cat -s | tail -n \${FZF_PREVIEW_LINES:-40}" \
     --preview-window="right,$PREVIEW%,border-left" <<<"$panes")
 [[ -z $pick ]] && exit 0
 
