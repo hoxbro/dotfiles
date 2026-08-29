@@ -25,8 +25,8 @@ status() {
 }
 
 rows() {
-    local -A owner=() target_of=()
-    local panes cpid csess pane id sess target cmd cwd title jump
+    local -A owner=() target_of=() pane_of=() ppid_of=() agents=() agent_of=()
+    local panes cpid csess pane pid ppid p name id sess target cmd cwd title jump
 
     # Sidekick runs its agent in a session of its own, attached from a tmux
     # client inside nvim's terminal buffer. Such a client inherits TMUX_PANE
@@ -37,12 +37,34 @@ rows() {
         owner[$csess]=$pane
     done < <(tmux list-clients -F '#{client_pid}	#{session_name}')
 
-    PANES='#{pane_id}	#{session_name}	#{session_name}:#{window_index}#{?#{>:#{window_panes},1},.#{pane_index},}	#{pane_current_command}	#{pane_current_path}	#{pane_title}'
+    PANES='#{pane_id}	#{pane_pid}	#{session_name}	#{session_name}:#{window_index}#{?#{>:#{window_panes},1},.#{pane_index},}	#{pane_current_path}	#{pane_title}'
     panes=$(tmux list-panes -a -F "$PANES")
-    while IFS=$'\t' read -r id sess target cmd cwd title; do target_of[$id]=$target; done <<<"$panes"
+    while IFS=$'\t' read -r id pid sess target cwd title; do
+        target_of[$id]=$target
+        pane_of[$pid]=$id
+    done <<<"$panes"
 
-    while IFS=$'\t' read -r id sess target cmd cwd title; do
-        [[ $cmd =~ ^($AGENTS)$ ]] || continue
+    # A wrapper like claude-continue keeps the agent as its child, and tmux
+    # reports the wrapper, so walk up from each agent to the pane holding it
+    while read -r pid ppid name; do
+        ppid_of[$pid]=$ppid
+        [[ $name =~ ^($AGENTS)$ ]] && agents[$pid]=$name
+    done < <(ps -eo pid=,ppid=,comm=)
+
+    for pid in "${!agents[@]}"; do
+        p=$pid
+        while ((p > 1)); do
+            if [[ -n ${pane_of[$p]-} ]]; then
+                agent_of[${pane_of[$p]}]=${agents[$pid]}
+                break
+            fi
+            p=${ppid_of[$p]:-0}
+        done
+    done
+
+    while IFS=$'\t' read -r id pid sess target cwd title; do
+        cmd=${agent_of[$id]-}
+        [[ -n $cmd ]] || continue
         jump=$id
         if [[ -n ${owner[$sess]-} ]]; then
             jump=${owner[$sess]}
@@ -101,8 +123,8 @@ fi
 
 panes=$(rows | render)
 if [[ -z $panes ]]; then
-    echo "no agents running in tmux" >&2
-    exit 1
+    tmux display-message "No agents running"
+    exit 0
 fi
 
 # shellcheck disable=SC2016 # fzf expands FZF_PREVIEW_LINES in the preview shell
