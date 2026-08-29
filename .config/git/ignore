@@ -7,3 +7,4 @@ mre*.py
 failing_tests.txt
 claude/
 .DS_Store
+.kilo/

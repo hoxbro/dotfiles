@@ -1,15 +1,19 @@
 # General
 
-- Always have temporary files located in a `claude/{SESSION_NAME}` directory, you should
-  never add these to git.
+- Always have temporary files located in a `claude/{SESSION_NAME}` directory
 - Always use built-in write and then run the file.
-- Only use `git add` with filename
 - Always use the `gh` CLI for fetching
 - Always cache fetched web results, and use them for future reference
 - Treat `AGENTS.md` or `.github/AGENTS.md` as `CLAUDE.md`
 - Don't start bash command with comment
+- Do not run linter, formatter, and type checking
+- Comments should be kept short and only introduced to explain why the code is as it is not what it does.
+
+# Git
+
+- Only use `git add` with filename
 - Attribution must follow this format: `Assisted-by: AGENT_NAME:MODEL_VERSION`
-- Do not run linter, formatter, and type checking, before asked for commit
+- When committing make sure to use backtick-quote for code
 
 # Python
 
@@ -20,3 +24,4 @@
 - `ty` is a valid command, do not replace with `mypy`
 - When writing tests only create a new file if there isn't any good file to put it in
 - UI tests needs `--ui` CLI flag
+- tests does not need docstrings
