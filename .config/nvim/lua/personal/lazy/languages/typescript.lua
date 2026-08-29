@@ -1,6 +1,25 @@
-if DAP_typescript_commands == nil then DAP_typescript_commands = {
-    "make test:unit",
-} end
+local function _bokehjs_dir()
+    local cwd = vim.fn.getcwd()
+    if cwd:match("/bokehjs$") ~= nil then return cwd end
+    if vim.fn.isdirectory(cwd .. "/bokehjs") == 1 then return cwd .. "/bokehjs" end
+    return cwd
+end
+
+local function _bokehjs()
+    local bokehjs_dir = _bokehjs_dir()
+
+    local bokehjs_source_map = {
+        ["@@/*"] = bokehjs_dir .. "/*",
+        ["../../../examples/*.ts"] = bokehjs_dir .. "/examples/*.ts",
+    }
+
+    for _, marker in ipairs(vim.fn.glob(vim.fn.getcwd() .. "/*/bokeh.ext.json", false, true)) do
+        local ext = vim.fn.fnamemodify(marker, ":h")
+        local name = vim.fn.fnamemodify(ext, ":t")
+        bokehjs_source_map["@@/" .. name .. "/*"] = ext .. "/*"
+    end
+    return bokehjs_dir, bokehjs_source_map
+end
 
 return {
     {
@@ -20,14 +39,19 @@ return {
         opts = function(_, opts)
             local adapter = {
                 type = "server",
-                host = "localhost",
+                host = "127.0.0.1",
                 port = "${port}",
-                executable = { command = vim.fn.exepath("js-debug-adapter"), args = { "${port}" } },
+                executable = {
+                    command = vim.fn.exepath("js-debug-adapter"),
+                    args = { "${port}", "127.0.0.1" },
+                },
             }
             local adapters = {
                 ["pwa-node"] = adapter,
                 ["pwa-chrome"] = adapter,
             }
+
+            local bk_dir, bk_map = _bokehjs()
             local configurations = {
                 {
                     type = "pwa-node",
@@ -47,7 +71,7 @@ return {
                     name = "Launch: Command",
                     cwd = "${workspaceFolder}",
                     args = function()
-                        local output = Util.selector(DAP_typescript_commands, "Select an command to run:")
+                        local output = Util.input("Select an command to run:")
                         return require("dap.utils").splitstr(output)
                     end,
                     runtimeExecutable = "node",
@@ -94,24 +118,27 @@ return {
                 {
                     type = "pwa-chrome",
                     request = "launch",
-                    name = "Launch: Chrome (BokehJS)",
-                    url = "http://127.0.0.1:5777/examples/legends",
+                    name = "Launch: Chrome (Bokeh URL)",
+                    url = function() return Util.input("Enter URL", "http://localhost:5006/") end,
+                    webRoot = bk_dir,
+                    protocol = "inspector",
+                    sourceMaps = true,
+                    sourceMapPathOverrides = bk_map,
+                    userDataDir = false,
+                    runtimeExecutable = vim.fn.exepath("chromium"),
+                },
+                {
+                    type = "pwa-chrome",
+                    request = "launch",
+                    name = "Launch: Chrome (Bokeh file)",
+                    file = function()
+                        local files = vim.fn.glob(vim.fn.getcwd() .. "/*.html", false, true)
+                        return Util.selector(files, "Select an html file:")
+                    end,
                     webRoot = "${workspaceFolder}",
                     protocol = "inspector",
                     sourceMaps = true,
-                    sourceMapPathOverrides = {
-                        -- Handle the @@/ prefixed paths in bundled source maps
-                        ["@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
-                        ["/static/js/@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
-                        ["static/js/@@/build/js/lib/*.js"] = "${workspaceFolder}/src/lib/*.ts",
-
-                        -- Handle individual lib file maps
-                        ["../../../src/lib/*.ts"] = "${workspaceFolder}/src/lib/*.ts",
-
-                        -- Handle examples
-                        ["../../../examples/*.ts"] = "${workspaceFolder}/examples/*.ts",
-                        ["/static/examples/*.ts"] = "${workspaceFolder}/examples/*.ts",
-                    },
+                    sourceMapPathOverrides = bk_map,
                     userDataDir = false,
                     runtimeExecutable = vim.fn.exepath("chromium"),
                 },
