@@ -95,6 +95,10 @@ ce() {
     echo "Usage: ce <env_name> package1 package2 ..." >&2
     return 1
   fi
+  if [[ "$1" == *=* ]]; then
+    echo "Environment name '$1' contains '='" >&2
+    return 1
+  fi
   if mamba env list | awk '{print $1}' | grep -qx "$1"; then
     echo "Environment '$1' exists."
   else

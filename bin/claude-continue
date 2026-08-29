@@ -8,7 +8,7 @@ claude_limit_hit() {
     local output reset_hour target_ts
     output=$(timeout 5 claude --print "t" --no-session-persistence 2>&1) || true
 
-    if echo "$output" | grep -qi "You've hit your limit"; then
+    if echo "$output" | grep -qi "You've hit your session limit"; then
         reset_hour=$(
             echo "$output" | sed -n 's/.*resets \([^()]*[0-9]\{1,2\}[ap]m\).*/\1/ip'
         )
