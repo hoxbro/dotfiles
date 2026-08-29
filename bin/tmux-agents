@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# AI
+AGENTS='claude|opencode|kilo'
+WAITING="❯ *[0-9]+\. *yes|[0-9]+\. *yes, and don't ask again|waiting for permission|tab to amend|ctrl\+e to explain|△ permission required|esc dismiss|allow once|allow always|\([yn]/[yn]\)"
+BUSY=$'(^|\n)[[:space:]]*(⏸|⏵).*esc to|esc inter|ctrl\+c to (stop|interrupt)|(■|⬝){4,}'
+
+# FZF
+POPUP=80   # % of the client width
+PREVIEW=60 # % of the popup width
+
+status() {
+    local screen
+    # Bottom non-empty lines only
+    screen=$(tmux capture-pane -p -t "$1" | grep -v '^[[:space:]]*$' | tail -n 12)
+    screen=${screen,,}
+    if [[ $screen =~ $WAITING ]]; then
+        echo waiting
+    elif [[ $screen =~ $BUSY ]]; then
+        echo running
+    else
+        echo finished
+    fi
+}
+
+rows() {
+    local -A owner=() target_of=()
+    local panes cpid csess pane id sess target cmd cwd title jump
+
+    # Sidekick runs its agent in a session of its own, attached from a tmux
+    # client inside nvim's terminal buffer. Such a client inherits TMUX_PANE
+    # from the editor, which names the pane that session is displayed in.
+    while IFS=$'\t' read -r cpid csess; do
+        pane=$(tr '\0' '\n' <"/proc/$cpid/environ" 2>/dev/null | sed -n 's/^TMUX_PANE=//p')
+        [[ -n $pane ]] || continue
+        owner[$csess]=$pane
+    done < <(tmux list-clients -F '#{client_pid}	#{session_name}')
+
+    PANES='#{pane_id}	#{session_name}	#{session_name}:#{window_index}#{?#{>:#{window_panes},1},.#{pane_index},}	#{pane_current_command}	#{pane_current_path}	#{pane_title}'
+    panes=$(tmux list-panes -a -F "$PANES")
+    while IFS=$'\t' read -r id sess target cmd cwd title; do target_of[$id]=$target; done <<<"$panes"
+
+    while IFS=$'\t' read -r id sess target cmd cwd title; do
+        [[ $cmd =~ ^($AGENTS)$ ]] || continue
+        jump=$id
+        if [[ -n ${owner[$sess]-} ]]; then
+            jump=${owner[$sess]}
+            target=${target_of[$jump]:-$target}
+        fi
+        title=${title#✳ }
+        title=${title#* | } # "OC | doing something"
+        [[ ${title,,} =~ ^(oc|opencode|kilo|kilo\ cli|claude|claude\ code|nvim)?$ ]] && title=${cwd##*/}
+        printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$target" "$cmd" "$(status "$id")" "$title" "$id" "$jump"
+    done <<<"$panes"
+}
+
+# Width of the list column: fzf reports its own when it asks for a reload,
+# otherwise derive it from the popup geometry above
+list_width() {
+    local cols=${FZF_COLUMNS:-}
+    if [[ -z $cols ]]; then
+        cols=$(tmux display -p '#{client_width}' 2>/dev/null)
+        [[ $cols =~ ^[0-9]+$ ]] || cols=${COLUMNS:-120}
+        cols=$((cols * POPUP / 100 - 4)) # tmux pane border, then fzf's own
+    fi
+    echo $((cols - cols * PREVIEW / 100 - 3)) # fzf gutter and preview border
+}
+
+# Title takes the leftover width, so the rest lands on the right edge
+render() {
+    awk -F'\t' -v width="$(list_width)" '
+        function w(s, n) { return length(s) > n ? length(s) : n }
+        { for (i = 1; i <= 6; i++) f[NR, i] = $i
+          ca = w($2, ca); ci = w($1, ci) }
+        END {
+            # Drop columns rather than overflow when the popup is narrow
+            cols = 3; tw = width - 13 - ca - ci
+            if (tw < 12) { cols = 2; tw = width - 9 - ci }
+            if (tw < 12) { cols = 1; tw = width - 5 }
+            if (tw < 8) tw = 8
+            for (r = 1; r <= NR; r++) {
+                state = f[r, 3]
+                color = state == "waiting" ? 31 : state == "running" ? 33 : 32
+                title = f[r, 4]
+                if (length(title) > tw) title = substr(title, 1, tw - 1) "…"
+                tail = cols > 1 ? sprintf("    \033[2m%s\033[0m", f[r, 1]) : ""
+                if (cols > 2) tail = sprintf("    \033[2m%-*s\033[0m%s", ca, f[r, 2], tail)
+                printf "\033[%dm●\033[0m    %-*s%s\t%s\t%s\n",
+                    color, tw, title, tail, f[r, 5], f[r, 6]
+            }
+        }'
+}
+
+self=$(readlink -f "$0")
+if [[ ${1-} == --list ]]; then
+    rows | render
+    exit 0
+fi
+
+panes=$(rows | render)
+if [[ -z $panes ]]; then
+    echo "no agents running in tmux" >&2
+    exit 1
+fi
+
+# shellcheck disable=SC2016 # fzf expands FZF_PREVIEW_LINES in the preview shell
+pick=$(fzf --ansi --delimiter=$'\t' --with-nth=1 \
+    --tmux "center,$POPUP%,60%" --info=hidden \
+    --bind "load:refresh-preview+reload(sleep 2; '$self' --list)" \
+    --preview='tmux capture-pane -p -e -t {2} | cat -s | tail -n ${FZF_PREVIEW_LINES:-40}' \
+    --preview-window="right,$PREVIEW%,border-left" <<<"$panes")
+[[ -z $pick ]] && exit 0
+
+IFS=$'\t' read -r _ _ jump <<<"$pick"
+target=$(tmux display -p -t "$jump" '#{session_name}:#{window_index}')
+tmux select-window -t "$target"
+tmux select-pane -t "$jump"
+if [[ -n ${TMUX-} ]]; then
+    tmux switch-client -t "${target%%:*}"
+else
+    tmux attach-session -t "${target%%:*}"
+fi
