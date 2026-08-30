@@ -1,6 +1,6 @@
 # General
 
-- Always have temporary files located in a `claude/{SESSION_NAME}` directory
+- Always have temporary files located in a `.scraith/{SESSION_NAME}` directory
 - Always use built-in write and then run the file.
 - Always use the `gh` CLI for fetching
 - Always cache fetched web results, and use them for future reference
@@ -18,7 +18,7 @@
 # Python
 
 - The correct python environment is always activated, never install packages.
-- Never use `python -c` write it to a file in `claude/{SESSION_NAME}` and run it with `python filename`
+- Never use `python -c` write it to a file in `.scraith/{SESSION_NAME}` and run it with `python filename`
 - If you are creating new tests confirm it actual fails on main.
 - Never write `TODO` comments for WIP use `NotImplementedError`
 - `ty` is a valid command, do not replace with `mypy`

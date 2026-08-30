@@ -5,6 +5,6 @@ mre*.py
 .lazy.lua
 **/.claude/settings.local.json
 failing_tests.txt
-claude/
+.scraith/
 .DS_Store
 .kilo/
