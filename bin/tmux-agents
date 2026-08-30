@@ -135,9 +135,13 @@ CROP='{
         if (match(s, /^\033\[[0-9;]*m/)) {
             out = out substr(s, 1, RLENGTH); s = substr(s, RLENGTH + 1); continue
         }
+        # OSC (hyperlinks, title, etc.)
+        if (match(s, /^\033\][^\007]*(\007|\033\\)/)) {
+            out = out substr(s, 1, RLENGTH); s = substr(s, RLENGTH + 1); continue
+        }
         out = out substr(s, 1, 1); s = substr(s, 2); n++
     }
-    bare = out; gsub(/\033\[[0-9;]*m/, "", bare)
+    bare = out; gsub(/\033\[[0-9;]*m/, "", bare); gsub(/\033\][^\007]*(\007|\033\\)/, "", bare)
     if (bare !~ /[^ ]/) { print ""; next }
     # Cutting mid-line can leave an attribute open, which bleeds into the next
     print (out ~ /\033\[/) ? out "\033[0m" : out

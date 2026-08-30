@@ -28,6 +28,7 @@ return {
                 tools = {
                     opencode = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } },
                     kilo = { cmd = { "kilo" } },
+                    claude = { native_scroll = true },
                 },
             },
         },
