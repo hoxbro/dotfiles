@@ -22,9 +22,9 @@ return {
         ft = "markdown",
         opts = { image = {} },
     },
-    {
-        "HakonHarnes/img-clip.nvim",
-        opts = {},
-        keys = { { "<leader>mp", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" } },
-    },
+    -- {
+    --     "HakonHarnes/img-clip.nvim",
+    --     opts = {},
+    --     keys = { { "<leader>mp", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" } },
+    -- },
 }

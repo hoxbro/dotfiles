@@ -37,10 +37,10 @@ return {
             vim.schedule(function() vim.lsp.enable(opts.enable or {}) end)
         end,
     },
-    {
-        "jmbuhr/otter.nvim",
-        keys = { { "<leader>co", function() require("otter").activate() end, desc = "Activate otter" } },
-        dependencies = { "nvim-treesitter/nvim-treesitter" },
-        opts = {},
-    },
+    -- {
+    --     "jmbuhr/otter.nvim",
+    --     keys = { { "<leader>co", function() require("otter").activate() end, desc = "Activate otter" } },
+    --     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    --     opts = {},
+    -- },
 }

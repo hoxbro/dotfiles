@@ -204,14 +204,12 @@ return {
                 python = python_exe,
                 -- pytest_discover_instances = true,
                 args = function(_, position)
-                    local Path = require("plenary.path")
-                    local elems = vim.split(position.path, Path.path.sep)
+                    local elems = vim.split(position.path, package.config:sub(1, 1), { plain = true })
                     return (vim.tbl_contains(elems, "ui") and { "--ui", "-vv" }) or { "-vv" }
                 end,
                 is_test_file = function(file_path)
-                    local Path = require("plenary.path")
                     if not vim.endswith(file_path, ".py") then return false end
-                    local elems = vim.split(file_path, Path.path.sep)
+                    local elems = vim.split(file_path, package.config:sub(1, 1), { plain = true })
                     local file_name = elems[#elems]
                     return vim.startswith(file_name, "test") and not vim.tbl_contains(elems, "node_modules")
                 end,
