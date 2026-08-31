@@ -8,6 +8,7 @@
 - Don't start bash command with comment
 - Do not run linter, formatter, and type checking
 - Comments should be kept short and only introduced to explain why the code is as it is not what it does.
+- Never open an issue or PR without my approval
 
 # Git
 

@@ -7,7 +7,4 @@
       "disabled": true,
     },
   },
-  "permission": {
-    "bash": "allow"
-  },
 }
