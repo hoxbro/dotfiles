@@ -149,6 +149,7 @@ hl.window_rule({ match = { class = "^(?i)(librewolf)$" }, workspace = "2" })
 hl.window_rule({ match = { class = "^(?i)(ferdium)$" }, workspace = "3" })
 hl.window_rule({ match = { class = "^(?i)(virt-manager)$" }, workspace = "4" })
 hl.window_rule({ match = { class = "^(?i)(parsecd)$" }, workspace = "5" })
+hl.window_rule({ match = { class = "^(?i)(com.obsproject.Studio)$" }, workspace = "6" })
 
 hl.window_rule({ match = { class = "^(?i)(clockify|eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
