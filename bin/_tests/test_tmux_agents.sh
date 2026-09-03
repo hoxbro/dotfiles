@@ -69,6 +69,12 @@ check "opencode dialog" waiting '  △ Permission required
 check "kilo idle banner" finished ' ┃  Ask anything... "What is the tech stack of this project?"
  ┃  Code  · Anthropic: Claude Opus 4.8 Kilo Gateway · medium
    ctrl+t variants  tab agents  ctrl+p commands'
+check "claude waiting on background agent" running '● Task 3 implementer running. Waiting for it to complete.
+
+✻ Waiting for 1 background agent to finish
+❯
+─────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents · ↓ to manage'
 check "plain prompt" finished 'shh@meshify ~/dotfiles $ '
 
 ((fails == 0)) || exit 1
