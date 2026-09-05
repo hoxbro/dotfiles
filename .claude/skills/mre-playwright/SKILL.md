@@ -1,49 +1,62 @@
 ---
 name: mre-playwright
-description: Automatically create a Minimum Reproducible Example (MRE) using Playwright to reproduce a browser-based bug from a GitHub issue.
+author: hoxbro
+description: >
+  Automatically create a Minimum Reproducible Example (MRE) using Playwright to
+  reproduce a browser-based bug, from a GitHub issue or from a plain
+  description.
 ---
 
-Create a Minimum Reproducible Example (MRE) using Playwright to reproduce a browser-based bug from a GitHub issue.
+Create a Minimum Reproducible Example (MRE) using Playwright to reproduce a browser-based bug.
 
 ## Usage
 
 ```
 /mre-playwright <issue_url_or_number>
+/mre-playwright <free-text bug description>
+/mre-playwright
 ```
 
 ## Instructions
 
-### 1. Fetch and Understand the Issue
+### 1. Understand the Bug
+
+If given a GitHub issue (URL or number):
 
 ```bash
 gh issue view title,body,comments <number >--json
 ```
 
-Extract:
+If given a free-text description, use that directly.
+
+If given no argument, use the bug already being discussed in the current conversation — don't ask the user to restate it.
+
+In all cases, ask only for what's still critically missing (e.g. how to trigger the bug), then extract:
 
 - Bug description
-- Code snippets from the issue
+- Code snippets
 - Steps to reproduce
 - Expected vs actual behavior
 
 ### 2. Create MRE Directory
 
 ```
-claude/<issue_name>/
-├── reproduce_<number>.py
+.scraith/<id>_<bug_name>/
+├── reproduce_<id>.py
 └── screenshot_*.png (generated when run)
 ```
+
+`<id>` is the issue number when there is one, otherwise a short slug for the bug.
 
 ### 3. MRE Script Structure
 
 ```python
 """
-Playwright reproducer for GitHub issue #<NUMBER>:
-<ISSUE_TITLE>
+Playwright reproducer for <TITLE>
 
-<ISSUE_URL>
+<ISSUE_URL — omit this line if there is no issue>
 
-Run with: python reproduce_<NUMBER>.py
+Run with: python reproduce_<ID>.py
 
 The bug: <ONE_LINE_DESCRIPTION>
 """
@@ -64,8 +77,8 @@ SCREENSHOT_DIR = Path(__file__).parent
 def create_app():
     """Create minimal app that demonstrates the bug.
 
-    Use EXACT code from issue when possible, or simplify while
-    preserving the bug trigger conditions.
+    Use EXACT code from the issue/description when possible, or simplify
+    while preserving the bug trigger conditions.
     """
     # ... app setup
     return app
@@ -78,7 +91,7 @@ def serve_app(app, port=5006):
 
 def main():
     print("=" * 60)
-    print("Reproducer for GitHub issue #<NUMBER>")
+    print("Reproducer for <TITLE>")
     print("<SHORT_DESCRIPTION>")
     print("=" * 60)
 
@@ -297,7 +310,7 @@ Bokeh model data is on `window.Bokeh.documents[0]._all_models` (not in the DOM),
 
 1. **Minimal** - Remove all code not needed to trigger the bug
 2. **Complete** - Single file, runs with `python reproduce.py`
-3. **Exact** - Use issue's code when possible, preserving the trigger
+3. **Exact** - Use the issue's/description's code when possible, preserving the trigger
 4. **Visual** - Screenshots at each step
 5. **Programmatic** - Code that confirms bug exists (not just visual)
 6. **Documented** - Clear comments explaining each step
