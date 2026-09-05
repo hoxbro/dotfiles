@@ -2,6 +2,7 @@
   "env": {
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0"
   },
+  "attribution": { "sessionUrl": false },
   "permissions": {
     "allow": [
       "Edit(/tmp/**)",
