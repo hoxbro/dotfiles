@@ -4,6 +4,14 @@ set -euo pipefail
 # You've hit your limit · resets 1pm (Europe/Copenhagen)
 # You've hit your limit · resets Jan 17, 10am (Europe/Copenhagen)
 
+_date() {
+    if command -v gdate &>/dev/null; then
+        gdate "$@"
+    else
+        date "$@"
+    fi
+}
+
 claude_limit_hit() {
     local output reset_hour target_ts
     output=$(timeout 5 claude --print "t" --no-session-persistence 2>&1) || true
@@ -17,10 +25,10 @@ claude_limit_hit() {
             echo "Claude limit reset is days away: $reset_hour"
             exit 0
         elif [[ -n "$reset_hour" ]]; then
-            now_ts=$(date +%s)
-            target_ts=$(date -d "$reset_hour" +%s)
+            now_ts=$(_date +%s)
+            target_ts=$(_date -d "$reset_hour" +%s)
             if ((target_ts <= now_ts)); then
-                target_ts=$(date -d "tomorrow ${reset_hour}" +%s)
+                target_ts=$(_date -d "tomorrow ${reset_hour}" +%s)
             fi
             echo "$target_ts"
             return 0
@@ -33,9 +41,9 @@ claude_limit_hit() {
 
 if target_ts=$(claude_limit_hit); then
     tput civis && trap 'tput cnorm' EXIT
-    printf 'Claude limit reached — sleeping until %s\n' "$(date -d "@$target_ts" +'%H:%M')"
+    printf 'Claude limit reached — sleeping until %s\n' "$(_date -d "@$target_ts" +'%H:%M')"
     while :; do
-        sleep_seconds=$((target_ts - $(date +%s) + 5))
+        sleep_seconds=$((target_ts - $(_date +%s) + 5))
         if [ "$sleep_seconds" -le 0 ]; then
             printf '\rDone.%-40s\n' ''
             break
