@@ -26,11 +26,7 @@ WORKTIME_NOTES_MAX=7
 get() { curl -s --connect-timeout 5 "$WORKTIME_BASE_URL$1"; }
 post() { curl -s --connect-timeout 5 -H "Content-Type: application/json" -X POST -d "$2" "$WORKTIME_BASE_URL$1"; }
 
-# Regenerates the right-click menu's XML from live shortcuts. Only
-# rewrites the file and SIGUSR2-reloads waybar when content changed.
-_worktime_xml_escape() {
-    sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
-}
+_worktime_xml_escape() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 
 worktime_sync_shortcuts_menu() {
     local shortcuts="$1" count i xml label
@@ -61,7 +57,7 @@ worktime_sync_shortcuts_menu() {
     if [[ "$(cat "$WORKTIME_SHORTCUTS_MENU_FILE" 2>/dev/null)" != "$xml" ]]; then
         mkdir -p "$(dirname "$WORKTIME_SHORTCUTS_MENU_FILE")"
         printf '%s' "$xml" >"$WORKTIME_SHORTCUTS_MENU_FILE"
-        pkill -SIGUSR2 waybar 2>/dev/null || true
+        notify-send "Worktime" "Shortcuts changed, restart waybar"
     fi
 }
 
