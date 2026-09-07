@@ -28,7 +28,7 @@ PACKAGES=(
 
     # GUI
     librewolf ghostty 1password nextcloud-client
-    celluloid betterbird timeshift pavucontrol clockify-desktop
+    celluloid betterbird timeshift pavucontrol
     seahorse gnome-keyring
     nemo nemo-fileroller
     code spotify parsec ferdium-bin zoom

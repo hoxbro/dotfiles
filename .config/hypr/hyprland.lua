@@ -71,7 +71,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("ferdium", { workspace = "3 silent" })
     hl.exec_cmd("1password")
     hl.exec_cmd("betterbird")
-    hl.exec_cmd("clockify")
     hl.exec_cmd("spotify")
 
     local focus_timer
@@ -136,6 +135,8 @@ bind_cmd("SUPER + SHIFT + e", "curl 10.0.1.2:8000/elgato/toggle -X POST")
 bind_cmd("SUPER + SEMICOLON", "walker -m clipboard")
 bind_cmd("Print", '~/bin/walker/screen "Screenshot | Full"')
 bind_cmd("SHIFT + Print", "~/bin/walker/screen")
+bind_cmd("SUPER + e", "~/bin/worktime start")
+bind_cmd("SUPER + SHIFT + e", "~/bin/worktime stop")
 
 -- Window rules
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
@@ -151,21 +152,7 @@ hl.window_rule({ match = { class = "^(?i)(virt-manager)$" }, workspace = "4" })
 hl.window_rule({ match = { class = "^(?i)(parsecd)$" }, workspace = "5" })
 hl.window_rule({ match = { class = "^(?i)(com.obsproject.Studio)$" }, workspace = "6" })
 
-hl.window_rule({ match = { class = "^(?i)(clockify|eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })
+hl.window_rule({ match = { class = "^(?i)(eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
 hl.window_rule({ match = { class = "^(?i)(1password)$" }, workspace = "special:password silent" })
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
-
-local work_width = "monitor_w*0.15*" .. HYPR_SCALE
-hl.window_rule({
-    match = { class = "^(?i)(clockify)$" },
-    float = true,
-    size = { work_width, "monitor_h-28" },
-    move = { 2, 28 },
-})
-hl.window_rule({
-    match = { class = "^(?i)(eu.betterbird.Betterbird)$" },
-    float = true,
-    size = { "monitor_w-" .. work_width .. "-4", "monitor_h-28" },
-    move = { work_width .. "+4", 28 },
-})

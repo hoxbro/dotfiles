@@ -6,6 +6,7 @@
   "modules-left": ["hyprland/workspaces", "custom/uptime"],
   "modules-center": [],
   "modules-right": [
+    "custom/worktime",
     "custom/recording",
     "tray",
     "memory",
@@ -121,5 +122,27 @@
     "interval": 1,
     "tooltip": true,
     "on-click": "bash ~/bin/walker/screen",
+  },
+
+  "custom/worktime": {
+    "exec": "~/bin/worktime status",
+    "on-click": "~/bin/worktime start",
+    "on-click-middle": "~/bin/worktime stop",
+    "menu": "on-click-right",
+    "menu-file": "~/.cache/worktime/menu.xml",
+    "menu-actions": {
+      "shortcut_slot_0": "~/bin/worktime start-shortcut-by-index 0",
+      "shortcut_slot_1": "~/bin/worktime start-shortcut-by-index 1",
+      "shortcut_slot_2": "~/bin/worktime start-shortcut-by-index 2",
+      "shortcut_slot_3": "~/bin/worktime start-shortcut-by-index 3",
+      "shortcut_slot_4": "~/bin/worktime start-shortcut-by-index 4",
+      "shortcut_slot_5": "~/bin/worktime start-shortcut-by-index 5",
+      "shortcut_slot_6": "~/bin/worktime start-shortcut-by-index 6",
+      "shortcut_slot_7": "~/bin/worktime start-shortcut-by-index 7",
+    },
+    "return-type": "json",
+    "interval": 1,
+    "signal": 8,
+    "tooltip": true,
   },
 }

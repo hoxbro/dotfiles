@@ -42,8 +42,25 @@
 #cpu,
 #tray,
 #cliphist,
-#wireplumber {
+#wireplumber,
+#custom-worktime {
   padding-right: 1em;
+}
+
+#custom-worktime.idle {
+  color: @foreground;
+}
+
+#custom-worktime.running {
+  color: #6fc3e6;
+}
+
+#custom-worktime.stale {
+  color: orange;
+}
+
+#custom-worktime.error {
+  color: #e01b24;
 }
 
 #idle_inhibitor {
