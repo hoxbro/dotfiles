@@ -7,8 +7,9 @@
 - Treat `AGENTS.md` or `.github/AGENTS.md` as `CLAUDE.md`
 - Don't start bash command with comment
 - Do not run linter, formatter, and type checking
-- Comments should be kept short and only introduced to explain why the code is as it is not what it does.
+- Comments should be kept short and only introduced to explain why the code is this way, not what it does, and not what it used to do.
 - Never open an issue or PR without my approval
+- Do not look at PRs unless asked.
 
 # Git
 
