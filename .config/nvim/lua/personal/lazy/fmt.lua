@@ -34,6 +34,7 @@ return {
             markdown = { "prettierd", "injected" },
             json = { "prettierd" },
             jsonc = { "prettierd" },
+            json5 = { "prettierd" },
             yaml = { "prettierd" },
             sh = { "shfmt" },
             bash = { "shfmt" },
