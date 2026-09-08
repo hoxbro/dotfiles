@@ -156,3 +156,11 @@ hl.window_rule({ match = { class = "^(?i)(eu.betterbird.Betterbird)$" }, workspa
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
 hl.window_rule({ match = { class = "^(?i)(1password)$" }, workspace = "special:password silent" })
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
+
+hl.window_rule({
+    match = { class = "^(waybar-menu)$" },
+    float = true,
+    move = { "cursor_x", "28" },
+    border_size = 0,
+    no_initial_focus = true,
+})
