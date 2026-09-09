@@ -3,7 +3,7 @@ set -uo pipefail
 
 # AI
 AGENTS='claude|opencode|kilo'
-WAITING="❯ *[0-9]+\. *yes|[0-9]+\. *yes, and don't ask again|waiting for permission|tab to amend|ctrl\+e to explain|△ permission required|esc dismiss|allow once|allow always|\([yn]/[yn]\)"
+WAITING="❯ *[0-9]+\. *yes|[0-9]+\. *yes, and don't ask again|waiting for permission|tab to amend|ctrl\+e to explain|△ permission required|esc dismiss|allow once|allow always|\([yn]/[yn]\)|enter to select"
 BUSY=$'(^|\n)[[:space:]]*(⏸|⏵).*esc to|esc inter|ctrl\+c to (stop|interrupt)|(■|⬝){4,}|waiting for [0-9]+ background agent'
 
 # FZF
