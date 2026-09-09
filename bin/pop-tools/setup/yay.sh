@@ -4,6 +4,7 @@ PACKAGES=(
     # CLI / TUI
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass jq
+    reflector mosh
 
     # Desktop Environment
     hyprland hyprpaper hyprlock hypridle hyprpolkitagent
@@ -40,7 +41,7 @@ PACKAGES=(
 )
 
 # Computers
-PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode)
+PACKAGES_MESHIFY=(ethtool openssh-server refind cifs-utils amd-ucode gnome-connections)
 PACKAGES_FRAMEWORK=(amd-ucode plymouth)
 PACKAGES_VIRTM=(spice-vdagent)
 
