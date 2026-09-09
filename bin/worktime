@@ -20,6 +20,8 @@ WORKTIME_POLL_INTERVAL=20
 WORKTIME_PROJECTS_TTL=3600
 WORKTIME_NOTES_CACHE="$HOME/.cache/worktime/notes.json"
 WORKTIME_NOTES_MAX=7
+WORKTIME_RECENT_CACHE="$HOME/.cache/worktime/recent.json"
+WORKTIME_RECENT_MAX=8
 
 get() { curl -s --connect-timeout 5 "$WORKTIME_BASE_URL$1"; }
 post() { curl -s --connect-timeout 5 -H "Content-Type: application/json" -X POST -d "$2" "$WORKTIME_BASE_URL$1"; }
@@ -84,6 +86,28 @@ worktime_notes_record() {
     jq --arg key "$key" --arg note "$note" --argjson max "$WORKTIME_NOTES_MAX" \
         '.[$key] = ([$note] + ((.[$key] // []) - [$note]))[0:$max]' \
         "$WORKTIME_NOTES_CACHE" >"$WORKTIME_NOTES_CACHE.tmp" && mv -f "$WORKTIME_NOTES_CACHE.tmp" "$WORKTIME_NOTES_CACHE"
+}
+
+# Last WORKTIME_RECENT_MAX unique (project, subproject, note) combos actually
+# started with a note, newest first, so the shortcuts menu can offer quick
+# re-starts of recent work alongside the server-configured shortcuts.
+worktime_recent_record() {
+    local project_id="$1" subproject_id="$2" note="$3"
+    [[ -z "$note" ]] && return 0
+    mkdir -p "$(dirname "$WORKTIME_RECENT_CACHE")"
+    [[ -f "$WORKTIME_RECENT_CACHE" ]] || echo '[]' >"$WORKTIME_RECENT_CACHE"
+    jq --arg pid "$project_id" --arg sid "$subproject_id" --arg note "$note" --argjson max "$WORKTIME_RECENT_MAX" \
+        '([{project_id: $pid, subproject_id: $sid, note: $note}] +
+          map(select(.project_id != $pid or .subproject_id != $sid or .note != $note)))[0:$max]' \
+        "$WORKTIME_RECENT_CACHE" >"$WORKTIME_RECENT_CACHE.tmp" && mv -f "$WORKTIME_RECENT_CACHE.tmp" "$WORKTIME_RECENT_CACHE"
+}
+
+worktime_recent_list() {
+    [[ -f "$WORKTIME_RECENT_CACHE" ]] || {
+        echo '[]'
+        return 0
+    }
+    jq -c '.' "$WORKTIME_RECENT_CACHE"
 }
 
 worktime_subproject_name() {
@@ -251,32 +275,51 @@ do_start() {
 
     start_timer "$project_id" "$subproject_id" "$choice" "$note"
     worktime_notes_record "$notes_key" "$note"
+    worktime_recent_record "$project_id" "$subproject_id" "$note"
 }
 
 do_shortcuts_menu() {
-    local shortcuts count names choice shortcut project_id subproject_id projects project_name
+    local shortcuts recent projects combined count names choice entry project_id subproject_id note project_name
     shortcuts=$(worktime_fetch_shortcuts) || {
         notify_err "Could not reach worktime server"
         exit 1
     }
-    count=$(jq 'length' <<<"$shortcuts")
+    projects=$(worktime_fetch_projects) || projects="[]"
+    recent=$(worktime_recent_list)
+
+    # Shortcuts first, then recent notes - labeled "note · project · subproject"
+    # since, unlike shortcuts, they have no dedicated nickname.
+    combined=$(jq -c -n --argjson shortcuts "$shortcuts" --argjson recent "$recent" --argjson projects "$projects" '
+        def project_label(pid; sid):
+            (($projects[] | select(.id == pid)) // {}) as $p |
+            (($p.subprojects[]? | select(.id == sid) | .name) // empty) as $sub |
+            [$p.name // pid] + (if $sub != "" then [$sub] else [] end) | join(" · ");
+        ($shortcuts | map({label: .name, project_id, subproject: (.subproject // ""), note: .name})) +
+        ($recent | map(. as $r |
+            {label: ([$r.note, project_label($r.project_id; $r.subproject_id)] | join(" · ")),
+             project_id: $r.project_id, subproject: $r.subproject_id, note: $r.note}))
+    ')
+
+    count=$(jq 'length' <<<"$combined")
     ((count == 0)) && exit 0
 
-    names=$(jq -r '.[].name' <<<"$shortcuts")
+    names=$(jq -r '.[].label' <<<"$combined")
     choice=$(printf '%s\n' "$names" | ~/dotfiles/.config/waybar/scripts/menu.py 2>/dev/null) || exit 0
     [[ -z "$choice" ]] && exit 0
 
-    shortcut=$(jq -c --arg name "$choice" '.[] | select(.name == $name)' <<<"$shortcuts" | head -n1)
-    project_id=$(jq -r '.project_id' <<<"$shortcut")
-    subproject_id=$(jq -r '.subproject // ""' <<<"$shortcut")
+    entry=$(jq -c --arg label "$choice" '[.[] | select(.label == $label)] | .[0]' <<<"$combined")
+    [[ -z "$entry" || "$entry" == "null" ]] && exit 0
 
-    # Use the real project name, not the shortcut's nickname, so the
+    project_id=$(jq -r '.project_id' <<<"$entry")
+    subproject_id=$(jq -r '.subproject // ""' <<<"$entry")
+    note=$(jq -r '.note' <<<"$entry")
+
+    # Use the real project name, not a shortcut's nickname, so the
     # tooltip doesn't show e.g. "Morning updates" as if it were a project.
-    projects=$(worktime_fetch_projects) || projects="[]"
     project_name=$(jq -r --arg pid "$project_id" '.[] | select(.id == $pid) | .name' <<<"$projects" | head -n1)
     [[ -z "$project_name" ]] && project_name="$project_id"
 
-    start_timer "$project_id" "$subproject_id" "$project_name" "$choice"
+    start_timer "$project_id" "$subproject_id" "$project_name" "$note"
 }
 
 mode="${1:-status}"
