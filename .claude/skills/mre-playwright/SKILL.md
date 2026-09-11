@@ -61,6 +61,7 @@ Run with: python reproduce_<ID>.py
 The bug: <ONE_LINE_DESCRIPTION>
 """
 
+import os
 import time
 from pathlib import Path
 
@@ -102,7 +103,10 @@ def main():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, slow_mo=100)
+            browser = p.chromium.launch(
+                headless=os.environ.get("MRE_HEADLESS", "1") != "0",
+                slow_mo=100,
+            )
             page = browser.new_page()
             page.goto(f"http://localhost:{port}")
 
@@ -321,3 +325,5 @@ Bokeh model data is on `window.Bokeh.documents[0]._all_models` (not in the DOM),
 2. Check screenshots show the problem clearly
 3. Confirm bug detection logic works
 4. Show user the output and screenshots for verification
+
+Always return a copy/pastable script `MRE_HEADSLES=0 python .scraith/<id>_<title>/reproduce_<id>.py`

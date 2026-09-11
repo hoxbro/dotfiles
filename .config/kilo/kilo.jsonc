@@ -7,4 +7,15 @@
       "disabled": true,
     },
   },
+  "mcp": {
+    "issuestore": {
+      "type": "local",
+      "command": ["holoviz", "issuestore", "serve"],
+      "enabled": false,
+      "timeout": 120000,
+    },
+  },
+  "permission": {
+    "issuestore_*": "allow",
+  },
 }
