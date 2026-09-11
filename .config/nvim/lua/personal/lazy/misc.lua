@@ -1,17 +1,17 @@
 return {
     { "tpope/vim-sleuth", event = { "BufReadPost", "BufWritePost", "BufNewFile" } },
-    {
-        "folke/trouble.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = {},
-        keys = {
-            {
-                "<leader>dd",
-                function() require("trouble").toggle({ mode = "diagnostics" }) end,
-                desc = "Trouble Toggle console",
-            },
-        },
-    },
+    -- {
+    --     "folke/trouble.nvim",
+    --     dependencies = { "nvim-tree/nvim-web-devicons" },
+    --     opts = {},
+    --     keys = {
+    --         {
+    --             "<leader>dd",
+    --             function() require("trouble").toggle({ mode = "diagnostics" }) end,
+    --             desc = "Trouble Toggle console",
+    --         },
+    --     },
+    -- },
     {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
@@ -51,5 +51,4 @@ return {
         opts = { mappings = { highlight = "" } },
     },
     { "laytan/cloak.nvim", event = { "BufReadPre" }, opts = {} },
-    "lewis6991/fileline.nvim",
 }

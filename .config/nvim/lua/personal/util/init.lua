@@ -1,4 +1,5 @@
 require("personal.util.autocmd")
+require("personal.util.fileline")
 require("personal.util.lsp_explain")
 require("personal.util.usercmd")
 require("personal.util.virtual_text")
