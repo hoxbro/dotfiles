@@ -6,7 +6,8 @@
   "permissions": {
     "allow": [
       "Edit(/tmp/**)",
-      "Edit(/private/tmp/**)"
+      "Edit(/private/tmp/**)",
+      "mcp__issuestore__*"
     ],
     "deny": [
       "Read(./.env)",
