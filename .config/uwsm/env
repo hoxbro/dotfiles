@@ -2,6 +2,7 @@
 
 date "+%H:%M" >/tmp/last-unlock
 export BROWSER=librewolf
+export LANG=en_DK.UTF-8
 
 case "$(uname -n)" in
 "framework")
