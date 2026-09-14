@@ -4,7 +4,7 @@ PACKAGES=(
     # CLI / TUI
     less rsync lsof zsh rar stow wl-clipboard man-db zip unzip
     ffmpeg parallel trash-cli btop yt-dlp downgrade ufw pass jq
-    reflector mosh
+    reflector mosh websocat
 
     # Desktop Environment
     hyprland hyprpaper hyprlock hypridle hyprpolkitagent

@@ -130,8 +130,7 @@
     "on-click-middle": "~/bin/worktime stop",
     "on-click-right": "~/bin/worktime shortcuts-menu",
     "return-type": "json",
-    "interval": 1,
-    "signal": 8,
+    "restart-interval": 5,
     "tooltip": true,
   },
 }
