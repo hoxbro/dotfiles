@@ -108,14 +108,6 @@
     },
   },
 
-  "custom/uptime": {
-    "exec": "~/.config/waybar/scripts/uptime-status.sh",
-    "return-type": "json",
-    "interval": 1,
-    "tooltip": true,
-    "format": "| {}",
-  },
-
   "custom/recording": {
     "exec": "~/.config/waybar/scripts/recording-status.sh",
     "return-type": "json",

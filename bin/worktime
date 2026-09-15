@@ -107,11 +107,12 @@ do_stop() {
 }
 
 start_timer() {
-    local project_id="$1" subproject_id="$2" label="$3" note="${4:-}" payload response
-    payload=$(jq -nc --arg project_id "$project_id" --arg subproject "$subproject_id" --arg note "$note" \
+    local project_id="$1" subproject_id="$2" label="$3" note="${4:-}" start="${5:-}" payload response
+    payload=$(jq -nc --arg project_id "$project_id" --arg subproject "$subproject_id" --arg note "$note" --arg start "$start" \
         '{project_id: $project_id}
          + (if $subproject == "" then {} else {subproject: $subproject} end)
-         + (if $note == "" then {} else {note: $note} end)')
+         + (if $note == "" then {} else {note: $note} end)
+         + (if $start == "" then {} else {start: $start} end)')
     response=$(post "/worktime/start" "$payload")
     if [[ -z "$response" ]]; then
         notify_err "Failed to start $label"
@@ -286,8 +287,18 @@ do_shortcuts_menu() {
     ((count == 0)) && exit 0
 
     names=$(jq -r '.[].label' <<<"$combined")
-    choice=$(printf '%s\n' "$names" | ~/dotfiles/.config/waybar/scripts/menu.py 2>/dev/null) || exit 0
+    choice=$(printf '%s\n' "$names" | ~/dotfiles/.config/waybar/scripts/menu.py /tmp/last-unlock 2>/dev/null) || exit 0
     [[ -z "$choice" ]] && exit 0
+
+    # A second line is the unlock time picked from the item's right-click list.
+    local start=""
+    if [[ "$choice" == *$'\n'* ]]; then
+        start=$(date -d "${choice#*$'\n'}" --iso-8601=seconds 2>/dev/null) || {
+            notify_err "Invalid time: ${choice#*$'\n'}"
+            exit 1
+        }
+        choice=${choice%%$'\n'*}
+    fi
 
     entry=$(jq -c --arg label "$choice" '[.[] | select(.label == $label)] | .[0]' <<<"$combined")
     [[ -z "$entry" || "$entry" == "null" ]] && exit 0
@@ -296,7 +307,7 @@ do_shortcuts_menu() {
     subproject_id=$(jq -r '.subproject // ""' <<<"$entry")
     note=$(jq -r '.note' <<<"$entry")
 
-    start_timer "$project_id" "$subproject_id" "$choice" "$note"
+    start_timer "$project_id" "$subproject_id" "$choice" "$note" "$start"
 }
 
 mode="${1:-status}"

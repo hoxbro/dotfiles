@@ -1,11 +1,14 @@
 #!/usr/bin/python3
+import json
+import subprocess
 import sys
 
 import gi
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
-from gi.repository import Gdk, GLib, Gtk
+gi.require_version("GtkLayerShell", "0.1")
+from gi.repository import Gdk, GLib, Gtk, GtkLayerShell
 
 GLib.set_prgname("waybar-menu")
 
@@ -35,7 +38,19 @@ decoration,
 """
 
 
+def cursor_position() -> tuple[int, int] | None:
+    try:
+        out = subprocess.run(
+            ["hyprctl", "cursorpos", "-j"], capture_output=True, text=True, timeout=1
+        ).stdout
+        pos = json.loads(out)
+        return int(pos["x"]), int(pos["y"])
+    except (OSError, subprocess.SubprocessError, ValueError, KeyError):
+        return None
+
+
 def main() -> int:
+    alt_file = sys.argv[1] if len(sys.argv) > 1 else None
     names = [line.rstrip("\n") for line in sys.stdin if line.strip()]
     if not names:
         return 1
@@ -49,31 +64,83 @@ def main() -> int:
     win = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
     win.set_decorated(False)
     win.set_resizable(False)
-    win.set_skip_taskbar_hint(True)
-    win.set_skip_pager_hint(True)
+
+    GtkLayerShell.init_for_window(win)
+    GtkLayerShell.set_namespace(win, "waybar-menu")
+    GtkLayerShell.set_layer(win, GtkLayerShell.Layer.OVERLAY)
+    GtkLayerShell.set_keyboard_mode(win, GtkLayerShell.KeyboardMode.ON_DEMAND)
+    GtkLayerShell.set_anchor(win, GtkLayerShell.Edge.TOP, True)
+    GtkLayerShell.set_anchor(win, GtkLayerShell.Edge.LEFT, True)
+    GtkLayerShell.set_exclusive_zone(win, -1)
+
+    display = Gdk.Display.get_default()
+    cursor = cursor_position()
+    monitor = (
+        display.get_monitor_at_point(*cursor) if cursor else display.get_primary_monitor()
+    ) or display.get_monitor(0)
+    GtkLayerShell.set_monitor(win, monitor)
+    geometry = monitor.get_geometry()
+
+    def place() -> None:
+        width = win.get_preferred_width().natural_width
+        height = win.get_preferred_height().natural_height
+        x = cursor[0] - geometry.x if cursor else geometry.width
+        y = cursor[1] - geometry.y if cursor else 0
+        GtkLayerShell.set_margin(win, GtkLayerShell.Edge.LEFT, max(0, min(x, geometry.width - width)))
+        GtkLayerShell.set_margin(win, GtkLayerShell.Edge.TOP, max(0, min(y, geometry.height - height)))
 
     box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
     win.add(box)
 
     chosen: dict[str, str] = {}
+    # The item right-clicked to open the alt list; None while showing names.
+    alt_for: str | None = None
 
-    def on_click(_button: Gtk.Button, name: str) -> None:
-        chosen["name"] = name
+    def on_click(_button: Gtk.Button, value: str) -> None:
+        chosen["value"] = value if alt_for is None else f"{alt_for}\n{value}"
         Gtk.main_quit()
 
-    for name in names:
-        label = Gtk.Label(label=name)
-        label.set_xalign(0.0)
+    def fill(items: list[str]) -> None:
+        for child in box.get_children():
+            box.remove(child)
+        for name in items:
+            label = Gtk.Label(label=name)
+            label.set_xalign(0.0)
 
-        btn = Gtk.Button()
-        btn.set_relief(Gtk.ReliefStyle.NONE)
-        style = btn.get_style_context()
-        style.add_class("menuitem")
-        style.add_class("flat")
-        style.add_class("worktime-item")
-        btn.add(label)
-        btn.connect("clicked", on_click, name)
-        box.pack_start(btn, False, False, 0)
+            btn = Gtk.Button()
+            btn.set_relief(Gtk.ReliefStyle.NONE)
+            style = btn.get_style_context()
+            style.add_class("menuitem")
+            style.add_class("flat")
+            style.add_class("worktime-item")
+            btn.add(label)
+            btn.connect("clicked", on_click, name)
+            btn.connect("button-press-event", on_button_press, name)
+            box.pack_start(btn, False, False, 0)
+        box.show_all()
+        win.resize(1, 1)
+        place()
+
+    def on_button_press(_widget: Gtk.Widget, event: Gdk.EventButton, name: str) -> bool:
+        nonlocal alt_for, cursor
+        if event.button != 3 or alt_file is None:
+            return False
+        cursor = cursor_position() or cursor
+        if alt_for is not None:
+            alt_for = None
+            fill(names)
+            return True
+        try:
+            with open(alt_file) as f:
+                alt = [line.rstrip("\n") for line in f if line.strip()]
+        except OSError:
+            alt = []
+        if alt:
+            alt_for = name
+            fill(alt)
+        return True
+
+    fill(names)
 
     def stop(*_args: object) -> bool:
         Gtk.main_quit()
@@ -91,8 +158,8 @@ def main() -> int:
     win.show_all()
     Gtk.main()
 
-    if "name" in chosen:
-        print(chosen["name"])
+    if "value" in chosen:
+        print(chosen["value"])
         return 0
     return 1
 
