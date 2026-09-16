@@ -11,7 +11,7 @@
     "issuestore": {
       "type": "local",
       "command": ["holoviz", "issuestore", "serve"],
-      "enabled": false,
+      "enabled": true,
       "timeout": 120000,
     },
   },

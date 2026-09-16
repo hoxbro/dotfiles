@@ -75,6 +75,7 @@ if [[ $name == "meshify" ]]; then
     sudo systemctl enable --now sshd
     if has ufw; then
         sudo ufw allow ssh
+        sudo ufw allow 60000:61000/udp # mosh
     fi
 fi
 
