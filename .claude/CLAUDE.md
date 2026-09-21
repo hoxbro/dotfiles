@@ -17,10 +17,11 @@
 
 # GitHub
 
-- Fetch GitHub content with `gh` CLI
+- Use the `issuestore` MCP when available for fetching, else use `gh` CLI
 - Never open an issue, PR, or comment without my explicit approval
 - Do not look at PRs unless asked.
 - Write issue and PR numbers as Markdown links, e.g. `[#123](https://github.com/owner/repo/pull/123)`.
+- Always use PR template when available
 
 # Python
 

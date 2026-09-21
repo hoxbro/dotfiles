@@ -98,6 +98,9 @@
   "tray": {
     "icon-size": 16,
     "spacing": 16,
+    "icons": {
+      "1Password_status_icon_1": "1password-panel",
+    },
   },
 
   "idle_inhibitor": {

@@ -154,5 +154,5 @@ hl.window_rule({ match = { class = "^(?i)(com.obsproject.Studio)$" }, workspace 
 
 hl.window_rule({ match = { class = "^(?i)(eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
-hl.window_rule({ match = { class = "^(?i)(1password)$" }, workspace = "special:password silent" })
+hl.window_rule({ match = { class = "^(?i)(com.onepassword.OnePassword)$" }, workspace = "special:password silent" })
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
