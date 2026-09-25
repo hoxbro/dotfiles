@@ -3,7 +3,6 @@
 - Always have temporary files (scripts, outputs, fetched pages) in `.scraith/<task>/`, where `<task>` is a short name for the current task
 - To run ad-hoc code, write it to a file in `.scraith/<task>/` with the Write tool, then run the file. Never pass code inline (`python -c`).
 - Always cache fetched web results in `.scraith/cache`, and use them for future reference
-- Treat `AGENTS.md` or `.github/AGENTS.md` as `CLAUDE.md`
 - Don't start bash command with comment
 - Do not run linter, formatter, and type checking, unless I ask.
 - Only add short comments explaining why, never what the code does or used to do. No comment is the default.
