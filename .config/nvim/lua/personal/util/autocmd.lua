@@ -88,3 +88,34 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
         end
     end,
 })
+
+-- Quickfix jumps skip terminal windows
+vim.api.nvim_create_autocmd("TermOpen", {
+    group = vim.api.nvim_create_augroup("term-winfixbuf", { clear = true }),
+    callback = function() vim.wo.winfixbuf = true end,
+})
+
+-- Close oil windows when a file is opened elsewhere
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = vim.api.nvim_create_augroup("oil-autoclose", { clear = true }),
+    callback = function(args)
+        local bo = vim.bo[args.buf]
+        if bo.buftype ~= "" or bo.filetype == "oil" or vim.wo.previewwindow then return end
+        local oil_wins = {}
+        for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+            if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "oil" then oil_wins[win] = true end
+        end
+        if vim.tbl_isempty(oil_wins) then return end
+        vim.schedule(function()
+            for win in pairs(oil_wins) do
+                if
+                    vim.api.nvim_win_is_valid(win)
+                    and vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "oil"
+                    and #vim.api.nvim_tabpage_list_wins(0) > 1
+                then
+                    pcall(vim.api.nvim_win_close, win, false)
+                end
+            end
+        end)
+    end,
+})
