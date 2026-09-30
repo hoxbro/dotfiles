@@ -89,12 +89,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
     end,
 })
 
--- Quickfix jumps skip terminal windows
-vim.api.nvim_create_autocmd("TermOpen", {
-    group = vim.api.nvim_create_augroup("term-winfixbuf", { clear = true }),
-    callback = function() vim.wo.winfixbuf = true end,
-})
-
 -- Close oil windows when a file is opened elsewhere
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = vim.api.nvim_create_augroup("oil-autoclose", { clear = true }),

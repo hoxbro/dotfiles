@@ -25,6 +25,7 @@ return {
             nes = { enabled = not nopilot },
             cli = {
                 mux = { backend = "tmux", enabled = true },
+                win = { wo = { winfixbuf = true } },
                 tools = {
                     opencode = { env = { AWS_PROFILE = vim.env.AWS_PROFILE } },
                     kilo = { cmd = { "kilo" } },
