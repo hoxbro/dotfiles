@@ -29,6 +29,7 @@
     remove-stash = reflog expire --expire-unreachable=30.days refs/stash
     freedom = "!git config hook.ban-main.enabled false && rm `git rev-parse --show-toplevel`/.git/hooks/pre-push"
     remove-remotes = "!git remote | grep -v '^origin$' | xargs -r -I {} sh -c 'echo Removing remote: {} && git remote remove {}'"
+    pixi-lock = "!git checkout --theirs pixi.lock && git add pixi.lock && pixi lock"
 [color]
     ui = true
 [color "diff-highlight"]

@@ -73,6 +73,8 @@ alias panel-kill='kill $(lsof -i :5006 -sTCP:LISTEN -t)'
 zsh-defer source $HOLOVIZ_REP/holoviz-tools/holoviz.zsh
 
 # Apps
+export DISABLE_TELEMETRY=1
+export DO_NOT_TRACK=1
 __zoxide() { eval "$(zoxide init zsh)" && unset -f __zoxide }; zsh-defer __zoxide
 __fzf() { eval "$(fzf --zsh)" && unset -f __fzf }; zsh-defer __fzf
 export FZF_DEFAULT_COMMAND="fd --type=f --hidden --follow --strip-cwd-prefix"
@@ -84,7 +86,6 @@ export FZF_DEFAULT_OPTS="\
 --gutter=' '"
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --icons=always --tree --color=always {} | head -200'"
-export GH_TELEMETRY=0
 eval "$(starship init zsh)"
 
 # Autocompletion
