@@ -17,5 +17,12 @@
   },
   "permission": {
     "issuestore_*": "allow",
+    "bash": "ask",
+    "edit": "ask",
+    "external_directory": {
+      "~/.claude/skills/*": "allow",
+      "~/dotfiles/.claude/skills/*": "allow",
+    },
   },
+  "plugin": ["file:///home/shh/projects/kilo-approver/src/index.ts"],
 }
