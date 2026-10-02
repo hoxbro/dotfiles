@@ -4,17 +4,11 @@ date "+%H:%M" >/tmp/last-unlock
 export BROWSER=librewolf
 export LANG=en_DK.UTF-8
 
+export XCURSOR_SIZE=24
+export HYPRCURSOR_SIZE=24
+export GDK_SCALE=2
+
 case "$(uname -n)" in
-"framework")
-    export XCURSOR_SIZE=24
-    export HYPRCURSOR_SIZE=24
-    export GDK_SCALE=2
-    export HYPR_SCALE=2
-    ;;
-*)
-    export XCURSOR_SIZE=12
-    export HYPRCURSOR_SIZE=12
-    export GDK_SCALE=1
-    export HYPR_SCALE=1
-    ;;
+"framework") export HYPR_MODE=preferred ;;
+"meshify") export HYPR_MODE=5120x2880@165 ;;
 esac

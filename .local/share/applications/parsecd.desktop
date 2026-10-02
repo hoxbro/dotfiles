@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Parsec
+GenericName=Parsec
+Comment=Simple, low-latency game streaming.
+Exec=sh -c 'XENVIRONMENT="$HOME/.config/parsec/Xresources" exec /usr/bin/parsecd "$@"' parsecd %u
+Icon=/usr/share/icons/hicolor/256x256/apps/parsecd.png
+Terminal=false
+Type=Application
+Categories=Network;Game;Utility;

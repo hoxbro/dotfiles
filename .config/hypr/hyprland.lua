@@ -52,7 +52,7 @@ hl.device({ name = "epic-mouse-v1", sensitivity = -0.5 })
 hl.device({ name = "apple-inc.-magic-trackpad", sensitivity = 0.5 })
 
 -- Monitor
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = HYPR_SCALE })
+hl.monitor({ output = "", mode = os.getenv("HYPR_MODE") or "preferred", position = "auto", scale = 2 })
 
 -- Gestures
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
