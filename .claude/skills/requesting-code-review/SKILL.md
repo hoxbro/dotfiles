@@ -1,7 +1,7 @@
 ---
 name: requesting-code-review
 description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
-author: https://github.com/obra/superpowers/releases/tag/v6.3.0
+author: https://github.com/obra/superpowers/releases/tag/v6.4.2
 ---
 
 # Requesting Code Review
@@ -29,7 +29,7 @@ Dispatch a code reviewer subagent to catch issues before they cascade. The revie
 **1. Get git SHAs:**
 
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+BASE_SHA=$(git rev-parse HEAD~1)  # or: git merge-base origin/main HEAD
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 

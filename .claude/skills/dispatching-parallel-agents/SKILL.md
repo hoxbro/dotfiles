@@ -1,7 +1,7 @@
 ---
 name: dispatching-parallel-agents
 description: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
-author: https://github.com/obra/superpowers/releases/tag/v6.3.0
+author: https://github.com/obra/superpowers/releases/tag/v6.4.2
 ---
 
 # Dispatching Parallel Agents

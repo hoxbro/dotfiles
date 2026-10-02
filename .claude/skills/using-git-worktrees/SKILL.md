@@ -1,7 +1,7 @@
 ---
 name: using-git-worktrees
 description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback
-author: https://github.com/obra/superpowers/releases/tag/v6.3.0
+author: https://github.com/obra/superpowers/releases/tag/v6.4.2
 ---
 
 # Using Git Worktrees
@@ -71,8 +71,8 @@ Follow this priority order. Explicit user preference always beats observed files
 2. **Check for an existing project-local worktree directory:**
 
    ```bash
-   ls -d .worktrees 2>/dev/null # Preferred (hidden)
-   ls -d worktrees 2>/dev/null  # Alternative
+   ls -d .worktrees 2>/dev/null     # Preferred (hidden)
+   ls -d worktrees 2>/dev/null      # Alternative
    ```
 
    If found, use it. If both exist, `.worktrees` wins.
@@ -108,9 +108,6 @@ cd "$path"
 Auto-detect and run appropriate setup:
 
 ```bash
-# pixi
-if [ -f pixi.lock ]; then pixi install; fi
-
 # Node.js
 if [ -f package.json ]; then npm install; fi
 
@@ -119,7 +116,7 @@ if [ -f Cargo.toml ]; then cargo build; fi
 
 # Python
 if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-if [ -f uv.lock ]; then uv sync; fi
+if [ -f pyproject.toml ]; then poetry install; fi
 
 # Go
 if [ -f go.mod ]; then go mod download; fi

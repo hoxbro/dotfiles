@@ -1,7 +1,7 @@
 ---
 name: using-superpowers
 description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
-author: https://github.com/obra/superpowers/releases/tag/v6.3.0
+author: https://github.com/obra/superpowers/releases/tag/v6.4.2
 ---
 
 <SUBAGENT-STOP>
@@ -49,6 +49,17 @@ These thoughts mean STOP—you're rationalizing:
 | "I'll just do this one thing first" | Check BEFORE doing anything.                           |
 | "This feels productive"             | Undisciplined action wastes time. Skills prevent this. |
 | "I know what that means"            | Knowing the concept ≠ using the skill. Invoke it.      |
+
+## Platform Adaptation
+
+If your harness appears here, read its reference file for special instructions:
+
+- Claude Code: `references/claude-code-tools.md`
+- Codex: `references/codex-tools.md`
+- Pi: `references/pi-tools.md`
+- Antigravity: `references/antigravity-tools.md`
+- Hermes Agent: `references/hermes-tools.md`
+- Muse: `references/muse-tools.md`
 
 ## User Instructions
 

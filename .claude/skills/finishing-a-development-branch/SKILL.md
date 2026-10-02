@@ -1,7 +1,7 @@
 ---
 name: finishing-a-development-branch
 description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work
-author: https://github.com/obra/superpowers/releases/tag/v6.3.0
+author: https://github.com/obra/superpowers/releases/tag/v6.4.2
 ---
 
 # Finishing a Development Branch
