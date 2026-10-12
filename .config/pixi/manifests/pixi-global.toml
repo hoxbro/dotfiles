@@ -2,7 +2,7 @@ version = 1
 
 [envs.tmux]
 channels = ["conda-forge"]
-dependencies = { tmux = "!=3.6" }
+dependencies = { tmux = "*" }
 exposed = {}
 
 [envs.nodejs]
