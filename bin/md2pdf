@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+# Convert a Markdown file to a pretty A4 PDF via Typst + the `ilm` template
+# (https://typst.app/universe/package/ilm), including a cover / front page.
+#
+# Usage:
+#   md2pdf input.md [output.pdf]
+#   md2pdf -T title -A author -d 2026-09-09 input.md [output.pdf]
+#
+# Options:
+#   -T <title>    Cover-page title (default: first `# heading` in the input).
+#   -A <author>   Cover-page author (default: $USER).
+#   -d <date>     Cover-page date, YYYY-MM-DD (default: today).
+#
+# Requires: pandoc (>= 3.11) and the typst binary on PATH.
+# ttc-iosevka
+
+set -euo pipefail
+
+for cmd in pandoc typst; do
+  if ! command -v "$cmd" >/dev/null; then
+    echo "error: required command not found on PATH: $cmd" >&2
+    exit 1
+  fi
+done
+
+title=""
+author=""
+date=""
+while getopts ":T:A:d:" opt; do
+  case "$opt" in
+  T) title="$OPTARG" ;;
+  A) author="$OPTARG" ;;
+  d) date="$OPTARG" ;;
+  *)
+    echo "usage: $(basename "$0") [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
+    exit 1
+    ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [[ $# -lt 1 ]]; then
+  echo "usage: $(basename "$0") [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
+  exit 1
+fi
+
+input="$1"
+output="${2:-${input%.*}.pdf}"
+
+if [[ ! -f "$input" ]]; then
+  echo "error: input file not found: $input" >&2
+  exit 1
+fi
+
+# Cover-page title: use the first `# heading` unless one was supplied.
+if [[ -z "$title" ]]; then
+  title="$(sed -n 's/^# \(.*\)/\1/p' "$input" | head -1)"
+fi
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+
+# If the title came from the leading H1, drop that line from the body so it
+# doesn't repeat under the cover page.
+source="$input"
+if [[ -n "$title" && "$title" == "$(sed -n 's/^# \(.*\)/\1/p' "$input" | head -1)" ]]; then
+  source="$tmpdir/body.md"
+  awk 'BEGIN{done=0} done==0 && /^# /{done=1; next} {print}' "$input" >"$source"
+fi
+
+# Pandoc custom Typst template that renders the body through the `ilm` package.
+template="$tmpdir/ilm.typst"
+cat >"$template" <<'EOF'
+#import "@preview/ilm:2.1.1": ilm
+
+$if(highlighting-definitions)$
+// syntax highlighting functions from skylighting:
+$highlighting-definitions$
+
+$endif$
+#set smartquote(enabled: $if(smart)$true$else$false$endif$)
+
+// Readable tables (mirrors table-style.typ so tables look good under ilm too).
+#set table(
+  inset: 7pt,
+  stroke: (_, y) => (
+    top: if y == 0 { 0.9pt } else { 0.4pt + luma(200) },
+    bottom: 0.9pt,
+  ),
+  fill: (_, y) => if y == 0 { luma(225) } else if calc.odd(y) { luma(245) } else { white },
+  align: left + horizon,
+)
+#show table.cell: set align(left + horizon)
+#show table.cell.where(y: 0): strong
+
+$for(header-includes)$
+$header-includes$
+
+$endfor$
+#show: ilm.with(
+$if(title)$
+  title: [$title$],
+$endif$
+$if(author)$
+  authors: ($for(author)$"$author$"$sep$, $endfor$),
+$endif$
+$if(date)$
+  date: {
+    let p = "$date$".split("-")
+    datetime(year: int(p.at(0)), month: int(p.at(1)), day: int(p.at(2)))
+  },
+$endif$
+$if(abstract)$
+  abstract: [$abstract$],
+$endif$
+$if(papersize)$
+  paper-size: "$papersize$",
+$endif$
+  // Always show the default cover / front page.
+  cover-page: "use-ilm-default",
+$if(toc)$
+  table-of-contents: outline(depth: $toc-depth$),
+$else$
+  table-of-contents: none,
+$endif$
+)
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$body$
+
+$if(bibliography)$
+#bibliography(($for(bibliography)$"$bibliography$"$sep$, $endfor$))
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+EOF
+
+meta_args=()
+[[ -n "$title" ]] && meta_args+=(-M "title=$title")
+meta_args+=(-M "author=${author:-$USER}")
+meta_args+=(-M "date=${date:-$(date +%F)}")
+
+pandoc "$source" \
+  -f gfm \
+  -o "$output" \
+  --pdf-engine=typst \
+  --template "$template" \
+  -V papersize=a4 \
+  -V fontsize=12pt \
+  "${meta_args[@]}"
+
+echo "wrote $output"
