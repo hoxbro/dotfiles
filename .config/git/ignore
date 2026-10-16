@@ -9,4 +9,5 @@ failing_tests.txt
 .DS_Store
 __pycache__
 .ipynb_checkpoints
-.kilo/
+.kilo
+.worktrees

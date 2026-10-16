@@ -6,6 +6,17 @@ local function file_mode_numeric()
     return string.format("0x%03o", stat.mode % 512)
 end
 
+local in_worktree = false
+local function update_worktree()
+    local out = vim.fn.systemlist({ "git", "rev-parse", "--path-format=absolute", "--git-dir", "--git-common-dir" })
+    in_worktree = vim.v.shell_error == 0 and out[1] ~= out[2]
+end
+update_worktree()
+vim.api.nvim_create_autocmd("DirChanged", {
+    group = vim.api.nvim_create_augroup("lualine-worktree", { clear = true }),
+    callback = update_worktree,
+})
+
 return {
     {
         "navarasu/onedark.nvim",
@@ -27,6 +38,16 @@ return {
                 section_separators = { left = nil, right = nil },
             },
             sections = {
+                lualine_b = {
+                    {
+                        "branch",
+                        icons_enabled = false,
+                        fmt = function(s) return s ~= "" and ((in_worktree and "󰙅 " or "\238\130\160 ") .. s) or s end,
+                        color = function() return in_worktree and "DiagnosticWarn" or {} end,
+                    },
+                    "diff",
+                    "diagnostics",
+                },
                 lualine_c = { { "filename", path = 1 } },
                 lualine_x = { file_mode_numeric },
             },
