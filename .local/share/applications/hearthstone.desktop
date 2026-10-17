@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Hearthstone
+Exec=sh -c "lutris lutris:rungameid/1 & lutris lutris:rungameid/2"
+Terminal=false
+Comment=Start Battle.net with Hearthstone Deck Tracker
+Icon=hearthstone

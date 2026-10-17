@@ -156,3 +156,5 @@ hl.window_rule({ match = { class = "^(?i)(eu.betterbird.Betterbird)$" }, workspa
 hl.window_rule({ match = { class = "^(?i)(spotify)$" }, workspace = "special:music silent" })
 hl.window_rule({ match = { class = "^(?i)(com.onepassword.OnePassword)$" }, workspace = "special:password silent" })
 hl.window_rule({ match = { class = "^(?i)(zoom)$" }, workspace = "special:zoom" })
+
+require("games")
