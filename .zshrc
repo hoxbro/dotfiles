@@ -77,6 +77,7 @@ export DISABLE_TELEMETRY=1
 export DO_NOT_TRACK=1
 __zoxide() { eval "$(zoxide init zsh)" && unset -f __zoxide }; zsh-defer __zoxide
 __fzf() { eval "$(fzf --zsh)" && unset -f __fzf }; zsh-defer __fzf
+__wt() { eval "$(wt config shell init zsh)" && unset -f __wt }; zsh-defer __wt
 export FZF_DEFAULT_COMMAND="fd --type=f --hidden --follow --strip-cwd-prefix"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --follow --strip-cwd-prefix"

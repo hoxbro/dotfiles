@@ -13,7 +13,7 @@
 - Only use `git add` with filename
 - Attribution must follow this format: `Assisted-by: AGENT_NAME:MODEL_VERSION` instead of `Co-Authored-By`
 - When committing make sure to use backtick-quote for code. Pass the message with `git commit -F- <<'EOF'`
-- Create worktrees in `.worktrees` dir
+- Use `wt` for git worktree
 
 # GitHub
 

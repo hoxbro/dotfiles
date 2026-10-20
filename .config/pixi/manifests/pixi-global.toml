@@ -109,3 +109,8 @@ exposed = { prek = "prek" }
 channels = ["conda-forge"]
 dependencies = { zizmor = "*" }
 exposed = { zizmor = "zizmor" }
+
+[envs.worktrunk]
+channels = ["conda-forge"]
+dependencies = { worktrunk = "*" }
+exposed = { wt = "wt" }

@@ -1,4 +1,5 @@
-scan_timeout = 100
+format = "$username$hostname$localip$shlvl$singularity$kubernetes$directory$vcsh$fossil_branch$fossil_metrics${custom.git_icon}$git_branch$all"
+scan_timeout = 200
 
 [conda]
 ignore_base = false
@@ -19,6 +20,16 @@ ignore_submodules = true
 [git_commit]
 tag_disabled = false
 tag_symbol = " | "
+
+[git_branch]
+format = '[$branch(:$remote_branch)]($style) '
+
+[custom.git_icon]
+require_repo = true
+when = true
+command = '[ "$(git rev-parse --path-format=absolute --git-dir)" != "$(git rev-parse --path-format=absolute --git-common-dir)" ] && echo "󰙅" || echo ""'
+style = "bold purple"
+format = 'on [$output ]($style)'
 
 [aws]
 disabled = true

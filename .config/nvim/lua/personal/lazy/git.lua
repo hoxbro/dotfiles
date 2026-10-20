@@ -1,6 +1,11 @@
 local function switch_worktree(new_root)
-    local old_root = vim.trim(vim.fn.system({ "git", "rev-parse", "--show-toplevel" }))
-    if old_root == new_root then return end
+    local old_root
+    for _, wt in
+        ipairs(vim.json.decode(vim.fn.system({ "wt", "list", "--format=json" }), { luanil = { object = true } }).items)
+    do
+        if wt.worktree and wt.worktree.current then old_root = wt.worktree.path end
+    end
+    if not old_root or old_root == new_root then return end
 
     for _, client in ipairs(vim.lsp.get_clients()) do
         client:stop()
@@ -112,20 +117,22 @@ return {
         keys = {
             { "<leader>gw", function() Snacks.gitbrowse() end, desc = "Open Git Browser", mode = { "n", "v" } },
             {
-                "<leader>sw",
+                "<leader>wt",
                 function()
-                    local out = vim.fn.systemlist({ "git", "worktree", "list", "--porcelain" })
+                    local out = vim.fn.system({ "wt", "list", "--format=json" })
                     if vim.v.shell_error ~= 0 then return vim.notify("Not a git repository", vim.log.levels.WARN) end
                     local items = {}
-                    for _, line in ipairs(out) do
-                        local path = line:match("^worktree (.+)")
-                        if path then table.insert(items, { text = path, path = path, branch = "" }) end
-                        local branch = line:match("^branch refs/heads/(.+)")
-                        if branch then items[#items].branch = branch end
-                        if line == "detached" then items[#items].branch = "(detached)" end
-                        if line == "bare" then items[#items].branch = "(bare)" end
+                    for _, wt in ipairs(vim.json.decode(out, { luanil = { object = true } }).items) do
+                        if wt.worktree and vim.uv.fs_stat(wt.worktree.path) then
+                            local branch = wt.branch or "(detached)"
+                            table.insert(items, {
+                                text = branch .. " " .. wt.worktree.path,
+                                path = wt.worktree.path,
+                                branch = branch,
+                                symbols = wt.display and wt.display.symbols or "",
+                            })
+                        end
                     end
-                    items = vim.tbl_filter(function(item) return vim.uv.fs_stat(item.path) ~= nil end, items)
                     Snacks.picker.pick({
                         title = "Git Worktrees",
                         items = items,
@@ -133,6 +140,7 @@ return {
                         format = function(item)
                             return {
                                 { ("%-30s"):format(item.branch), "SnacksPickerGitBranch" },
+                                { ("%-6s"):format(item.symbols), "SnacksPickerGitStatus" },
                                 { vim.fn.fnamemodify(item.path, ":~"), "SnacksPickerDir" },
                             }
                         end,

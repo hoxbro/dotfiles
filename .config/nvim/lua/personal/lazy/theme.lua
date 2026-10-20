@@ -8,8 +8,12 @@ end
 
 local in_worktree = false
 local function update_worktree()
-    local out = vim.fn.systemlist({ "git", "rev-parse", "--path-format=absolute", "--git-dir", "--git-common-dir" })
-    in_worktree = vim.v.shell_error == 0 and out[1] ~= out[2]
+    in_worktree = false
+    local out = vim.fn.system({ "wt", "list", "--format=json" })
+    if vim.v.shell_error ~= 0 then return end
+    for _, wt in ipairs(vim.json.decode(out, { luanil = { object = true } }).items) do
+        if wt.worktree and wt.worktree.current then in_worktree = not wt.worktree.main end
+    end
 end
 update_worktree()
 vim.api.nvim_create_autocmd("DirChanged", {

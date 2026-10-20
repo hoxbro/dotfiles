@@ -1,0 +1,4 @@
+worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+
+[post-start]
+pixi = "if [ -f pixi.lock ]; then pixi install; fi"
