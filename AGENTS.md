@@ -21,7 +21,8 @@
 - Never open an issue, PR, or comment without my explicit approval
 - Do not look at PRs unless asked.
 - Write issue and PR numbers as Markdown links, e.g. `[#123](https://github.com/owner/repo/pull/123)`.
-- Always use PR template when available and open PR as draft
+- Always use PR template when available and open PR as draft.
+- Keep PR text short enough to skim: brief bullets, no restating the diff, no filler.
 
 # Python
 

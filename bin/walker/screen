@@ -35,7 +35,7 @@ record_screen() {
     has_encoder() { grep -qF -- "$1" <<<"$encoders"; }
 
     if has_gpu nvidia && has_encoder h264_nvenc; then
-        args=(-c h264_nvenc -r 60 -p preset=p4 -p tune=ll -p cq=26)
+        args=(-c h264_nvenc -r 60 -p preset=p4 -p tune=ll -p cq=26 -F "scale='if(gt(iw,4096),trunc(iw/4)*2,iw)':-2")
     elif has_gpu amd && has_encoder h264_vaapi; then
         render_device=$(find /dev/dri -maxdepth 1 -type c -name 'renderD*' -print -quit 2>/dev/null)
         args=(-c h264_vaapi -r 60 -p qp=26 ${render_device:+-d "$render_device"})

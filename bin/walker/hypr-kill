@@ -2,15 +2,28 @@
 
 set -euxo pipefail
 
+wait_for_clients() {
+    local timeout=$1
+    while ((timeout-- > 0)) && [[ $(hyprctl clients -j -i 0 | jq 'length') -gt 0 ]]; do
+        sleep 0.1
+    done
+}
+
+kill_remaining() {
+    hyprctl clients -j -i 0 | jq -r '.[].pid' | sort -u | xargs -r kill "$1" || true
+}
+
 hypr_kill() {
     hyprctl clients -j -i 0 |
         jq -r ".[].address" |
         xargs -I{} hyprctl dispatch -i 0 "hl.dsp.window.close({ window = 'address:{}' })"
+    wait_for_clients 50
 
-    local timeout=50
-    while ((timeout-- > 0)) && [[ $(hyprctl clients -j -i 0 | jq 'length') -gt 0 ]]; do
-        sleep 0.1
-    done
+    # Wine's explorer.exe /desktop and overlay windows ignore close requests
+    kill_remaining -TERM
+    wait_for_clients 30
+    kill_remaining -KILL
+
     hyprctl dispatch -i 0 "hl.dsp.focus({ workspace = 1 })"
 }
 

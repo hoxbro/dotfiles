@@ -7,6 +7,7 @@
 #   md2pdf -T title -A author -d 2026-09-09 input.md [output.pdf]
 #
 # Options:
+#   -c            Add a table of contents after the cover page.
 #   -T <title>    Cover-page title (default: first `# heading` in the input).
 #   -A <author>   Cover-page author (default: $USER).
 #   -d <date>     Cover-page date, YYYY-MM-DD (default: today).
@@ -26,13 +27,15 @@ done
 title=""
 author=""
 date=""
-while getopts ":T:A:d:" opt; do
+toc=0
+while getopts ":T:A:d:c" opt; do
   case "$opt" in
   T) title="$OPTARG" ;;
   A) author="$OPTARG" ;;
   d) date="$OPTARG" ;;
+  c) toc=1 ;;
   *)
-    echo "usage: $(basename "$0") [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
+    echo "usage: $(basename "$0") [-c] [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
     exit 1
     ;;
   esac
@@ -40,7 +43,7 @@ done
 shift $((OPTIND - 1))
 
 if [[ $# -lt 1 ]]; then
-  echo "usage: $(basename "$0") [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
+  echo "usage: $(basename "$0") [-c] [-T title] [-A author] [-d date] input.md [output.pdf]" >&2
   exit 1
 fi
 
@@ -62,10 +65,17 @@ trap 'rm -rf "$tmpdir"' EXIT
 
 # If the title came from the leading H1, drop that line from the body so it
 # doesn't repeat under the cover page.
+# The `##` sections then become the top level, so shift headings up one level
+# and ilm numbers them 1., 2., ... rather than 0.1., 0.2., ...
 source="$input"
+pandoc_args=()
 if [[ -n "$title" && "$title" == "$(sed -n 's/^# \(.*\)/\1/p' "$input" | head -1)" ]]; then
   source="$tmpdir/body.md"
   awk 'BEGIN{done=0} done==0 && /^# /{done=1; next} {print}' "$input" >"$source"
+  pandoc_args+=(--shift-heading-level-by=-1)
+fi
+if [[ "$toc" == 1 ]]; then
+  pandoc_args+=(--toc --toc-depth=2)
 fi
 
 # Pandoc custom Typst template that renders the body through the `ilm` package.
@@ -118,6 +128,8 @@ $if(papersize)$
 $endif$
   // Always show the default cover / front page.
   cover-page: "use-ilm-default",
+  // Top-level sections flow on; don't force each onto a new page.
+  chapter-pagebreak: false,
 $if(toc)$
   table-of-contents: outline(depth: $toc-depth$),
 $else$
@@ -146,12 +158,13 @@ meta_args+=(-M "author=${author:-$USER}")
 meta_args+=(-M "date=${date:-$(date +%F)}")
 
 pandoc "$source" \
-  -f gfm \
+  -f gfm+tex_math_dollars \
   -o "$output" \
   --pdf-engine=typst \
   --template "$template" \
   -V papersize=a4 \
   -V fontsize=12pt \
+  "${pandoc_args[@]}" \
   "${meta_args[@]}"
 
 echo "wrote $output"
