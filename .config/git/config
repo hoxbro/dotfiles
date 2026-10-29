@@ -83,8 +83,8 @@
     event = pre-push
     command = ~/dotfiles/.config/git/ban-main
 [merge]
-    tool = codediff
+    tool = diffview
 [mergetool]
     keepBackup = false
-[mergetool "codediff"]
-    cmd = nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""
+[mergetool "diffview"]
+    cmd = nvim -c \"DiffviewOpen -- $MERGED\"

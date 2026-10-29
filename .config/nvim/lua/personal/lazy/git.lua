@@ -105,12 +105,19 @@ return {
         },
     },
     {
-        "esmuellert/codediff.nvim",
-        cmd = "CodeDiff",
-        opts = {
-            diff = { conflict_result_position = "center", conflict_result_width_ratio = { 1, 1, 1 } },
-            explorer = { hidden = true },
-        },
+        "dlyongemallo/diffview-plus.nvim",
+        cmd = "DiffviewOpen",
+        opts = function()
+            local actions = require("diffview.actions")
+            local view = {
+                { "n", "co", actions.conflict_choose("ours"), { desc = "Choose ours" } },
+                { "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose theirs" } },
+                { "n", "cn", actions.conflict_choose("base"), { desc = "Choose none" } },
+                { "n", "cb", actions.conflict_choose("all"), { desc = "Choose both" } },
+                { "n", "cf", function() require("diffview").emit("focus_files") end, { desc = "Goto files" } },
+            }
+            return { view = { merge_tool = { layout = "diff4_mixed" } }, keymaps = { view = view } }
+        end,
     },
     {
         "folke/snacks.nvim",
@@ -152,15 +159,7 @@ return {
                 end,
                 desc = "Switch Git Worktree",
             },
-            -- { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
-            -- { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
-            -- { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
-            -- {
-            --     "<leader>gP",
-            --     function() Snacks.picker.gh_pr({ state = "all" }) end,
-            --     desc = "GitHub Pull Requests (all)",
-            -- },
         },
-        opts = { gitbrowse = {} }, -- gh = {}
+        opts = { gitbrowse = {} },
     },
 }
