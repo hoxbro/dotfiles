@@ -1,5 +1,3 @@
-local HYPR_SCALE = tonumber(os.getenv("HYPR_SCALE"))
-
 -- Layout
 hl.config({
     general = {
@@ -38,6 +36,7 @@ hl.config({
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         focus_on_activate = false,
+        bell_sound = "",
     },
     input = {
         kb_layout = "us,dk",
@@ -92,7 +91,7 @@ hl.bind("SUPER + f", hl.dsp.window.fullscreen())
 hl.bind("SUPER + r", hl.dsp.layout("togglesplit"))
 hl.bind("SUPER + Tab", hl.dsp.window.cycle_next({ floating = true }))
 hl.bind("SUPER + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false, floating = true }))
-hl.bind("code:66", hl.dsp.exec_cmd("walker"), { locked = true })
+hl.bind("CTRL + code:66", hl.dsp.exec_cmd("walker"), { locked = true })
 
 hl.bind("SUPER + h", hl.dsp.focus({ direction = "l" }))
 hl.bind("SUPER + l", hl.dsp.focus({ direction = "r" }))
