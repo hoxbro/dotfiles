@@ -30,6 +30,9 @@ hl.config({
     master = {
         new_status = "master",
     },
+    binds = {
+        disable_keybind_grabbing = true,
+    },
     misc = {
         force_default_wallpaper = 0,
         disable_hyprland_logo = true,
@@ -149,7 +152,7 @@ hl.window_rule({ match = { class = "^(?i)(com.mitchellh.ghostty)$" }, workspace 
 hl.window_rule({ match = { class = "^(?i)(librewolf)$" }, workspace = "2" })
 hl.window_rule({ match = { class = "^(?i)(ferdium)$" }, workspace = "3" })
 hl.window_rule({ match = { class = "^(?i)(virt-manager)$" }, workspace = "4" })
-hl.window_rule({ match = { class = "^(?i)(parsecd)$" }, workspace = "5" })
+hl.window_rule({ match = { class = "^(?i)(rustdesk)$" }, workspace = "5" })
 hl.window_rule({ match = { class = "^(?i)(com.obsproject.Studio)$" }, workspace = "6" })
 
 hl.window_rule({ match = { class = "^(?i)(eu.betterbird.Betterbird)$" }, workspace = "special:work silent" })

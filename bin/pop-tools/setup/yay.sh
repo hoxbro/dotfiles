@@ -32,7 +32,7 @@ PACKAGES=(
     celluloid betterbird timeshift pavucontrol
     seahorse gnome-keyring
     nemo nemo-fileroller
-    code spotify parsec ferdium-bin zoom
+    code spotify ferdium-bin zoom rustdesk-bin
     libreoffice-still chromium gnome-text-editor loupe evince
 
     # Programming
