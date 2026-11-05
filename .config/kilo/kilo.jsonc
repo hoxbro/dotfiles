@@ -22,6 +22,7 @@
     "external_directory": {
       "~/.claude/skills/*": "allow",
       "~/dotfiles/.claude/skills/*": "allow",
+      "/tmp/*": "allow",
     },
   },
   "plugin": ["file:///home/shh/projects/kilo-approver/src/index.ts"],

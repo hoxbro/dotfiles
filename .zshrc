@@ -4,7 +4,7 @@ export TERM='xterm-256color'
 export GPG_TTY=$TTY
 
 # Speed up zsh startup
-if [[ -z "$ZSH_EAGER" ]]; then
+if [[ -z "$ZSH_EXECUTION_STRING" ]]; then
     source ~/.config/zsh/zsh-defer/zsh-defer.plugin.zsh
 else
     function zsh-defer() { eval "$@" &>/dev/null }

@@ -1,6 +1,7 @@
 {
   "attribution": {
-    "sessionUrl": false
+    "sessionUrl": false,
+    "pr": ""
   },
   "permissions": {
     "allow": [
