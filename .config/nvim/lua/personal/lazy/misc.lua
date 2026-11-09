@@ -50,5 +50,14 @@ return {
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         opts = { mappings = { highlight = "" } },
     },
-    { "laytan/cloak.nvim", event = { "BufReadPre" }, opts = {} },
+    {
+        "laytan/cloak.nvim",
+        event = { "BufReadPre" },
+        opts = {
+            patterns = {
+                { file_pattern = "*", cloak_pattern = [[(Bearer%s+["'`]?)[^%s"'`]+]], replace = "%1" },
+                { file_pattern = { ".cenv", ".env*" }, cloak_pattern = "=.+" },
+            },
+        },
+    },
 }
