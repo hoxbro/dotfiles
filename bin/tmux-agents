@@ -26,16 +26,7 @@ status() {
 
 rows() {
     local -A owner=() target_of=() pane_of=() ppid_of=() agents=() agent_of=()
-    local panes cpid csess pane pid ppid p name id sess target cmd cwd title jump
-
-    # Sidekick runs its agent in a session of its own, attached from a tmux
-    # client inside nvim's terminal buffer. Such a client inherits TMUX_PANE
-    # from the editor, which names the pane that session is displayed in.
-    while IFS=$'\t' read -r cpid csess; do
-        pane=$(tr '\0' '\n' <"/proc/$cpid/environ" 2>/dev/null | sed -n 's/^TMUX_PANE=//p')
-        [[ -n $pane ]] || continue
-        owner[$csess]=$pane
-    done < <(tmux list-clients -F '#{client_pid}	#{session_name}')
+    local panes cpid csess pid ppid p name id sess target cmd cwd title jump
 
     PANES='#{pane_id}	#{pane_pid}	#{session_name}	#{session_name}:#{window_index}#{?#{>:#{window_panes},1},.#{pane_index},}	#{pane_current_path}	#{pane_title}'
     panes=$(tmux list-panes -a -F "$PANES")
@@ -48,8 +39,20 @@ rows() {
     # reports the wrapper, so walk up from each agent to the pane holding it
     while read -r pid ppid name; do
         ppid_of[$pid]=$ppid
+        name=${name##*/}
         [[ $name =~ ^($AGENTS)$ ]] && agents[$pid]=$name
     done < <(ps -eo pid=,ppid=,comm=)
+
+    # Sidekick.nvim runs its agent in a session of its own, attached from a tmux
+    # client inside nvim's terminal buffer, so its ancestry leads to the pane
+    # that session is displayed in
+    while IFS=$'\t' read -r cpid csess; do
+        for ((p = cpid; p > 1; p = ${ppid_of[$p]:-0})); do
+            [[ -z ${pane_of[$p]-} ]] && continue
+            owner[$csess]=${pane_of[$p]}
+            break
+        done
+    done < <(tmux list-clients -F '#{client_pid}	#{session_name}')
 
     for pid in "${!agents[@]}"; do
         p=$pid
@@ -92,7 +95,7 @@ list_width() {
 
 # Title takes the leftover width, so the rest lands on the right edge
 render() {
-    awk -F'\t' -v width="$(list_width)" '
+    gawk -F'\t' -v width="$(list_width)" '
         function w(s, n) { return length(s) > n ? length(s) : n }
         { for (i = 1; i <= 6; i++) f[NR, i] = $i
           ca = w($2, ca); ci = w($1, ci) }
@@ -150,7 +153,7 @@ CROP='{
 pick=$(fzf --ansi --delimiter=$'\t' --with-nth=1 \
     --tmux "center,$POPUP%,60%" --info=hidden \
     --bind "load:refresh-preview+reload(sleep 2; '$self' --list)" \
-    --preview="tmux capture-pane -p -e -t {2} | awk -v w=\${FZF_PREVIEW_COLUMNS:-200} '$CROP' | cat -s | tail -n \${FZF_PREVIEW_LINES:-40}" \
+    --preview="tmux capture-pane -p -e -t {2} | gawk -v w=\${FZF_PREVIEW_COLUMNS:-200} '$CROP' | cat -s | tail -n \${FZF_PREVIEW_LINES:-40}" \
     --preview-window="right,$PREVIEW%,border-left" <<<"$panes")
 [[ -z $pick ]] && exit 0
 

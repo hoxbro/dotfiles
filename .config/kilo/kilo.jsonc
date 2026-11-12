@@ -15,7 +15,8 @@
       "~/.claude/skills/*": "allow",
       "~/dotfiles/.claude/skills/*": "allow",
       "/tmp/*": "allow",
+      "/private/var/*": "allow",
     },
   },
-  "plugin": ["file:///home/shh/projects/kilo-approver/src/index.ts"],
+  "plugin": ["file://{env:HOME}/projects/kilo-approver/src/index.ts"],
 }
