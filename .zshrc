@@ -32,7 +32,6 @@ alias tree='eza --tree --git-ignore'
 export COLOR_LIGHT='#90a0bf'
 export COLOR_DARK='#21283b'
 
-alias folder='xdg-open'
 alias wol='curl -X POST http://10.0.1.2:8000/wol && ping 10.0.1.11'
 alias t='tmux-sessionizer'
 alias sync-dotfiles='stow -d ~/dotfiles -R . --no-folding'
@@ -52,6 +51,14 @@ bootwindows() {
 __env_vars() {
     export SUDO_EDITOR=$(command -v nvim)
     source ~/.env || true
+
+    if [[ -n "$WSL_DISTRO_NAME" ]]; then
+        alias open='explorer.exe'
+    elif [[ "$OSTYPE" == linux* ]]; then
+        alias open='xdg-open'
+    elif [[ "$OSTYPE" == (msys|cygwin)* ]]; then
+        alias open='start'
+    fi
 
     unset -f __env_vars
 }
