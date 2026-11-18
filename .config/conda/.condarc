@@ -1,11 +1,8 @@
 anaconda_anon_usage: false
 changeps1: false
 channel_priority: strict
-solver: libmamba
 ssl_verify: true
 channels:
   - conda-forge
-conda_build:
-  pkg_format: '2'
 plugins:
   use_sharded_repodata: true

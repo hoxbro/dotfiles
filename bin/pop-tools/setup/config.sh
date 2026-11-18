@@ -34,6 +34,7 @@ if has bluetoothctl; then
 fi
 
 if has nemo; then
+    xdg-mime default nemo.desktop inode/directory
     gsettings set org.cinnamon.desktop.default-applications.terminal exec ghostty
 fi
 
