@@ -1,7 +1,7 @@
 ---
 name: using-superpowers
 description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
-author: https://github.com/obra/superpowers/releases/tag/v6.4.2
+author: https://github.com/obra/superpowers/releases/tag/v7.0.2
 ---
 
 <SUBAGENT-STOP>

@@ -1,7 +1,7 @@
 ---
 name: receiving-code-review
 description: Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation
-author: https://github.com/obra/superpowers/releases/tag/v6.4.2
+author: https://github.com/obra/superpowers/releases/tag/v7.0.2
 ---
 
 # Code Review Reception

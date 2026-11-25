@@ -1,7 +1,7 @@
 ---
 name: test-driven-development
 description: Use when implementing any feature or bugfix, before writing implementation code
-author: https://github.com/obra/superpowers/releases/tag/v6.4.2
+author: https://github.com/obra/superpowers/releases/tag/v7.0.2
 ---
 
 # Test-Driven Development (TDD)

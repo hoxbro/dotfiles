@@ -1,7 +1,7 @@
 ---
 name: writing-plans
 description: Use when you have a spec or requirements for a multi-step task, before touching code
-author: https://github.com/obra/superpowers/releases/tag/v6.4.2
+author: https://github.com/obra/superpowers/releases/tag/v7.0.2
 ---
 
 # Writing Plans
